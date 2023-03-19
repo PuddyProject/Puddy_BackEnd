@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: #TODO
+    url: #TODO
+    username: #TODO
+    password: #TODO
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+
+logging:
+  level:
+    org.hibernate.sql: debug
