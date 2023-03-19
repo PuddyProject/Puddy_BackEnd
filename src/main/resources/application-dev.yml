@@ -18,3 +18,10 @@ spring:
 logging:
   level:
     org.hibernate.sql: debug
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: '/swagger-ui.html'
+    try-it-out-enabled: false
+  version: 'v1'
