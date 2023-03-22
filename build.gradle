@@ -17,7 +17,7 @@ plugins {
 
 group = 'com.team'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 configurations {
 	compileOnly {
@@ -36,6 +36,9 @@ dependencies {
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	//Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
 
 	//querydsl
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
@@ -56,9 +59,15 @@ dependencies {
 	//Swagger UI
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
 
+	//token
+	implementation 'com.auth0:java-jwt:3.18.3'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 
+	//S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {
@@ -90,3 +99,49 @@ configurations {
 	}
 	querydsl.extendsFrom compileClasspath
 }
+
+//def frontendDir = "$projectDir/frontend"
+//
+//sourceSets {
+//	main {
+//		resources {
+//			srcDirs = ["$projectDir/src/main/resources"]
+//		}
+//	}
+//}
+//
+//processResources {
+//	dependsOn "copyReactBuildFiles"
+//}
+//
+//task installReact(type: Exec) {
+//	workingDir "$frontendDir"
+//	inputs.dir "$frontendDir"
+//	group = BasePlugin.BUILD_GROUP
+//	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+//		commandLine "npm.cmd", "audit", "fix"
+//		commandLine 'npm.cmd', 'install'
+//	} else {
+//		commandLine "npm", "audit", "fix"
+//		commandLine 'npm', 'install'
+//	}
+//}
+//
+//task buildReact(type: Exec) {
+//	dependsOn "installReact"
+//	workingDir "$frontendDir"
+//	inputs.dir "$frontendDir"
+//	group = BasePlugin.BUILD_GROUP
+//	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+//		commandLine "npm.cmd", "run-script", "build"
+//	} else {
+//		commandLine "npm", "run-script", "build"
+//	}
+//}
+//
+//task copyReactBuildFiles(type: Copy) {
+//	dependsOn "buildReact"
+//	from "$frontendDir/build"
+//	into "$buildDir/resources/main/static"
+//}
+//
