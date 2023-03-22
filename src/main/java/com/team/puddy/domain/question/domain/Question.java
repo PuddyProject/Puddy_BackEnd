@@ -26,7 +26,7 @@ public class Question extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id",updatable = false)
     private User user;
     @NotBlank
     @Column(name = "title", length = 50)
