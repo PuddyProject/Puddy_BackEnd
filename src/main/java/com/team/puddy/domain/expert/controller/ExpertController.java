@@ -6,39 +6,35 @@ import com.team.puddy.domain.expert.dto.ExpertFormDto;
 import com.team.puddy.domain.expert.service.ExpertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-@RequestMapping("/expert")
+
 @RestController
 @RequiredArgsConstructor
 public class ExpertController {
 
     private final ExpertService expertService;
 
-    @GetMapping(value = "/register")
-    public String expertForm(){
-
-        return "/profile/experts";
-    }
-
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/profile/experts")
     public String newExpert(@Valid ExpertFormDto expertFormDto,
+                            HttpServletRequest request,
                             BindingResult bindingResult){
 
+        String referer = request.getHeader("Referer");
+
         if(bindingResult.hasErrors()){
-            return "/profile/experts";
+            return "redirect:"+ referer;
         }
 
         try{
             Expert expert = Expert.createExpert(expertFormDto);
             expertService.saveExpert(expert);
         }catch (IllegalStateException e){
-            return "/profile/experts";
+            return "redirect:"+ referer;
         }
 
         return "redirect:/";
