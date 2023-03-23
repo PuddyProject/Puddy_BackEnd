@@ -1,7 +1,11 @@
 package com.team.puddy.global.config.security;
 
 
+import com.team.puddy.global.config.security.jwt.JwtAuthenticationEntryPoint;
+import com.team.puddy.global.config.security.jwt.JwtAuthorizationFilter;
 import com.team.puddy.global.config.security.jwt.JwtTokenUtils;
+import com.team.puddy.global.config.security.jwt.RefreshTokenRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -22,12 +27,15 @@ import java.util.Arrays;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final JwtTokenUtils jwtTokenUtils;
 
-    public SecurityConfig(JwtTokenUtils jwtTokenUtils) {
-        this.jwtTokenUtils = jwtTokenUtils;
-    }
+    private final RefreshTokenRepository refreshTokenRepository;
+
+
 
     //TODO: JWT 관련 클래스 구현
 
@@ -44,11 +52,13 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/users/**").permitAll()
+                .antMatchers("/questions/**").hasRole("USER")
                 .and()
                 .formLogin().disable()
-//                .addFilterBefore(JwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .exceptionHandling()
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
 
                 ;
                 //TODO: 로그인, 로그아웃 라우팅

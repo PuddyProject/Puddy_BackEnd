@@ -62,12 +62,14 @@ dependencies {
 	//token
 	implementation 'com.auth0:java-jwt:3.18.3'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'com.nimbusds:nimbus-jose-jwt:9.31'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 
 	//S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 }
 
 tasks.named('test') {

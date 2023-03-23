@@ -20,13 +20,18 @@ public enum ErrorCode {
 
     // JWT
     JWT_EXCEPTION(HttpStatus.BAD_REQUEST, "Jwt Exception"),
-    NOT_VALID_USER(HttpStatus.BAD_REQUEST, "Authorization Exception"),
+    NOT_VALID_USER(HttpStatus.BAD_REQUEST, "권한이 없습니다."),
+
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"존재하지 않는 토큰입니다"),
 
     //USER
-    DUPLICATE_USER_NAME(HttpStatus.BAD_REQUEST,"Duplicate Username "),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND,"User not founded"),
+    DUPLICATE_ACCOUNT(HttpStatus.BAD_REQUEST,"중복된 아이디입니다"),
 
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED,"Password invalid");
+    DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST,"중복된 이메일입니다" ),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND,"가입된 유저가 아닙니다."),
+
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED,"유효하지 않은 패스워드입니다.");
+
     private final HttpStatus status;
     private final String message;
 
