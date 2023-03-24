@@ -2,7 +2,6 @@ package com.team.puddy.global.mapper;
 
 import com.team.puddy.domain.type.UserRole;
 import com.team.puddy.domain.user.domain.User;
-import com.team.puddy.domain.user.dto.request.LoginUserRequest;
 import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
@@ -20,6 +19,7 @@ public interface UserMapper {
                 .email(request.email())
                 .username(request.username())
                 .role(UserRole.USER.getRole())
+                .isNotificated(request.isNotificated())
                 .nickname("퍼디1234")
                 .build();
     }

@@ -19,7 +19,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @Builder
-public class User extends BaseEntity {
+public class User extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +38,9 @@ public class User extends BaseEntity {
 
     @Setter private String nickname;
 
+    @Setter
+    private boolean isNotificated;
+
     @NotNull
     @Column(name = "role")
     private String role;
@@ -50,6 +53,7 @@ public class User extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Question> questionList = new ArrayList<>();
+
 
 
 }

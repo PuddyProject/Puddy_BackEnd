@@ -18,7 +18,6 @@ public class GlobalExceptionHandler {
     //서비스 로직 예외를 처리하기 위한 핸들러 메서드
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<?> businessException(final BusinessException e) {
-        final ErrorCode errorCode = e.getErrorCode();
         return ResponseEntity.status(e.getErrorCode().getStatus())
                 .body(Response.error(e.getErrorCode().name()));
     }
