@@ -1,6 +1,7 @@
 package com.team.puddy.domain.expert.domain;
 
 
+import com.team.puddy.domain.BaseEntity;
 import com.team.puddy.domain.expert.dto.ExpertFormDto;
 import com.team.puddy.domain.user.domain.User;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "expert")
 @Getter
-public class Expert {
+public class Expert extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

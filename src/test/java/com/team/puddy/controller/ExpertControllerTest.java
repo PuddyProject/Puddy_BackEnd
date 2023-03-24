@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @Transactional
 @TestPropertySource(locations="classpath:application-test.properties")
-public class ExpertTest {
+public class ExpertControllerTest {
 
     @Autowired
     private ExpertService expertService;
