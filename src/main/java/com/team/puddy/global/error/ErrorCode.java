@@ -17,6 +17,8 @@ public enum ErrorCode {
     JSON_WRITE_ERROR(HttpStatus.BAD_REQUEST, "Json Write Error"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"),
     SERVLET_ERROR(HttpStatus.BAD_REQUEST, "Servlet Error"),
+    INVALID_ERROR(HttpStatus.BAD_REQUEST, "Invalid Error"),
+
 
     // JWT
     JWT_EXCEPTION(HttpStatus.BAD_REQUEST, "Jwt Exception"),
@@ -30,7 +32,10 @@ public enum ErrorCode {
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST,"중복된 이메일입니다" ),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND,"가입된 유저가 아닙니다."),
 
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED,"유효하지 않은 패스워드입니다.");
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED,"유효하지 않은 패스워드입니다."),
+
+    //EXPERT
+    DUPLICATE_EXPERT_ACCOUNT(HttpStatus.BAD_REQUEST,"중복된 계정입니다");
 
     private final HttpStatus status;
     private final String message;
