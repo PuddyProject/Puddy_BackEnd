@@ -37,8 +37,6 @@ public class SecurityConfig {
 
 
 
-    //TODO: JWT 관련 클래스 구현
-
     // 정적 자원에 대해서는 Security 설정을 적용하지 않음
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -53,7 +51,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/users/**").permitAll()
-                .antMatchers("/questions/**").hasRole("USER")
+                .antMatchers("/questions/write").hasRole("USER")
                 .and()
                 .formLogin().disable()
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -65,9 +63,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -76,20 +71,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    //TODO: 배포시 프론트 URL, 백 URL 넣기
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:8080", "http://localhost:3000",
-                "https://localhost:8080", "https://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }
