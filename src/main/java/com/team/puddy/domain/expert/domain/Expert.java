@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 public class Expert {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "expert_id")
     private Long id;
 
