@@ -11,7 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "exeprt")
+@Table(name = "expert")
 @Getter
 public class Expert {
 
