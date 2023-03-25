@@ -1,15 +1,13 @@
 package com.team.puddy.global.config.security;
 
 
-import com.team.puddy.global.config.security.jwt.JwtAuthenticationEntryPoint;
-import com.team.puddy.global.config.security.jwt.JwtAuthorizationFilter;
-import com.team.puddy.global.config.security.jwt.JwtTokenUtils;
-import com.team.puddy.global.config.security.jwt.RefreshTokenRepository;
+import com.team.puddy.global.config.security.jwt.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,12 +28,11 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final JwtTokenUtils jwtTokenUtils;
 
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
+
     private final RefreshTokenRepository refreshTokenRepository;
-
-
 
     // 정적 자원에 대해서는 Security 설정을 적용하지 않음
     @Bean
@@ -58,8 +55,8 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
 
-                ;
-                //TODO: 로그인, 로그아웃 라우팅
+        ;
+        //TODO: 로그인, 로그아웃 라우팅
 
         return http.build();
     }

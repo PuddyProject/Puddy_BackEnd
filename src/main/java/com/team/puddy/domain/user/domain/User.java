@@ -1,17 +1,18 @@
 package com.team.puddy.domain.user.domain;
 
 import com.team.puddy.domain.BaseEntity;
+import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.question.domain.Question;
+import com.team.puddy.domain.type.JwtProvider;
 import com.team.puddy.domain.type.UserRole;
 import io.jsonwebtoken.Claims;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="\"user\"")
@@ -19,7 +20,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @Builder
-public class User extends BaseEntity{
+public class User extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,3 +58,4 @@ public class User extends BaseEntity{
 
 
 }
+

@@ -17,6 +17,7 @@ public class JwtUserDetails implements UserDetails {
     private String role;
     private boolean isAuthenticated;
 
+
     public JwtUserDetails(DecodedJWT decodedJWT) {
         id = decodedJWT.getClaim("id").asLong();
         role = decodedJWT.getClaim("auth").asString();

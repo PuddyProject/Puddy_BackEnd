@@ -26,7 +26,7 @@ import java.io.IOException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JwtAuthorizationFilter extends OncePerRequestFilter {
+public class    JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtVerifier jwtVerifier;
 
@@ -48,6 +48,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         try {
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             DecodedJWT decodedJWT = jwtVerifier.verify(token);
+            String account = decodedJWT.getSubject();
             JwtUserDetails jwtUserDetails = new JwtUserDetails(decodedJWT);
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
@@ -65,7 +66,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             log.error("JwtFilter - doFilterInternal() : {}", e.getMessage());
             request.setAttribute("exception", JwtException.UNKNOWN_ERROR.name());
         }
-
         filterChain.doFilter(request, response);
     }
+
 }

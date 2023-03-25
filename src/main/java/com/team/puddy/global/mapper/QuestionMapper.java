@@ -15,23 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface QuestionMapper {
 
-
-    default Question toEntity(QuestionRequestDto requestDto, String imagePath, User user) {
-        return Question.builder()
-                .title(requestDto.title())
-                .user(user)
-                .content(requestDto.content())
-                .category(requestDto.category())
-                .imagePath(imagePath)
-                .build();
-    }
+    @Mapping(target = "id", ignore = true)
+    Question toEntity(QuestionRequestDto requestDto, String imagePath, User user);
 
 
     default QuestionResponseDto toDto(Question question) {
         return QuestionResponseDto.builder()
                 .title(question.getTitle())
                 .content(question.getContent())
-                .category(question.getCategory())
+                .category(question.getCategory().name())
                 .build();
     }
 

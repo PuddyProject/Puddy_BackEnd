@@ -1,7 +1,9 @@
 package com.team.puddy.domain.question.domain;
 
 import com.team.puddy.domain.BaseEntity;
+import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.answer.domain.Answer;
+import com.team.puddy.domain.type.Category;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -18,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Question extends BaseEntity {
+public class Question extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +47,9 @@ public class Question extends BaseEntity {
     @ColumnDefault("false")
     private boolean isDeleted;
 
-    private String category;
+    @Setter
+    @Enumerated(value = EnumType.STRING)
+    private Category category;
     @Setter
     @Builder.Default
     @OneToMany(mappedBy = "question", orphanRemoval = true, cascade = CascadeType.ALL)

@@ -1,5 +1,7 @@
 package com.team.puddy.domain.user.controller;
 
+import com.team.puddy.domain.type.UserRole;
+import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.DuplicateAccountRequest;
 import com.team.puddy.domain.user.dto.request.DuplicateEmailRequest;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
@@ -15,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -40,13 +44,16 @@ public class UserController {
 
     @PostMapping("/login/reissue")
     public LoginToken tokenReissue(@RequestBody TokenReissueDto tokenReissueDto) {
+        log.info("access: {}",tokenReissueDto.accessToken());
+        log.info("refresh: {}",tokenReissueDto.refreshToken());
         return userService.reissueToken(tokenReissueDto);
     }
 
-    @DeleteMapping("/login/logout")
-    public void logout(@AuthenticationPrincipal JwtUserDetails userDetails) {
+    @DeleteMapping(value = "/logout", produces = "application/json")
+    public void logout(@AuthenticationPrincipal JwtUserDetails userDetails, HttpServletResponse response) {
         userService.logout(userDetails.getUserId());
     }
+
 
 
     @GetMapping("/duplicate-email")

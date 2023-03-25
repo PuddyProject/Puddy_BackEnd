@@ -9,8 +9,10 @@ import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.service.QuestionService;
+import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
+import com.team.puddy.global.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,13 +47,15 @@ public class QuestionController {
     @Operation(summary = "QNA 게시글 등록 메서드")
     public Response<?> registerQuestion(@RequestPart(value = "request") @Valid QuestionRequestDto requestDto,
                                         @RequestParam(value = "file", required = false) MultipartFile file,
-                                        @AuthenticationPrincipal JwtUserDetails userDetails) throws IOException {
+                                        @AuthenticationPrincipal JwtUserDetails user) throws IOException {
+       
+
         String imagePath = "";
         if (file != null && !file.isEmpty()) {
             String fileName = createFileName(file.getOriginalFilename());
             imagePath = uploadToS3(file, fileName);
         }
-        questionService.addQuestion(requestDto, imagePath, userDetails.getUserId());
+        questionService.addQuestion(requestDto, imagePath, user.getUserId());
 
         return Response.success(imagePath);
     }
@@ -72,6 +76,11 @@ public class QuestionController {
         QuestionListResponseDto questionList = questionService.getQuestionList(pageable);
 
         return Response.success(questionList);
+    }
+
+    @GetMapping("/count")
+    public Response<Long> getQuestionCount(@AuthenticationPrincipal JwtUserDetails jwtUserDetails) {
+        return Response.success(questionService.getQuestionCount());
     }
 
 

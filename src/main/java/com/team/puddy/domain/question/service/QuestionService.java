@@ -54,8 +54,9 @@ public class QuestionService {
 
     }
 
+
     @Transactional(readOnly = true)
-    public QuestionResponseDto getQuestion(Long questionId) {
+    public QuestionResponseDto  getQuestion(Long questionId) {
         Question findQuestion = questionRepository.findById(questionId).orElseThrow(EntityNotFoundException::new);
         return questionMapper.toDto(findQuestion);
     }

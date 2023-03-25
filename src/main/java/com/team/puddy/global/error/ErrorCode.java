@@ -24,6 +24,8 @@ public enum ErrorCode {
     JWT_EXCEPTION(HttpStatus.BAD_REQUEST, "Jwt Exception"),
     NOT_VALID_USER(HttpStatus.BAD_REQUEST, "권한이 없습니다."),
 
+    TOKEN_VERIFY_FAIL(HttpStatus.BAD_REQUEST, "토큰 검증에 실패했습니다."),
+
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"존재하지 않는 토큰입니다"),
 
     //USER
