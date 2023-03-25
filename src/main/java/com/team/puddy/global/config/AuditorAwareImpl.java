@@ -1,5 +1,6 @@
 package com.team.puddy.global.config;
 
+import com.team.puddy.global.config.auth.JwtUserDetails;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
