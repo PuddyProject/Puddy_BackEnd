@@ -1,4 +1,4 @@
-package com.team.puddy.entity;
+package com.team.puddy.domain.expert.entity;
 
 import com.team.puddy.domain.expert.domain.Expert;
 import com.team.puddy.domain.expert.repository.ExpertRepository;

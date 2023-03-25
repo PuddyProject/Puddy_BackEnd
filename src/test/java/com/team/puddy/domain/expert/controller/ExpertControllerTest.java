@@ -1,4 +1,4 @@
-package com.team.puddy.controller;
+package com.team.puddy.domain.expert.controller;
 
 import com.team.puddy.domain.expert.domain.Expert;
 import com.team.puddy.domain.expert.repository.ExpertRepository;
