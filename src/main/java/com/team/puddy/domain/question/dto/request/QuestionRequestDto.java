@@ -11,9 +11,9 @@ import javax.validation.constraints.NotBlank;
 public record QuestionRequestDto (
         @NotBlank String title,
         @NotBlank String content,
-        @NotBlank String category
+        @NotBlank String category,
 
-//        @NotBlank String userName
+        int postCategory
 ) {
 
     @Builder

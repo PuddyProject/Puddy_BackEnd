@@ -47,6 +47,8 @@ public class Question extends BaseTimeEntity {
     @ColumnDefault("false")
     private boolean isDeleted;
 
+    private int postCategory;
+
     @Setter
     @Enumerated(value = EnumType.STRING)
     private Category category;
