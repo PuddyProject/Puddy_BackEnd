@@ -48,8 +48,6 @@ public class QuestionController {
     public Response<?> registerQuestion(@RequestPart(value = "request") @Valid QuestionRequestDto requestDto,
                                         @RequestParam(value = "file", required = false) MultipartFile file,
                                         @AuthenticationPrincipal JwtUserDetails user) throws IOException {
-       
-
         String imagePath = "";
         if (file != null && !file.isEmpty()) {
             String fileName = createFileName(file.getOriginalFilename());

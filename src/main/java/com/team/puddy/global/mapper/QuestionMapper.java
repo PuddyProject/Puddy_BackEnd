@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 public interface QuestionMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user",source = "user")
+    @Mapping(target = "imagePath",source = "imagePath")
     Question toEntity(QuestionRequestDto requestDto, String imagePath, User user);
 
 
@@ -24,6 +26,7 @@ public interface QuestionMapper {
                 .title(question.getTitle())
                 .content(question.getContent())
                 .category(question.getCategory().name())
+                .postCategory(question.getPostCategory())
                 .build();
     }
 
