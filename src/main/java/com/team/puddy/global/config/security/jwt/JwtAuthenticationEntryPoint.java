@@ -13,7 +13,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException){
         JwtException exception = getJwtException(request);
-        if (exception != JwtException.EMPTY_TOKEN) exception.setResponse(response);
+        exception.setResponse(response);
     }
 
     private JwtException getJwtException(HttpServletRequest request) {

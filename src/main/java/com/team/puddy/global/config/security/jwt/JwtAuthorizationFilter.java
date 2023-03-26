@@ -5,6 +5,7 @@ import com.team.puddy.global.config.auth.AuthConstants;
 import com.team.puddy.global.config.auth.JwtUserDetails;
 import com.team.puddy.global.config.security.SecurityConfig;
 import com.team.puddy.global.error.ErrorCode;
+import com.team.puddy.global.error.exception.BusinessException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -56,7 +57,7 @@ public class    JwtAuthorizationFilter extends OncePerRequestFilter {
             SecurityContextHolder.setContext(context);
         } catch (SecurityException | MalformedJwtException e) {
             request.setAttribute("exception", JwtException.WRONG_TYPE_TOKEN.name());
-        } catch (ExpiredJwtException e) {
+        } catch (ExpiredJwtException | BusinessException e) {
             request.setAttribute("exception", JwtException.EXPIRED_TOKEN.name());
         } catch (UnsupportedJwtException e) {
             request.setAttribute("exception", JwtException.UNSUPPORTED_TOKEN.name());
