@@ -27,6 +27,7 @@ public interface QuestionMapper {
                 .content(question.getContent())
                 .category(question.getCategory().name())
                 .postCategory(question.getPostCategory())
+                .viewCount(question.getView_count())
                 .build();
     }
 

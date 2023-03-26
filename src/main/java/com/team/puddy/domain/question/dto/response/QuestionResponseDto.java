@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 public record QuestionResponseDto (String title,
                                    String content,
                                    @Category String category,
+                                   int viewCount,
                                    int postCategory) {
     @Builder
     public QuestionResponseDto {}

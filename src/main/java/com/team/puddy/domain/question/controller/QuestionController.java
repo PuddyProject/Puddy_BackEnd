@@ -62,6 +62,7 @@ public class QuestionController {
     @GetMapping("/{questionId}")
     @Operation(summary = "QNA 게시글 단건 조회 메서드")
     public Response<QuestionResponseDto> getQuestion(@PathVariable Long questionId) {
+        questionService.increaseViewCount(questionId);
         QuestionResponseDto question = questionService.getQuestion(questionId);
         return Response.success(question);
     }

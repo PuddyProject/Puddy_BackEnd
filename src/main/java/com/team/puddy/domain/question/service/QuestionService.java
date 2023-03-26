@@ -63,6 +63,11 @@ public class QuestionService {
         return questionMapper.toDto(findQuestion);
     }
 
+    @Transactional
+    public void increaseViewCount(Long questionId) {
+        questionRepository.increaseViewCount(questionId);
+    }
+
     @Transactional(readOnly = true)
     public long getQuestionCount() {
         return questionRepository.count();
