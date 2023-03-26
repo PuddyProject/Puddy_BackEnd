@@ -1,6 +1,7 @@
 package com.team.puddy.domain.answer.domain;
 
 import com.team.puddy.domain.BaseEntity;
+import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class Answer extends BaseEntity {
+public class Answer extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +33,8 @@ public class Answer extends BaseEntity {
 
     @NotBlank
     private String content;
+
+    private int postCategory;
 
     @ColumnDefault("0")
     private boolean selected;

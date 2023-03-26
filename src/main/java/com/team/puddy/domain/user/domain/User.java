@@ -3,7 +3,6 @@ package com.team.puddy.domain.user.domain;
 import com.team.puddy.domain.BaseEntity;
 import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.question.domain.Question;
-import com.team.puddy.domain.type.JwtProvider;
 import com.team.puddy.domain.type.UserRole;
 import io.jsonwebtoken.Claims;
 import lombok.*;
