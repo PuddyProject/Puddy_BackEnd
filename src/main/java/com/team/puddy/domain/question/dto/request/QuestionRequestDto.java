@@ -12,7 +12,6 @@ public record QuestionRequestDto (
         @NotBlank String title,
         @NotBlank String content,
         @NotBlank String category,
-
         int postCategory
 ) {
 
