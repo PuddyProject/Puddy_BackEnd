@@ -7,6 +7,8 @@ import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.repository.QuestionRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserRepository;
+import com.team.puddy.global.error.ErrorCode;
+import com.team.puddy.global.error.exception.NotFoundException;
 import com.team.puddy.global.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,7 +50,7 @@ public class QuestionService {
 
     }
     public void addQuestion(QuestionRequestDto requestDto, String imagePath,Long userId) throws IOException {
-        User findUser = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
         Question question = questionMapper.toEntity(requestDto, imagePath,findUser);
         questionRepository.save(question);
 
