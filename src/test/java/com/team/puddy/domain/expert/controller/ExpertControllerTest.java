@@ -12,6 +12,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -37,6 +39,7 @@ public class ExpertControllerTest {
         expert.setCareer("1930년 홍길동병원대표");
         expert.setLocation("서울시 마포구 합정동");
         Expert savedExpert = expertRepository.save(expert);
-        System.out.println(savedExpert.toString());
+        assertEquals(expert , savedExpert);
+
     }
 }
