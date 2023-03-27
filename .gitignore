@@ -38,5 +38,5 @@ out/
 .vscode/
 
 /src/main/resources/application-local.yml
+/src/main/frontend
 
-/frontend/

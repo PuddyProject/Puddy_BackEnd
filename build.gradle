@@ -44,6 +44,7 @@ dependencies {
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
 	//Lombok & Mapstruct
 	implementation 'org.projectlombok:lombok:1.18.24'
@@ -105,19 +106,16 @@ configurations {
 	querydsl.extendsFrom compileClasspath
 }
 
-//def frontendDir = "$projectDir/frontend"
+//def frontendDir = "$projectDir/src/main/frontend"
 //
 //sourceSets {
 //	main {
-//		resources {
-//			srcDirs = ["$projectDir/src/main/resources"]
+//		resources { srcDirs = ["$projectDir/src/main/resources"]
 //		}
 //	}
 //}
 //
-//processResources {
-//	dependsOn "copyReactBuildFiles"
-//}
+//processResources { dependsOn "copyReactBuildFiles" }
 //
 //task installReact(type: Exec) {
 //	workingDir "$frontendDir"
@@ -125,10 +123,9 @@ configurations {
 //	group = BasePlugin.BUILD_GROUP
 //	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
 //		commandLine "npm.cmd", "audit", "fix"
-//		commandLine 'npm.cmd', 'install'
-//	} else {
-//		commandLine "npm", "audit", "fix"
-//		commandLine 'npm', 'install'
+//		commandLine 'npm.cmd', 'install' }
+//	else {
+//		commandLine "npm", "audit", "fix" commandLine 'npm', 'install'
 //	}
 //}
 //
@@ -147,6 +144,5 @@ configurations {
 //task copyReactBuildFiles(type: Copy) {
 //	dependsOn "buildReact"
 //	from "$frontendDir/build"
-//	into "$buildDir/resources/main/static"
+//	into "$projectDir/src/main/resources/static"
 //}
-//
