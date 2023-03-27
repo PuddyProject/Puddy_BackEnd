@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/users/**").permitAll()
-                .antMatchers("/questions/write").hasRole("USER")
+                .antMatchers("/questions/write").hasAnyRole("USER","EXPERT")
                 .and()
                 .formLogin().disable()
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
