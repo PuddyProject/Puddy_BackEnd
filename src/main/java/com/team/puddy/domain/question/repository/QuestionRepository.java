@@ -20,5 +20,5 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Modifying
     @Query("UPDATE Question q SET q.view_count = q.view_count + 1 WHERE q.id = :questionId")
     void increaseViewCount(@Param("questionId") Long questionId);
-
+    
 }
