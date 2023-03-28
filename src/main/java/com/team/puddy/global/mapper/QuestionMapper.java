@@ -25,6 +25,8 @@ public interface QuestionMapper {
         return QuestionResponseDto.builder()
                 .title(question.getTitle())
                 .content(question.getContent())
+                .isSolved(question.isSolved())
+                .nickname(question.getUser().getNickname())
                 .category(question.getCategory().name())
                 .postCategory(question.getPostCategory())
                 .viewCount(question.getView_count())
