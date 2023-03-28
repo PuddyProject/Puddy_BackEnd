@@ -4,6 +4,7 @@ import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
+import com.team.puddy.domain.question.repository.QuestionQueryRepository;
 import com.team.puddy.domain.question.repository.QuestionRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserRepository;
@@ -22,6 +23,7 @@ import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -30,6 +32,8 @@ import java.util.Optional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+
+    private final QuestionQueryRepository questionQueryRepository;
 
     private final UserRepository userRepository;
 
@@ -46,8 +50,22 @@ public class QuestionService {
                 .hasNextPage(hasNextPage)
                 .build();
 
+    }
 
+    @Transactional(readOnly = true)
+    public List<QuestionResponseDto> getPopularQuestions() {
+        List<Question> popularQuestions = questionQueryRepository.getPopularQuestionList();
+        return popularQuestions.stream()
+                .map(questionMapper::toDto)
+                .toList();
+    }
 
+    @Transactional(readOnly = true)
+    public List<QuestionResponseDto> getRecentQuestions() {
+        List<Question> recentQuestionList = questionQueryRepository.getRecentQuestionList();
+        return recentQuestionList.stream()
+                .map(questionMapper::toDto)
+                .collect(Collectors.toList());
     }
     public void addQuestion(QuestionRequestDto requestDto, String imagePath,Long userId) throws IOException {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
