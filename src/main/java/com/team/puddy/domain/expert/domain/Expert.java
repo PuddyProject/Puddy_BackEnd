@@ -29,12 +29,15 @@ public class Expert extends BaseEntity {
     @Column(name = "company_no")
     @Setter
     private String companyNm;
+
     @ColumnDefault("false")
     @Column(name = "is_confirm")
     private boolean isConfirm;
+
     @NotNull
     @Setter
-    private String introduction;
+    private String introduce;
+
     @NotNull
     @Column(name = "company_name")
     @Setter
@@ -43,18 +46,24 @@ public class Expert extends BaseEntity {
     @NotNull
     @Setter
     private String career;
+
     @Setter
     private String location;
+
+    @Setter
+    @Column
+    private String education;
 
 //     private File file;
 
     public static Expert createExpert(ExpertFormDto expertFormDto){
         Expert expert = new Expert();
         expert.setCompanyNm(expertFormDto.getCompanyNm());
-        expert.setIntroduction(expertFormDto.getIntroduction());
+        expert.setIntroduce(expertFormDto.getIntroduce());
         expert.setCompanyName(expertFormDto.getCompanyName());
         expert.setCareer(expertFormDto.getCareer());
         expert.setLocation(expertFormDto.getLocation());
+        expert.setEducation(expertFormDto.getEducation());
         return expert;
     }
 }
