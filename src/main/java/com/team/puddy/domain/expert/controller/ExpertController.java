@@ -9,6 +9,7 @@ import com.team.puddy.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -21,7 +22,7 @@ public class ExpertController {
     private final ExpertService expertService;
 
     @PostMapping(value = "/profile/experts")
-    public Response<?> newExpert(@Valid ExpertFormDto expertFormDto,
+    public Response<?> newExpert(@RequestBody @Valid ExpertFormDto expertFormDto,
                                  BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
