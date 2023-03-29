@@ -34,7 +34,7 @@ public class ExpertController {
 
         try{
             Expert expert = Expert.createExpert(expertFormDto, user.getUserId());
-            expertService.saveExpert(expert);
+            expertService.saveExpert(expert,  user.getUserId());
         }catch (IllegalStateException e){
             return Response.error(ErrorCode.DUPLICATE_EXPERT_ACCOUNT.getMessage());
         }

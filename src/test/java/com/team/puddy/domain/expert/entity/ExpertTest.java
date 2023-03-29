@@ -33,9 +33,7 @@ public class ExpertTest {
 //    @WithMockUser(username = "kimGeonWoo")
     public void auditingTest(){
         Expert newExpert = new Expert();
-        newExpert.setCompanyNm("사업가 번호 : 16516-5416516");
         newExpert.setIntroduce("저는 홍길동입니다.");
-        newExpert.setCompanyName("홍길동병원");
         newExpert.setCareer("1930년 홍길동병원대표");
         newExpert.setLocation("서울시 마포구 합정동");
         newExpert.setEducation("서울대학교 수의학");

@@ -26,9 +26,7 @@ public class ExpertControllerTest {
     public void createExpertTest() {
 
         Expert expert = new Expert();
-        expert.setCompanyNm("사업가 번호 : 16516-5416516");
         expert.setIntroduce("저는 홍길동입니다.");
-        expert.setCompanyName("홍길동병원");
         expert.setCareer("1930년 홍길동병원대표");
         expert.setLocation("서울시 마포구 합정동");
         Expert savedExpert = expertRepository.save(expert);

@@ -9,13 +9,7 @@ import javax.validation.constraints.NotBlank;
 public class ExpertFormDto {
 
     @NotBlank
-    private String companyNm;
-
-    @NotBlank
     private String introduce;
-
-    @NotBlank
-    private String companyName;
 
     @NotBlank
     private String career;

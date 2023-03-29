@@ -25,11 +25,6 @@ public class Expert extends BaseEntity {
     @Setter
     private Long userId;
 
-    @NotNull
-    @Column(name = "company_no")
-    @Setter
-    private String companyNm;
-
     @ColumnDefault("false")
     @Column(name = "is_confirm")
     private boolean isConfirm;
@@ -37,11 +32,6 @@ public class Expert extends BaseEntity {
     @NotNull
     @Setter
     private String introduce;
-
-    @NotNull
-    @Column(name = "company_name")
-    @Setter
-    private String companyName;
 
     @NotNull
     @Setter
@@ -59,9 +49,7 @@ public class Expert extends BaseEntity {
     public static Expert createExpert(ExpertFormDto expertFormDto, Long userId){
         Expert expert = new Expert();
         expert.setUserId(userId);
-        expert.setCompanyNm(expertFormDto.getCompanyNm());
         expert.setIntroduce(expertFormDto.getIntroduce());
-        expert.setCompanyName(expertFormDto.getCompanyName());
         expert.setCareer(expertFormDto.getCareer());
         expert.setLocation(expertFormDto.getLocation());
         expert.setEducation(expertFormDto.getEducation());
