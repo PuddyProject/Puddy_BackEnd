@@ -21,10 +21,6 @@ public class Expert extends BaseEntity {
     @Column(name = "expert_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @NotNull
     @Column(name = "company_no")
     @Setter

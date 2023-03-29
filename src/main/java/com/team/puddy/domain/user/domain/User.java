@@ -2,6 +2,7 @@ package com.team.puddy.domain.user.domain;
 
 import com.team.puddy.domain.BaseEntity;
 import com.team.puddy.domain.BaseTimeEntity;
+import com.team.puddy.domain.expert.domain.Expert;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.type.UserRole;
 import io.jsonwebtoken.Claims;
@@ -54,7 +55,8 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Question> questionList = new ArrayList<>();
 
-
-
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "expert_id")
+    private Expert expert;
 }
 
