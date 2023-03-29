@@ -20,14 +20,14 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Question extends BaseTimeEntity {
+public class Question extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id",updatable = false)
     private User user;
     @NotBlank
@@ -38,7 +38,7 @@ public class Question extends BaseTimeEntity {
     @Type(type = "text")
     private String content;
 
-    @ColumnDefault("0L")
+    @ColumnDefault("0")
     private long viewCount;
 
     @ColumnDefault("false")
@@ -52,12 +52,18 @@ public class Question extends BaseTimeEntity {
     @Setter
     @Enumerated(value = EnumType.STRING)
     private Category category;
+
     @Setter
     @Builder.Default
-    @OneToMany(mappedBy = "question", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
 
     @Column(length = 500)
     private String imagePath;
+
+    public void setAnswerList(List<Answer> answerList) {
+        this.answerList = answerList;
+    }
 
 }

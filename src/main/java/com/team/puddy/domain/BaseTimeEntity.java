@@ -12,9 +12,9 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
-@EntityListeners(value = {AuditingEntityListener.class})
+@Getter
 @MappedSuperclass
-@Getter @Setter
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
     @CreatedDate
     @Column(updatable = false)

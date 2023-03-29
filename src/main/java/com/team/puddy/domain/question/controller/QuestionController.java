@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
@@ -13,10 +14,12 @@ import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
 import com.team.puddy.global.error.ErrorCode;
+import com.team.puddy.global.mapper.QuestionMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -42,6 +45,7 @@ public class QuestionController {
     private String BUCKET;
     private final QuestionService questionService;
     private final AmazonS3Client amazonS3Client;
+    private final QuestionMapper questionMapper;
 
     @PostMapping(value = "/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "QNA 게시글 등록 메서드")
@@ -72,9 +76,10 @@ public class QuestionController {
     public Response<QuestionListResponseDto> getQuestionList(
             @RequestParam int page) {
         Pageable pageable = PageRequest.of(page - 1, 10);
-        QuestionListResponseDto questionList = questionService.getQuestionList(pageable);
 
-        return Response.success(questionList);
+        QuestionListResponseDto questionListDto = questionService.getQuestionList(pageable);
+
+        return Response.success(questionListDto);
     }
 
     @GetMapping("/count")

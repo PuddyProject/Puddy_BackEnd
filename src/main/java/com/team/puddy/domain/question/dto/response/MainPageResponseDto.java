@@ -5,8 +5,8 @@ import lombok.Builder;
 
 import java.util.List;
 
-public record MainPageResponseDto(List<QuestionResponseDto> popularQuestions,
-                                      List<QuestionResponseDto> recentQuestions) {
+public record MainPageResponseDto(List<QuestionResponeDtoExcludeAnswer> popularQuestions,
+                                      List<QuestionResponeDtoExcludeAnswer> recentQuestions) {
     @Builder
     public MainPageResponseDto {
     }

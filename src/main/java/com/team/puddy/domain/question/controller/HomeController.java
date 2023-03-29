@@ -2,6 +2,7 @@ package com.team.puddy.domain.question.controller;
 
 
 import com.team.puddy.domain.question.dto.response.MainPageResponseDto;
+import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.service.QuestionService;
 import com.team.puddy.global.common.dto.Response;
@@ -27,8 +28,8 @@ public class HomeController {
     @GetMapping
     @Operation(summary = "메인 페이지 데이터 조회 메서드")
     public Response<MainPageResponseDto> mainPage() {
-        List<QuestionResponseDto> popularQuestions = questionService.getPopularQuestions();
-        List<QuestionResponseDto> recentQuestions = questionService.getRecentQuestions();
+        List<QuestionResponeDtoExcludeAnswer> popularQuestions = questionService.getPopularQuestions();
+        List<QuestionResponeDtoExcludeAnswer> recentQuestions = questionService.getRecentQuestions();
 
         //TODO: 그 외의 요청정보 추가시 수정
         MainPageResponseDto mainPageData = MainPageResponseDto.builder()
