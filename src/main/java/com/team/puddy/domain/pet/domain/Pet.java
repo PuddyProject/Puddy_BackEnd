@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name="pet")
+@Table(name = "pet")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,16 +25,12 @@ public class Pet {
 
     private String breed;
 
-    private String birthday_date;
-
     private int age;
 
     private int weight;
 
     private boolean gender;
-
-
-
+    
     private String imagePath;
 
 
