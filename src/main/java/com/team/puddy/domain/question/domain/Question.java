@@ -60,5 +60,4 @@ public class Question extends BaseTimeEntity {
     @Column(length = 500)
     private String imagePath;
 
-
 }

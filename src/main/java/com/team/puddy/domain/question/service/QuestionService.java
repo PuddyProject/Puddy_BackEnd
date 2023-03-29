@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import javax.persistence.EntityNotFoundException;
+import com.team.puddy.global.error.exception.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -83,6 +83,9 @@ public class QuestionService {
 
     @Transactional
     public void increaseViewCount(Long questionId) {
+        if(!questionRepository.existsById(questionId)) {
+            throw new EntityNotFoundException();
+        }
         questionRepository.increaseViewCount(questionId);
     }
 
