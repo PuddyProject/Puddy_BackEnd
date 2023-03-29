@@ -16,7 +16,6 @@ import java.util.Optional;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Optional<Question> findByTitle(String title);
-
     Page<Question> findByOrderByModifiedDateDesc(Pageable pageable);
 
     @Override
@@ -26,4 +25,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("UPDATE Question q SET q.viewCount = q.viewCount + 1 WHERE q.id = :questionId")
     void increaseViewCount(@Param("questionId") Long questionId);
 
+    @Modifying
+    @Query("UPDATE Question q SET q.isSolved = 1 where q.id = :questionId")
+    void select(@Param("questionId") Long questionId);
 }
