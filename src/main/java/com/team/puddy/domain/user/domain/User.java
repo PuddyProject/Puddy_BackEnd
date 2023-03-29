@@ -54,5 +54,9 @@ public class User extends BaseTimeEntity{
     @Builder.Default
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Question> questionList = new ArrayList<>();
+
+    @OneToOne()
+    @JoinColumn(name = "expert_id")
+    private Expert expert;
 }
 

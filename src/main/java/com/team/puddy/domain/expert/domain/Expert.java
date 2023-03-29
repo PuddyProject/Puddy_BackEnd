@@ -21,9 +21,9 @@ public class Expert extends BaseEntity {
     @Column(name = "expert_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    @Setter
+    private Long userId;
 
     @NotNull
     @Column(name = "company_no")
@@ -56,8 +56,9 @@ public class Expert extends BaseEntity {
 
 //     private File file;
 
-    public static Expert createExpert(ExpertFormDto expertFormDto){
+    public static Expert createExpert(ExpertFormDto expertFormDto, Long userId){
         Expert expert = new Expert();
+        expert.setUserId(userId);
         expert.setCompanyNm(expertFormDto.getCompanyNm());
         expert.setIntroduce(expertFormDto.getIntroduce());
         expert.setCompanyName(expertFormDto.getCompanyName());
