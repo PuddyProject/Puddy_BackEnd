@@ -72,7 +72,7 @@ public class JwtVerifierTest {
         String account = jwtVerifier.parseAccount(validToken);
 
         // Then
-        assertThat(account).isEqualTo(decodedJWT.getClaim("account").asString());
+        assertThat(account).isEqualTo(decodedJWT.getSubject());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class JwtVerifierTest {
         return JWT.create()
                 .withIssuedAt(now)
                 .withExpiresAt(expiry)
-                .withClaim("account", testAccount)
+                .withClaim("account", testAccount) // "account" 값을 설정
                 .sign(Algorithm.HMAC256(testSecret));
     }
 
@@ -115,9 +115,10 @@ public class JwtVerifierTest {
         Date expiry = new Date(now.getTime() - 86400000L);
 
         return JWT.create()
+                .withSubject(testAccount)
                 .withIssuedAt(now)
                 .withExpiresAt(expiry)
-                .withClaim("account", testAccount)
+                .withClaim("account",testAccount)
                 .sign(Algorithm.HMAC256(testSecret));
     }
 }
