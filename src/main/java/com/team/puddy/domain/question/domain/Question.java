@@ -62,8 +62,4 @@ public class Question extends BaseTimeEntity{
     @Column(length = 500)
     private String imagePath;
 
-    public void setAnswerList(List<Answer> answerList) {
-        this.answerList = answerList;
-    }
-
 }
