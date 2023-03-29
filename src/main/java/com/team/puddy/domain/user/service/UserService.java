@@ -92,7 +92,7 @@ public class UserService {
     @Transactional
     public void logout(long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND, userId));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
         jwtVerifier.expireRefreshToken(user.getAccount());
     }
 

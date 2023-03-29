@@ -3,7 +3,9 @@ package com.team.puddy.global.error;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.error.exception.BusinessException;
 import com.team.puddy.global.error.exception.EntityNotFoundException;
+import com.team.puddy.global.error.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,10 +26,15 @@ public class GlobalExceptionHandler {
 
     //@유효성 검증 실패 예외를 처리하기 위한 핸들러 메서드
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected Response<Void> invalidException(final MethodArgumentNotValidException e) {
-        return Response.error(ErrorCode.INVALID_INPUT_VALUE.getMessage());
+    protected ResponseEntity<?> invalidException(final MethodArgumentNotValidException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Response.error(e.getMessage()));
+    }
+    //엔티티 찾지 못하는 예외를 처리하기 위한 핸들러 메서드
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity<?> notFoundException(final NotFoundException e) {
+        return ResponseEntity.status(e.getErrorCode().getStatus())
+                .body(Response.error(e.getErrorCode().name()));
     }
 
-
-    //todo
 }
