@@ -2,6 +2,7 @@ package com.team.puddy.global.mapper;
 
 import com.team.puddy.domain.answer.domain.Answer;
 import com.team.puddy.domain.answer.dto.RequestAnswerDto;
+import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.user.domain.User;
 import org.mapstruct.Mapper;
@@ -20,5 +21,15 @@ public interface AnswerMapper {
                 .selected(false)
                 .user(user)
                 .question(question).build();
+    }
+
+    default ResponseAnswerDto toDto(Answer answer, User user) {
+        return ResponseAnswerDto.builder()
+                .id(answer.getId())
+                .content(answer.getContent())
+                .nickname(user.getNickname())
+                .selected(answer.isSelected())
+                .userRole(user.getRole())
+                .postCategory(answer.getPostCategory()).build();
     }
 }
