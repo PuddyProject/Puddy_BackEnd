@@ -39,7 +39,7 @@ public class Question extends BaseTimeEntity {
     private String content;
 
     @ColumnDefault("0")
-    private int view_count;
+    private long viewCount;
 
     @ColumnDefault("false")
     private boolean isSolved;

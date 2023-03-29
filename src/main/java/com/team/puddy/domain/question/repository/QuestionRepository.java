@@ -18,7 +18,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     Page<Question> findByOrderByModifiedDateDesc(Pageable pageable);
 
     @Modifying
-    @Query("UPDATE Question q SET q.view_count = q.view_count + 1 WHERE q.id = :questionId")
+    @Query("UPDATE Question q SET q.viewCount = q.viewCount + 1 WHERE q.id = :questionId")
     void increaseViewCount(@Param("questionId") Long questionId);
     
 }

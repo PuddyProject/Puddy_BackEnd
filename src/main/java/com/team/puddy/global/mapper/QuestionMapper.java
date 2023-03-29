@@ -16,8 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 public interface QuestionMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user",source = "user")
-    @Mapping(target = "imagePath",source = "imagePath")
+    @Mapping(target = "user", source = "user")
+    @Mapping(target = "imagePath", source = "imagePath")
+    @Mapping(target = "viewCount", ignore = true)
+    @Mapping(target = "answerList", ignore = true)
+    @Mapping(target = "isSolved",ignore = true)
+    @Mapping(target = "isDeleted",ignore = true)
     Question toEntity(QuestionRequestDto requestDto, String imagePath, User user);
 
 
@@ -29,7 +33,7 @@ public interface QuestionMapper {
                 .nickname(question.getUser().getNickname())
                 .category(question.getCategory().name())
                 .postCategory(question.getPostCategory())
-                .viewCount(question.getView_count())
+                .viewCount(question.getViewCount())
                 .build();
     }
 

@@ -19,7 +19,7 @@ public class QuestionQueryRepository {
     public List<Question> getPopularQuestionList() {
 
         return queryFactory.selectFrom(question)
-                .orderBy(question.view_count.desc())
+                .orderBy(question.viewCount.desc())
                 .limit(5)
                 .fetch();
     }

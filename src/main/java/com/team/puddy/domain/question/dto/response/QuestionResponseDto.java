@@ -10,7 +10,7 @@ public record QuestionResponseDto (String title,
                                    String content,
                                    String nickname,
                                    @Category String category,
-                                   int viewCount,
+                                   long viewCount,
                                    boolean isSolved,
                                    int postCategory) {
     @Builder
