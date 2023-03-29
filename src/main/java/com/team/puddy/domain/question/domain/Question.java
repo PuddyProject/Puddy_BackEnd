@@ -38,7 +38,7 @@ public class Question extends BaseTimeEntity {
     @Type(type = "text")
     private String content;
 
-    @ColumnDefault("0")
+    @ColumnDefault("0L")
     private long viewCount;
 
     @ColumnDefault("false")
