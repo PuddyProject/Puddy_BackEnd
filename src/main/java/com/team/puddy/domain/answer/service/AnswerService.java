@@ -42,7 +42,7 @@ public class AnswerService {
         Question findQuestion = questionRepository.findById(questionId).orElseThrow(() -> new NotFoundException(ErrorCode.QUESTION_NOT_FOUND));
 
         Answer answer = answerMapper.toEntity(requestDto, findUser, findQuestion);
-        findQuestion.getAnswerList().add(answer);
+//        findQuestion.getAnswerList().add(answer);
         answerRepository.save(answer);
     }
 
