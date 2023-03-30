@@ -1,8 +1,12 @@
 package com.team.puddy.domain.expert.controller;
 
 
+import com.amazonaws.services.ec2.model.SpotInstanceType;
+import com.team.puddy.domain.answer.dto.RequestAnswerDto;
 import com.team.puddy.domain.expert.domain.Expert;
+import com.team.puddy.domain.expert.dto.ExpertDto;
 import com.team.puddy.domain.expert.dto.ExpertFormDto;
+import com.team.puddy.domain.expert.repository.ExpertRepository;
 import com.team.puddy.domain.expert.service.ExpertService;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
@@ -10,9 +14,7 @@ import com.team.puddy.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,6 +24,8 @@ import javax.validation.Valid;
 public class ExpertController {
 
     private final ExpertService expertService;
+
+    private final ExpertRepository expertRepository;
 
     @PostMapping(value = "/profile/experts")
     public Response<?> newExpert(@RequestBody @Valid ExpertFormDto expertFormDto,
@@ -40,5 +44,11 @@ public class ExpertController {
         }
 
         return Response.success();
+    }
+
+    @GetMapping(value = "/experts/{userId}")
+    public Response<ExpertDto> viewExpert(@PathVariable("userId") Long userId) {
+
+        return Response.success(expertService.loadExpertByUserId(userId));
     }
 }
