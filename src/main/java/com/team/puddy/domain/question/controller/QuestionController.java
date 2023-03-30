@@ -11,6 +11,7 @@ import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.service.QuestionService;
 import com.team.puddy.domain.user.domain.User;
+import com.team.puddy.global.common.S3UpdateUtil;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
 import com.team.puddy.global.error.ErrorCode;
@@ -41,10 +42,10 @@ import java.util.UUID;
 @Slf4j
 public class QuestionController {
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String BUCKET;
+    private final S3UpdateUtil s3UpdateUtil;
+
     private final QuestionService questionService;
-    private final AmazonS3Client amazonS3Client;
+
     private final QuestionMapper questionMapper;
 
     @PostMapping(value = "/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -54,8 +55,8 @@ public class QuestionController {
                                         @AuthenticationPrincipal JwtUserDetails user) throws IOException {
         String imagePath = "";
         if (file != null && !file.isEmpty()) {
-            String fileName = createFileName(file.getOriginalFilename());
-            imagePath = uploadToS3(file, fileName);
+            String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
+            imagePath = s3UpdateUtil.uploadToS3(file, fileName);
         }
         questionService.addQuestion(requestDto, imagePath, user.getUserId());
 
@@ -85,27 +86,6 @@ public class QuestionController {
     @GetMapping("/count")
     public Response<Long> getQuestionCount(@AuthenticationPrincipal JwtUserDetails jwtUserDetails) {
         return Response.success(questionService.getQuestionCount());
-    }
-
-
-    //중복 파일명 방지
-    private String createFileName(String fileName) {
-        return UUID.randomUUID().toString().concat(fileName);
-    }
-
-    //S3에 업로드 하는 메소드
-    private String uploadToS3(MultipartFile file, String fileName) throws IOException {
-
-        ObjectMetadata objectMetaData = new ObjectMetadata();
-        objectMetaData.setContentType(file.getContentType());
-        objectMetaData.setContentLength(file.getSize());
-        // S3에 업로드
-        amazonS3Client.putObject(
-                new PutObjectRequest(BUCKET, "questions/" + fileName, file.getInputStream(), objectMetaData)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)
-        );
-
-        return amazonS3Client.getUrl(BUCKET, "questions/" + fileName).toString();
     }
 
 }
