@@ -26,19 +26,19 @@ springdoc:
     try-it-out-enabled: false
   version: 'v1'
 
-  cloud:
-    aws:
-      credentials:
-        access-key: ${S3_ACCESS}
-        secret-key: ${S3_SECRET}
-      stack:
-        auto: false
-      region:
-        static: ${S3_REGION}
-      s3:
-        endpoint: ${S3_ENDPOINT}
-        bucket: ${S3_BUCKET}
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS}
+      secret-key: ${S3_SECRET}
+    stack:
+      auto: false
+    region:
+      static: ${S3_REGION}
+    s3:
+      endpoint: ${S3_ENDPOINT}
+      bucket: ${S3_BUCKET}
 
-  jwt:
-    secret-key: ${JWT_SECRET}
+jwt:
+  secret-key: ${JWT_SECRET}
 
