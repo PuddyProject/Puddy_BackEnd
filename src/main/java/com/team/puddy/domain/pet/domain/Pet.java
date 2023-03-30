@@ -30,7 +30,7 @@ public class Pet {
     private int weight;
 
     private boolean gender;
-    
+
     private String imagePath;
 
 

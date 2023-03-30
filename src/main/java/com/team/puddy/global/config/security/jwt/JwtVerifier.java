@@ -22,7 +22,6 @@ import java.util.Optional;
 public class JwtVerifier {
 
     private final RefreshTokenRepository refreshTokenRepository;
-
     @Value("${jwt.secret-key}")
     public String SECRET;
 
