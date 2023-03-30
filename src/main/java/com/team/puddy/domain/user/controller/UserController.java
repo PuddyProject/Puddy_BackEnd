@@ -1,15 +1,11 @@
 package com.team.puddy.domain.user.controller;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.team.puddy.domain.question.service.QuestionService;
-import com.team.puddy.domain.user.dto.response.ResponseUserDto;
+
 import com.team.puddy.domain.user.dto.request.DuplicateAccountRequest;
 import com.team.puddy.domain.user.dto.request.DuplicateEmailRequest;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
 import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
+import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import com.team.puddy.domain.user.dto.response.TokenReissueDto;
 import com.team.puddy.domain.user.service.UserService;
 import com.team.puddy.global.common.S3UpdateUtil;
@@ -72,7 +68,7 @@ public class UserController {
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping("/me")
     public Response<?> me(@AuthenticationPrincipal JwtUserDetails user) {
-        ResponseUserDto userInfo = userService.getUserInfo(user.getUserId());
+        ResponseUserInfoDto userInfo = userService.getUserInfo(user.getUserId());
         return Response.success(userInfo);
     }
 

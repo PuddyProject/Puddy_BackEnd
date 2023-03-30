@@ -3,6 +3,7 @@ package com.team.puddy.domain.user.domain;
 import com.team.puddy.domain.BaseEntity;
 import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.expert.domain.Expert;
+import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.type.UserRole;
 import io.jsonwebtoken.Claims;
@@ -26,6 +27,7 @@ public class User extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+
     @Column(unique = true)
     private String account;
 
@@ -58,5 +60,15 @@ public class User extends BaseTimeEntity{
     @OneToOne()
     @JoinColumn(name = "expert_id")
     private Expert expert;
+
+    @Builder.Default
+    @OneToOne
+    @JoinColumn(name= "pet_id")
+    private Pet pet= null;
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
 }
 
