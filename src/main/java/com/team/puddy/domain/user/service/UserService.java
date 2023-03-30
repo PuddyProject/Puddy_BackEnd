@@ -3,6 +3,7 @@ package com.team.puddy.domain.user.service;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
 import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
+import com.team.puddy.domain.user.dto.response.ResponseUserDto;
 import com.team.puddy.domain.user.dto.response.TokenReissueDto;
 import com.team.puddy.domain.user.repository.UserQueryRepository;
 import com.team.puddy.domain.user.repository.UserRepository;
@@ -96,4 +97,9 @@ public class UserService {
         jwtVerifier.expireRefreshToken(user.getAccount());
     }
 
+    public ResponseUserDto getUserInfo(Long userId) {
+        User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+
+        return userMapper.toDto(findUser);
+    }
 }

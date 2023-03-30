@@ -1,7 +1,6 @@
 package com.team.puddy.domain.user.controller;
 
-import com.team.puddy.domain.type.UserRole;
-import com.team.puddy.domain.user.domain.User;
+import com.team.puddy.domain.user.dto.response.ResponseUserDto;
 import com.team.puddy.domain.user.dto.request.DuplicateAccountRequest;
 import com.team.puddy.domain.user.dto.request.DuplicateEmailRequest;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
@@ -14,12 +13,12 @@ import com.team.puddy.global.config.security.jwt.LoginToken;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.Set;
 
 @Slf4j
 @RestController
@@ -29,16 +28,17 @@ public class UserController {
 
     private final UserService userService;
 
+    @ResponseStatus(value = HttpStatus.OK)
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public Response<LoginToken> login(@RequestBody @Valid LoginUserRequest request) {
         LoginToken token = userService.login(request);
         return Response.success(token);
     }
 
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/join")
     public Response<Void> join(@RequestBody @Valid RegisterUserRequest request) {
         userService.join(request);
-
         return Response.success();
     }
 
@@ -53,6 +53,21 @@ public class UserController {
     public void logout(@AuthenticationPrincipal JwtUserDetails userDetails, HttpServletResponse response) {
         userService.logout(userDetails.getUserId());
     }
+    @ResponseStatus(value = HttpStatus.OK)
+    @GetMapping("/me")
+    public Response<?> me(@AuthenticationPrincipal JwtUserDetails user) {
+        ResponseUserDto userInfo = userService.getUserInfo(user.getUserId());
+        return Response.success(userInfo);
+    }
+
+    @PatchMapping("/update-profile-image")
+    public Response<?> updateProfileImage(
+            @AuthenticationPrincipal JwtUserDetails user) {
+
+        //TODO: 로직 추가
+        return Response.success();
+    }
+
 
 
 

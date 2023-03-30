@@ -3,6 +3,7 @@ package com.team.puddy.global.mapper;
 import com.team.puddy.domain.type.UserRole;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
+import com.team.puddy.domain.user.dto.response.ResponseUserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -23,4 +24,6 @@ public interface UserMapper {
                 .nickname("퍼디1234")
                 .build();
     }
+
+    ResponseUserDto toDto(User user);
 }
