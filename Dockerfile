@@ -1,4 +1,11 @@
 FROM openjdk:17-jdk
+ENV JWT_SECRET=${JWT_SECRET}
+ENV S3_BUCKET=${S3_BUCKET}
+ENV S3_REGION=${S3_REGION}
+ENV S3_ACCESS=${S3_ACCESS}
+ENV S3_SECRET=${S3_SECRET}
+ENV DB_URL=${DB_URL}
+ENV DB_PASSWORD=${DB_PASSWORD}
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","-Dspring.profiles.active=dev","/app.jar"]
