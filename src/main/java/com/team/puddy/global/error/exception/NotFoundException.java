@@ -1,8 +1,11 @@
 package com.team.puddy.global.error.exception;
 
 import com.team.puddy.global.error.ErrorCode;
+import lombok.Getter;
 
+@Getter
 public class NotFoundException extends BusinessException{
+
     public NotFoundException(ErrorCode errorCode) {
         super(errorCode);
     }
