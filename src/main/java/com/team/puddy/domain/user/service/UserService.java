@@ -25,6 +25,7 @@ import static com.team.puddy.global.error.ErrorCode.USER_NOT_FOUND;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -96,10 +97,15 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
         jwtVerifier.expireRefreshToken(user.getAccount());
     }
-
+    @Transactional(readOnly = true)
     public ResponseUserDto getUserInfo(Long userId) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         return userMapper.toDto(findUser);
+    }
+
+    public void updateProfileImage(Long userId,String imagePath) {
+        User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        findUser.setImagePath(imagePath);
     }
 }

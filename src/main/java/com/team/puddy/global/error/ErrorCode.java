@@ -35,12 +35,13 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "가입된 유저가 아닙니다."),
 
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "유효하지 않은 패스워드입니다."),
+    IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "업데이트할 이미지가 없습니다."),
 
     //QUESTION
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 문제입니다."),
 
     //EXPERT
-    DUPLICATE_EXPERT_ACCOUNT(HttpStatus.BAD_REQUEST,"중복된 계정입니다");
+    DUPLICATE_EXPERT_ACCOUNT(HttpStatus.BAD_REQUEST, "중복된 계정입니다");
 
     private final HttpStatus status;
     private final String message;
