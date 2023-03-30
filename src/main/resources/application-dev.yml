@@ -40,5 +40,5 @@ cloud:
       bucket: ${S3_BUCKET}
 
 jwt:
-  secret-key: ${JWT_SECRET}
+  secret-key: 104f205379c2ff5cdfa3a61a1b5a860193072bbeebf6f90356595a81d6b752a2
 
