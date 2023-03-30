@@ -40,7 +40,7 @@ public class    JwtAuthorizationFilter extends OncePerRequestFilter {
         log.info("Header Authorization : {}", authorizationHeader);
 
         if (authorizationHeader == null || !authorizationHeader.startsWith(AuthConstants.TOKEN_PREFIX.getValue())) {
-            log.error("헤더가 없습니다..");
+
             filterChain.doFilter(request, response);
             return;
         }
