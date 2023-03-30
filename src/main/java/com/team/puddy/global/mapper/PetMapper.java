@@ -26,5 +26,14 @@ public interface PetMapper {
                 .build();
     }
 
-    ResponsePetDto toDto(Pet pet);
+   default ResponsePetDto toDto(Pet pet) {
+        return ResponsePetDto.builder()
+                .name(pet.getName())
+                .age(pet.getAge())
+                .breed(pet.getBreed())
+                .gender(pet.isGender())
+                .imagePath(pet.getImagePath())
+                .note(pet.getNote())
+                .isNeutered(pet.isNeutered()).build();
+   }
 }

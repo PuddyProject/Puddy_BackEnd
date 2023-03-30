@@ -7,7 +7,7 @@ public record ResponsePetDto(String name,
                              String breed,
                              boolean isNeutered,
                              float weight,
-                             Boolean gender,
+                             boolean gender,
                              String note,
                              String imagePath
 
