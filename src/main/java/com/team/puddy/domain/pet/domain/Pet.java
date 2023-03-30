@@ -2,6 +2,7 @@ package com.team.puddy.domain.pet.domain;
 
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -17,21 +18,22 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     private String name;
 
     private String breed;
 
     private int age;
 
-    private int weight;
+    private float weight;
 
     private boolean gender;
 
+    private boolean isNeutered;
+
     private String imagePath;
+    @Lob
+    @Type(type = "text")
+    private String note;
 
 
 }

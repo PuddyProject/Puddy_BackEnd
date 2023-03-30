@@ -1,4 +1,4 @@
-package com.team.puddy.domain.pet.dto;
+package com.team.puddy.domain.pet.dto.request;
 
 public record RequestPetDto(String name,
                             int age,
