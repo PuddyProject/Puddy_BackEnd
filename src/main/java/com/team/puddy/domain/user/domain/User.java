@@ -66,6 +66,10 @@ public class User extends BaseTimeEntity{
     @JoinColumn(name= "pet_id")
     private Pet pet= null;
 
+    public void updateAuth() {
+        this.role = UserRole.EXPERT.getRole();
+    }
+
     public void setPet(Pet pet) {
         this.pet = pet;
     }

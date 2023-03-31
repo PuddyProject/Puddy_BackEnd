@@ -103,10 +103,14 @@ public class UserService {
 
         return userMapper.toDto(findUser);
     }
-
+    @Transactional
     public void updateProfileImage(Long userId,String imagePath) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         findUser.setImagePath(imagePath);
     }
-
+    @Transactional
+    public void updateAuth(Long userId) {
+        User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        findUser.updateAuth();
+    }
 }

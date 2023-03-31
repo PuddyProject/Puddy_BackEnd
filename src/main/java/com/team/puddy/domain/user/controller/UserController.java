@@ -65,6 +65,13 @@ public class UserController {
         userService.logout(userDetails.getUserId());
     }
 
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @PatchMapping("/update-auth")
+    public void updateAuth(@AuthenticationPrincipal JwtUserDetails user) {
+        userService.updateAuth(user.getUserId());
+    }
+
+
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping("/me")
     public Response<?> me(@AuthenticationPrincipal JwtUserDetails user) {
