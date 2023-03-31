@@ -89,7 +89,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/duplicate-email")
+    @PostMapping("/duplicate-email")
     @Operation(summary = "이메일 중복 검사 메서드")
     public void duplicateEmail(@RequestBody DuplicateEmailRequest request) {
 
@@ -97,7 +97,7 @@ public class UserController {
         log.error("중복된 이메일입니다.");
     }
 
-    @GetMapping("/duplicate-account")
+    @PostMapping("/duplicate-account")
     @Operation(summary = "아이디 중복 검사 메서드")
     public void duplicateAccount(@RequestBody DuplicateAccountRequest request) {
 
