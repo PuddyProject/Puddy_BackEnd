@@ -1,9 +1,9 @@
 spring:
   datasource:
-    driver-class-name: #TODO
-    url: #TODO
-    username: #TODO
-    password: #TODO
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: root
+    password: ${DB_PASSWORD}
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -12,6 +12,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 1000
     show-sql: true
 
 
@@ -25,3 +26,20 @@ springdoc:
     path: '/swagger-ui.html'
     try-it-out-enabled: false
   version: 'v1'
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS}
+      secret-key: ${S3_SECRET}
+    stack:
+      auto: false
+    region:
+      static: ${S3_REGION}
+    s3:
+      endpoint: ${S3_ENDPOINT}
+      bucket: ${S3_BUCKET}
+
+jwt:
+  secret-key: ${JWT_SECRET}
+
