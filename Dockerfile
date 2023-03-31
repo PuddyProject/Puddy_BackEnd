@@ -9,4 +9,4 @@ ENV DB_PASSWORD=${DB_PASSWORD}
 ENV S3_ENDPOINT=${S3_ENDPOINT}
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","-Dspring.profiles.active=dev","/app.jar"]
+ENTRYPOINT ["java","-jar","/app.jar"]
