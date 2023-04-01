@@ -40,7 +40,7 @@ public class UserService {
 
     @Transactional
     public LoginToken login(LoginUserRequest request) {
-        User user = userRepository.findByAccount(request.account()).orElseThrow(() -> new BusinessException(USER_NOT_FOUND, String.format("%s is not founded", request.account())));
+        User user = userRepository.findByAccount(request.account()).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new BusinessException(ErrorCode.INVALID_PASSWORD);
@@ -100,13 +100,24 @@ public class UserService {
     @Transactional(readOnly = true)
     public ResponseUserInfoDto getUserInfo(Long userId) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-
-        return userMapper.toDto(findUser);
+        boolean hasPet = true;
+        if (findUser.getPet() == null) {
+            hasPet = false;
+        }
+        return userMapper.toDto(findUser,hasPet);
     }
-
+    @Transactional
     public void updateProfileImage(Long userId,String imagePath) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         findUser.setImagePath(imagePath);
     }
+    @Transactional
+    public void updateAuth(Long userId) {
+        User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        findUser.updateAuth();
+    }
 
+    public void getMyPost(Long userId) {
+//        userQueryRepository.find
+    }
 }

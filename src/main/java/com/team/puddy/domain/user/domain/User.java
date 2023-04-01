@@ -57,14 +57,22 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Question> questionList = new ArrayList<>();
 
-    @OneToOne()
-    @JoinColumn(name = "expert_id")
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name="expert_id")
     private Expert expert;
 
     @Builder.Default
     @OneToOne
     @JoinColumn(name= "pet_id")
     private Pet pet= null;
+
+    public void updateAuth() {
+        this.role = UserRole.EXPERT.getRole();
+    }
+
+    public void setExpert(Expert expert) {
+        this.expert=expert;
+    }
 
     public void setPet(Pet pet) {
         this.pet = pet;

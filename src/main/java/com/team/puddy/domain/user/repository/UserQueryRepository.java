@@ -5,6 +5,9 @@ import com.team.puddy.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
+import static com.team.puddy.domain.expert.domain.QExpert.expert;
 import static com.team.puddy.domain.user.domain.QUser.user;
 
 @Repository
@@ -27,6 +30,13 @@ public class UserQueryRepository {
                 .fetchOne() != null;
     }
 
+    public Optional<User> findUserWithExpertByUserId(Long userId) {
 
+        return Optional.ofNullable(queryFactory
+                .selectFrom(user)
+                .innerJoin(user.expert, expert).fetchJoin() // INNER JOIN을 사용한 페치 조인
+                .where(user.id.eq(userId))
+                .fetchOne());
 
+    }
 }

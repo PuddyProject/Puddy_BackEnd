@@ -1,6 +1,7 @@
 package com.team.puddy.global.config.security.jwt;
 
 import com.team.puddy.domain.BaseEntity;
+import com.team.puddy.domain.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @Entity(name = "RefreshToken")
-public class RefreshToken extends BaseEntity {
+public class RefreshToken extends BaseTimeEntity {
     @Id
     @GeneratedValue
     private Long id;

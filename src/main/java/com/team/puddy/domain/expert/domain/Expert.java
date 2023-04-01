@@ -2,57 +2,50 @@ package com.team.puddy.domain.expert.domain;
 
 
 import com.team.puddy.domain.BaseEntity;
-import com.team.puddy.domain.expert.dto.ExpertFormDto;
+import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.user.domain.User;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "expert")
 @Getter
-public class Expert extends BaseEntity {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Expert extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "expert_id")
     private Long id;
 
-    @Column(name = "user_id")
-    @Setter
-    private Long userId;
+    @OneToOne(mappedBy = "expert",fetch = FetchType.LAZY)
+    private User user;
 
-    @ColumnDefault("false")
-    @Column(name = "is_confirm")
-    private boolean isConfirm;
+    private String username;
 
     @NotNull
-    @Setter
     private String introduce;
 
-    @NotNull
-    @Setter
-    private String career;
+    @ElementCollection
+    @CollectionTable(name="career",joinColumns =
+            @JoinColumn(name="expert_id"))
+    @Column(name = "content")
+    @Builder.Default
+    private List<String> careerList = new ArrayList<>();
 
-    @Setter
     private String location;
 
-    @Setter
-    @Column
     private String education;
 
-//     private File file;
-
-    public static Expert createExpert(ExpertFormDto expertFormDto, Long userId){
-        Expert expert = new Expert();
-        expert.setUserId(userId);
-        expert.setIntroduce(expertFormDto.getIntroduce());
-        expert.setCareer(expertFormDto.getCareer());
-        expert.setLocation(expertFormDto.getLocation());
-        expert.setEducation(expertFormDto.getEducation());
-        return expert;
+    public void setCareerList(List<String> careerList) {
+        this.careerList = careerList;
     }
+
 }
