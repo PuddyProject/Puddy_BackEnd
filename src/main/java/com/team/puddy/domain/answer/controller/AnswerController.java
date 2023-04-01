@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
 public class AnswerController {
 
     private final AnswerService answerService;
