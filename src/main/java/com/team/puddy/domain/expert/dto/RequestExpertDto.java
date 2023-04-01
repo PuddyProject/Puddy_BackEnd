@@ -1,5 +1,6 @@
 package com.team.puddy.domain.expert.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,5 +22,7 @@ public record RequestExpertDto(@NotBlank
                                @NotBlank
                                String education) {
 
-
+    @Builder
+    public RequestExpertDto {
+    }
 }

@@ -1,6 +1,5 @@
 package com.team.puddy.domain.answer.domain;
 
-import com.team.puddy.domain.BaseEntity;
 import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.user.domain.User;

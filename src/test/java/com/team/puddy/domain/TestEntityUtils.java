@@ -1,5 +1,7 @@
 package com.team.puddy.domain;
 
+import com.team.puddy.domain.expert.domain.Expert;
+import com.team.puddy.domain.expert.dto.RequestExpertDto;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
@@ -68,6 +70,17 @@ public class TestEntityUtils {
         return request;
     }
 
+    public static RequestExpertDto requestExpertDto() {
+
+        return RequestExpertDto.builder().
+                education("테스트대학교")
+                        .introduce("저는 테스트입니다.")
+                        .location("테스트시 테스트동")
+                        .careerList(List.of("테스트 대학원 석사", "테스트 대학교 수의학과 학사"))
+                        .build();
+
+    }
+
     public static List<QuestionResponeDtoExcludeAnswer> questionList() {
         User user = user();
         Question question1 = question(user);
@@ -89,6 +102,15 @@ public class TestEntityUtils {
         List<QuestionResponeDtoExcludeAnswer> questions = questionList();
         PageRequest page = PageRequest.of(1, 10);
 
-        return new PageImpl<>(questions,page,questions.size());
+        return new PageImpl<>(questions, page, questions.size());
+    }
+
+    public static Expert expert() {
+        return Expert.builder().id(2L)
+                .education("테스트대학교")
+                .introduce("저는 테스트입니다.")
+                .location("테스트시 테스트동")
+                .careerList(List.of("테스트 대학원 석사", "테스트 대학교 수의학과 학사"))
+                .user(null).build();
     }
 }

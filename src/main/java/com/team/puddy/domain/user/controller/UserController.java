@@ -5,6 +5,7 @@ import com.team.puddy.domain.user.dto.request.DuplicateAccountRequest;
 import com.team.puddy.domain.user.dto.request.DuplicateEmailRequest;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
 import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
+import com.team.puddy.domain.user.dto.response.ResponsePostDto;
 import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import com.team.puddy.domain.user.dto.response.TokenReissueDto;
 import com.team.puddy.domain.user.service.UserService;
@@ -69,6 +70,14 @@ public class UserController {
     @PatchMapping("/update-auth")
     public void updateAuth(@AuthenticationPrincipal JwtUserDetails user) {
         userService.updateAuth(user.getUserId());
+    }
+
+    @GetMapping("/users/posts")
+    public Response<?> myQnas(@AuthenticationPrincipal JwtUserDetails user) {
+
+        userService.getMyPost(user.getUserId());
+        //TODO
+        return Response.success();
     }
 
 

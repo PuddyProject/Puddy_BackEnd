@@ -66,14 +66,12 @@ dependencies {
 	implementation 'com.nimbusds:nimbus-jose-jwt:9.31'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testImplementation 'io.rest-assured:rest-assured:5.3.0'
+
 
 
 	//S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
-	//h2
-	runtimeOnly 'com.h2database:h2'
+	
 
 }
 
@@ -112,43 +110,3 @@ configurations {
 	querydsl.extendsFrom compileClasspath
 }
 
-//def frontendDir = "$projectDir/src/main/frontend"
-//
-//sourceSets {
-//	main {
-//		resources { srcDirs = ["$projectDir/src/main/resources"]
-//		}
-//	}
-//}
-//
-//processResources { dependsOn "copyReactBuildFiles" }
-//
-//task installReact(type: Exec) {
-//	workingDir "$frontendDir"
-//	inputs.dir "$frontendDir"
-//	group = BasePlugin.BUILD_GROUP
-//	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-//		commandLine "npm.cmd", "audit", "fix"
-//		commandLine 'npm.cmd', 'install' }
-//	else {
-//		commandLine "npm", "audit", "fix" commandLine 'npm', 'install'
-//	}
-//}
-//
-//task buildReact(type: Exec) {
-//	dependsOn "installReact"
-//	workingDir "$frontendDir"
-//	inputs.dir "$frontendDir"
-//	group = BasePlugin.BUILD_GROUP
-//	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-//		commandLine "npm.cmd", "run-script", "build"
-//	} else {
-//		commandLine "npm", "run-script", "build"
-//	}
-//}
-//
-//task copyReactBuildFiles(type: Copy) {
-//	dependsOn "buildReact"
-//	from "$frontendDir/build"
-//	into "$projectDir/src/main/resources/static"
-//}
