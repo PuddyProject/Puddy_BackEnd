@@ -35,7 +35,7 @@ public class JwtTokenUtilsTest {
 
     @BeforeEach
     void setUp() {
-        testUser = TestEntityUtils.user("puddy", "1234");
+        testUser = TestEntityUtils.user();
         jwtTokenUtils = new JwtTokenUtils(SECRET, refreshTokenRepository);
     }
 
