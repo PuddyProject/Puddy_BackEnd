@@ -20,6 +20,8 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@CrossOrigin("http://localhost:3000")
+
 public class PetController {
 
     private final S3UpdateUtil s3UpdateUtil;

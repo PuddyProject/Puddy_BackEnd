@@ -33,7 +33,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/users")
-@CrossOrigin
+@CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 public class UserController {
 
