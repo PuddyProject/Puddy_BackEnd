@@ -50,9 +50,11 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS,"/**/*").permitAll()
                 .antMatchers("/users/experts").hasRole("EXPERT")
+                .antMatchers("/users/update-auth").hasRole("USER")
+                .antMatchers("/questions/write").hasAnyRole("USER","EXPERT")
                 .antMatchers("/users/**","/experts/**").permitAll()
-                .antMatchers("/answers/**").permitAll()
-                .antMatchers("/questions/**").hasAnyRole("USER","EXPERT")
+                .antMatchers("/answers/**","/questions/**").permitAll()
+
                 .antMatchers("/users/me").hasAnyRole("USER", "EXPERT")
                 .and()
                 .formLogin().disable()
