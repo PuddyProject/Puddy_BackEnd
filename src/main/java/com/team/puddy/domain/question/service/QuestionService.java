@@ -73,7 +73,6 @@ public class QuestionService {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
         Question question = questionMapper.toEntity(requestDto, imagePath, findUser);
         questionRepository.save(question);
-
     }
 
 

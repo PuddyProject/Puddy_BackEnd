@@ -23,7 +23,6 @@ public class QuestionQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    private final QuestionMapper questionMapper;
 
     public Question getQuestion(Long questionId) {
         return queryFactory
