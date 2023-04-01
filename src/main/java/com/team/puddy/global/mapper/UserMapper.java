@@ -25,5 +25,5 @@ public interface UserMapper {
                 .build();
     }
 
-    ResponseUserInfoDto toDto(User user);
+    ResponseUserInfoDto toDto(User user,boolean hasPet);
 }
