@@ -40,7 +40,10 @@ public enum ErrorCode {
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 문제입니다."),
 
     //EXPERT
-    DUPLICATE_EXPERT_ACCOUNT(HttpStatus.BAD_REQUEST, "중복된 계정입니다");
+    EXPERT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 문제입니다."),
+
+    DUPLICATE_EXPERT(HttpStatus.BAD_REQUEST, "이미 등록된 전문가 유저입니다.");
+
 
     private final HttpStatus status;
     private final String message;

@@ -2,59 +2,55 @@ package com.team.puddy.domain.expert.service;
 
 
 import com.team.puddy.domain.expert.domain.Expert;
-import com.team.puddy.domain.expert.dto.ExpertDto;
+import com.team.puddy.domain.expert.dto.RequestExpertDto;
+import com.team.puddy.domain.expert.dto.ResponseExpertDto;
 import com.team.puddy.domain.expert.repository.ExpertRepository;
 import com.team.puddy.domain.user.domain.User;
+import com.team.puddy.domain.user.repository.UserQueryRepository;
 import com.team.puddy.domain.user.repository.UserRepository;
 import com.team.puddy.global.config.auth.JwtUserDetails;
 import com.team.puddy.global.error.ErrorCode;
 import com.team.puddy.global.error.exception.NotFoundException;
+import com.team.puddy.global.error.exception.user.DuplicateException;
+import com.team.puddy.global.mapper.ExpertMapper;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ExpertService {
 
     private final ExpertRepository expertRepository;
-
     private final UserRepository userRepository;
+    private final UserQueryRepository userQueryRepository;
+    private final ExpertMapper expertMapper;
 
-    public Expert saveExpert(Expert expert,Long userId){
-        validateDuplicateExpert(expert, userId);
-        return expertRepository.save(expert);
-    }
-
-    private void validateDuplicateExpert(Expert expert, Long userId){
-
-
-        Expert findExpert = expertRepository.findByUserId(userId);
-
-        if(findExpert != null){
-            throw new IllegalStateException("이미 등록된 전문가입니다.");
-        }
-    }
-
-    public ExpertDto loadExpertByUserId(Long userId){
-
-        Expert expert =expertRepository.findByUserId(userId);
+    public void registerExpert(RequestExpertDto requestExpertDto, Long userId){
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
-
-        if(expert == null){
-            throw new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다.");
+        if(expertRepository.existsByUserId(userId)) {
+            throw new DuplicateException(ErrorCode.DUPLICATE_EXPERT);
         }
+        Expert expert = expertMapper.toEntity(requestExpertDto, findUser);
+        findUser.setExpert(expert);
 
-        return ExpertDto.builder()
-                .userName(findUser.getUsername())
-                .introduce(expert.getIntroduce())
-                .career(expert.getCareer())
-                .location(expert.getLocation())
-                .education(expert.getEducation()).build();
+        expertRepository.save(expert);
+    }
+
+
+    public ResponseExpertDto getExpertByUserId(Long userId) {
+        User findUser = userQueryRepository.findUserWithExpertByUserId(userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        return expertMapper.toDto(findUser.getExpert());
 
     }
 }
