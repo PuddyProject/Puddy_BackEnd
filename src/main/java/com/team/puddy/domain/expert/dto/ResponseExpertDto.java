@@ -3,16 +3,18 @@ package com.team.puddy.domain.expert.dto;
 
 import lombok.Builder;
 
-public record ExpertDto ( //private String profileImg;
-                         String userName,
+import java.util.List;
+
+public record ResponseExpertDto(
+                         String username,
                          String introduce,
-                         String career,
+                         List<String> careerList,
                          String location,
                          String education){
 
 
     @Builder
-    public ExpertDto{
+    public ResponseExpertDto {
 
     }
 }
