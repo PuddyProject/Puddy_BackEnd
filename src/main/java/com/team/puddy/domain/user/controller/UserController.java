@@ -33,6 +33,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/users")
+@CrossOrigin
 @RequiredArgsConstructor
 public class UserController {
 
