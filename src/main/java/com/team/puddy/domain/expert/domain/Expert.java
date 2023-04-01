@@ -1,11 +1,9 @@
 package com.team.puddy.domain.expert.domain;
 
 
-import com.team.puddy.domain.BaseEntity;
 import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

@@ -1,15 +1,11 @@
 package com.team.puddy.domain.user.domain;
 
-import com.team.puddy.domain.BaseEntity;
 import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.expert.domain.Expert;
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.type.UserRole;
-import io.jsonwebtoken.Claims;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

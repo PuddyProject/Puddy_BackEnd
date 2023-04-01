@@ -1,6 +1,5 @@
 package com.team.puddy.global.config.security.jwt;
 
-import com.team.puddy.domain.BaseEntity;
 import com.team.puddy.domain.BaseTimeEntity;
 import lombok.*;
 
