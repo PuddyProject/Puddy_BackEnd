@@ -31,8 +31,9 @@ public class AnswerController {
 
     @PatchMapping("/questions/{questionId}/answers/{answerId}")
     public Response<Void> answerSelect(@PathVariable Long questionId,
-                                       @PathVariable Long answerId) {
-        answerService.answerSelect(questionId, answerId);
+                                       @PathVariable Long answerId,
+                                       @AuthenticationPrincipal JwtUserDetails user) {
+        answerService.answerSelect(questionId, answerId,user.getUserId());
         return Response.success();
     }
 

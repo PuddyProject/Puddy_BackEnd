@@ -38,6 +38,7 @@ public enum ErrorCode {
 
     //QUESTION
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 문제입니다."),
+    NOT_THE_WRITER(HttpStatus.FORBIDDEN, "작성자만 채택할 수 있습니다."),
 
     //EXPERT
     EXPERT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 문제입니다."),

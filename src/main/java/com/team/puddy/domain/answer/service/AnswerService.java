@@ -6,10 +6,12 @@ import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
 import com.team.puddy.domain.answer.repository.AnswerQueryRepository;
 import com.team.puddy.domain.answer.repository.AnswerRepository;
 import com.team.puddy.domain.question.domain.Question;
+import com.team.puddy.domain.question.repository.QuestionQueryRepository;
 import com.team.puddy.domain.question.repository.QuestionRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserRepository;
 import com.team.puddy.global.error.ErrorCode;
+import com.team.puddy.global.error.exception.BusinessException;
 import com.team.puddy.global.error.exception.NotFoundException;
 import com.team.puddy.global.mapper.AnswerMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,8 @@ public class AnswerService {
     private final UserRepository userRepository;
 
     private final QuestionRepository questionRepository;
+
+    private final QuestionQueryRepository questionQueryRepository;
 
 
     private final AnswerMapper answerMapper;
@@ -59,7 +63,11 @@ public class AnswerService {
         return answerRepository.count();
     }
 
-    public void answerSelect(Long questionId, Long answerId) {
+    public void answerSelect(Long questionId, Long answerId,Long userId) {
+        Question findQuestion = questionQueryRepository.findByIdWithUser(questionId).orElseThrow(() -> new NotFoundException(ErrorCode.QUESTION_NOT_FOUND));
+        if (!findQuestion.getUser().getId().equals(userId)) {
+            throw new BusinessException(ErrorCode.NOT_THE_WRITER,ErrorCode.NOT_THE_WRITER.getMessage());
+        }
         questionRepository.select(questionId);
         answerRepository.select(answerId);
     }
