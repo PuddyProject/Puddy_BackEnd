@@ -25,7 +25,7 @@ public class PetService {
 
     public void addPet(Long userId,String imagePath, RequestPetDto request) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
-        findUser.setPet(petRepository.save(petMapper.toEntity(request,imagePath)));
+        findUser.setPet(petRepository.save(petMapper.toEntity(findUser,request,imagePath)));
     }
 
 
