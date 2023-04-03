@@ -73,12 +73,11 @@ public class UserController {
         userService.updateAuth(user.getUserId());
     }
 
-    @GetMapping("/users/posts")
-    public Response<?> myQnas(@AuthenticationPrincipal JwtUserDetails user) {
+    @GetMapping("/posts")
+    public Response<?> myPost(@AuthenticationPrincipal JwtUserDetails user) {
 
-        userService.getMyPost(user.getUserId());
-        //TODO
-        return Response.success();
+        ResponsePostDto myPost = userService.getMyPost(user.getUserId());
+        return Response.success(myPost);
     }
 
 

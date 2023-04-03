@@ -1,8 +1,15 @@
 package com.team.puddy.domain.user.service;
 
+import com.team.puddy.domain.answer.domain.Answer;
+import com.team.puddy.domain.answer.dto.ResponseAnswerDtoExcludeUser;
+import com.team.puddy.domain.answer.repository.AnswerQueryRepository;
+import com.team.puddy.domain.question.domain.Question;
+import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
+import com.team.puddy.domain.question.repository.QuestionQueryRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
 import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
+import com.team.puddy.domain.user.dto.response.ResponsePostDto;
 import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import com.team.puddy.domain.user.dto.response.TokenReissueDto;
 import com.team.puddy.domain.user.repository.UserQueryRepository;
@@ -11,6 +18,8 @@ import com.team.puddy.global.config.security.jwt.JwtVerifier;
 import com.team.puddy.global.error.ErrorCode;
 import com.team.puddy.global.error.exception.BusinessException;
 import com.team.puddy.global.error.exception.NotFoundException;
+import com.team.puddy.global.mapper.AnswerMapper;
+import com.team.puddy.global.mapper.QuestionMapper;
 import com.team.puddy.global.mapper.UserMapper;
 import com.team.puddy.global.config.security.jwt.JwtTokenUtils;
 import com.team.puddy.global.config.security.jwt.LoginToken;
@@ -19,6 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.team.puddy.global.error.ErrorCode.USER_NOT_FOUND;
 
@@ -29,13 +41,16 @@ import static com.team.puddy.global.error.ErrorCode.USER_NOT_FOUND;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final UserQueryRepository userQueryRepository;
+    private final QuestionQueryRepository questionQueryRepository;
+    private final AnswerQueryRepository answerQueryRepository;
 
+    private final QuestionMapper questionMapper;
+    private final AnswerMapper answerMapper;
     private final UserMapper userMapper;
+
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtils;
-
     private final JwtVerifier jwtVerifier;
 
     @Transactional
@@ -97,6 +112,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
         jwtVerifier.expireRefreshToken(user.getAccount());
     }
+
     @Transactional(readOnly = true)
     public ResponseUserInfoDto getUserInfo(Long userId) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
@@ -104,20 +120,31 @@ public class UserService {
         if (findUser.getPet() == null) {
             hasPet = false;
         }
-        return userMapper.toDto(findUser,hasPet);
+        return userMapper.toDto(findUser, hasPet);
     }
+
     @Transactional
-    public void updateProfileImage(Long userId,String imagePath) {
+    public void updateProfileImage(Long userId, String imagePath) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         findUser.setImagePath(imagePath);
     }
+
     @Transactional
     public void updateAuth(Long userId) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         findUser.updateAuth();
     }
 
-    public void getMyPost(Long userId) {
-//        userQueryRepository.find
+    public ResponsePostDto getMyPost(Long userId) {
+        List<Question> questionList = questionQueryRepository.findQuestionListByUserId(userId);
+        List<Answer> answerList = answerQueryRepository.findAnswerListByUserId(userId);
+
+        //TODO: 엔티티 -> DTO 변경 후 응답 로직 구현
+        List<QuestionResponeDtoExcludeAnswer> questionDtoList = questionList.stream().map(questionMapper::toDto).toList();
+        List<ResponseAnswerDtoExcludeUser> answerDtoList = answerList.stream().map(answerMapper::toDto).toList();
+
+        return ResponsePostDto.builder()
+                .questionList(questionDtoList)
+                .answerList(answerDtoList).build();
     }
 }
