@@ -26,7 +26,6 @@ public class JwtTokenUtils {
     private String SECRET;
 
     public JwtTokenUtils(@Value("${jwt.secret-key}") String SECRET,
-                         RefreshTokenRepository refreshTokenRepository,
                          RedisTemplate<String,String> redisTemplate) {
         this.SECRET = SECRET;
         this.redisTemplate = redisTemplate;

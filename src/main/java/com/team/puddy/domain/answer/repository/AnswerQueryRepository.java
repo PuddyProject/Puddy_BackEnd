@@ -24,4 +24,13 @@ public class AnswerQueryRepository {
                 .orderBy(answer.modifiedDate.desc())
                 .fetch();
     }
+
+    public List<Answer> findAnswerListByUserId(Long userId) {
+
+        return queryFactory.selectFrom(answer)
+                .innerJoin(answer.user, user)
+                .fetchJoin()
+                .where(user.id.eq(userId))
+                .fetch();
+    }
 }

@@ -71,4 +71,13 @@ public class QuestionQueryRepository {
                 .where(question.id.eq(questionId))
                 .fetchOne());
     }
+
+    public List<Question> findQuestionListByUserId(Long userId) {
+        return queryFactory.selectFrom(question)
+                .innerJoin(question.user, user)
+                .fetchJoin()
+                .where(user.id.eq(userId))
+                .fetch();
+    }
+
 }
