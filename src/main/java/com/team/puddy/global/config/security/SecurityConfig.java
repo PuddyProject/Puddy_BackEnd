@@ -33,7 +33,8 @@ public class SecurityConfig {
 
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
 
     // 정적 자원에 대해서는 Security 설정을 적용하지 않음
     @Bean
@@ -50,18 +51,16 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS,"/**/*").permitAll()
                 .antMatchers("/users/experts").hasRole("EXPERT")
+                .antMatchers("/questions/write","/users/update-auth","/users/pets","/users/update-profile-image","/users/me","/questions/{questionId}/answers/write").hasAnyRole("USER","EXPERT")
                 .antMatchers("/users/**","/experts/**").permitAll()
-                .antMatchers("/answers/**").permitAll()
-                .antMatchers("/questions/**").hasAnyRole("USER","EXPERT")
-                .antMatchers("/users/me").hasAnyRole("USER", "EXPERT")
+                .antMatchers("/answers/**","/questions/**").permitAll()
                 .and()
                 .formLogin().disable()
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 
         ;
-        //TODO: 로그인, 로그아웃 라우팅
 
         return http.build();
     }

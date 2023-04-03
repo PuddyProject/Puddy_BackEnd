@@ -54,6 +54,7 @@ public interface QuestionMapper {
                 .isSolved(question.isSolved())
                 .nickname(question.getUser().getNickname())
                 .createdDate(question.getCreatedDate())
+                .imagePath(question.getImagePath())
                 .category(question.getCategory().name())
                 .postCategory(question.getPostCategory())
                 .viewCount(question.getViewCount())

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 
@@ -21,7 +22,9 @@ import java.util.Optional;
 @Component
 public class JwtVerifier {
 
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisTemplate<String, String> redisTemplate;
+
+
     @Value("${jwt.secret-key}")
     public String SECRET;
 
@@ -35,20 +38,20 @@ public class JwtVerifier {
             throw new BusinessException(ErrorCode.TOKEN_VERIFY_FAIL);
         }
     }
-//AuthConstants.TOKEN_PREFIX.getValue() +
     public void verifyRefreshToken(String account, String refreshToken) {
-        Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findByAccount(account);
+        Optional<String> findRefreshToken = Optional.ofNullable(redisTemplate.opsForValue().get(account));
         findRefreshToken.ifPresentOrElse(findToken -> {
-                    if (!findToken.getToken().equals(refreshToken))
-                        throw new NotFoundException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
-                },
+            if(!findToken.equals(refreshToken)) {
+                throw new NotFoundException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
+            }
+        },
                 () -> {
-                    throw new BusinessException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
+            throw new NotFoundException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
                 });
     }
 
     public void expireRefreshToken(String account) {
-        refreshTokenRepository.deleteByAccount(account);
+          redisTemplate.delete(account);
     }
 
     public String parseAccount(String accessToken) {

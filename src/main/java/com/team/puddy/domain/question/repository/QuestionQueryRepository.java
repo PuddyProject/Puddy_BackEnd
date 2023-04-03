@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.team.puddy.domain.answer.domain.QAnswer.answer;
 import static com.team.puddy.domain.question.domain.QQuestion.question;
@@ -62,5 +63,12 @@ public class QuestionQueryRepository {
                 .orderBy(question.modifiedDate.desc())
                 .limit(5)
                 .fetch();
+    }
+
+    public Optional<Question> findByIdWithUser(Long questionId) {
+        return Optional.ofNullable(queryFactory.selectFrom(question)
+                .leftJoin(question.user,user).fetchJoin()
+                .where(question.id.eq(questionId))
+                .fetchOne());
     }
 }

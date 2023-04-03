@@ -3,8 +3,6 @@ package com.team.puddy.global.config.security.jwt;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.team.puddy.global.config.auth.AuthConstants;
 import com.team.puddy.global.config.auth.JwtUserDetails;
-import com.team.puddy.global.config.security.SecurityConfig;
-import com.team.puddy.global.error.ErrorCode;
 import com.team.puddy.global.error.exception.BusinessException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -40,7 +38,6 @@ public class    JwtAuthorizationFilter extends OncePerRequestFilter {
         log.info("Header Authorization : {}", authorizationHeader);
 
         if (authorizationHeader == null || !authorizationHeader.startsWith(AuthConstants.TOKEN_PREFIX.getValue())) {
-
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,25 +46,24 @@ public class    JwtAuthorizationFilter extends OncePerRequestFilter {
         try {
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             DecodedJWT decodedJWT = jwtVerifier.verify(token);
-            String account = decodedJWT.getSubject();
             JwtUserDetails jwtUserDetails = new JwtUserDetails(decodedJWT);
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(jwtUserDetails, null, jwtUserDetails.getAuthorities());
             context.setAuthentication(authentication);
             SecurityContextHolder.setContext(context);
-        } catch (SecurityException | MalformedJwtException e) {
-            request.setAttribute("exception", JwtException.WRONG_TYPE_TOKEN.name());
+        } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+            setJwtException(request, JwtException.WRONG_TOKEN);
         } catch (ExpiredJwtException | BusinessException e) {
-            request.setAttribute("exception", JwtException.EXPIRED_TOKEN.name());
-        } catch (UnsupportedJwtException e) {
-            request.setAttribute("exception", JwtException.UNSUPPORTED_TOKEN.name());
-        } catch (IllegalArgumentException e) {
-            request.setAttribute("exception", JwtException.WRONG_TOKEN.name());
+            setJwtException(request, JwtException.EXPIRED_TOKEN);
         } catch (Exception e) {
             log.error("JwtFilter - doFilterInternal() : {}", e.getMessage());
-            request.setAttribute("exception", JwtException.UNKNOWN_ERROR.name());
+            setJwtException(request, JwtException.UNKNOWN_ERROR);
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void setJwtException(HttpServletRequest request, JwtException exception) {
+        request.setAttribute("exception", exception.name());
     }
 
 }
