@@ -3,6 +3,7 @@ package com.team.puddy.global.mapper;
 import com.team.puddy.domain.answer.domain.Answer;
 import com.team.puddy.domain.answer.dto.RequestAnswerDto;
 import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
+import com.team.puddy.domain.answer.dto.ResponseAnswerDtoExcludeUser;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.user.domain.User;
 import org.mapstruct.Mapper;
@@ -22,6 +23,8 @@ public interface AnswerMapper {
                 .user(user)
                 .question(question).build();
     }
+
+    ResponseAnswerDtoExcludeUser toDto(Answer answer);
 
     default ResponseAnswerDto toDto(Answer answer, User user) {
         return ResponseAnswerDto.builder()
