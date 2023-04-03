@@ -1,10 +1,7 @@
 package com.team.puddy.domain.user.controller;
 
 
-import com.team.puddy.domain.user.dto.request.DuplicateAccountRequest;
-import com.team.puddy.domain.user.dto.request.DuplicateEmailRequest;
-import com.team.puddy.domain.user.dto.request.LoginUserRequest;
-import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
+import com.team.puddy.domain.user.dto.request.*;
 import com.team.puddy.domain.user.dto.response.ResponsePostDto;
 import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import com.team.puddy.domain.user.dto.response.TokenReissueDto;
@@ -120,5 +117,11 @@ public class UserController {
         userService.duplicateAccountCheck(request.account());
     }
 
+    //TODO: 닉네임 중복확인, 프로필 업데이트시 닉네임도 추가
+    @PostMapping("/duplicate-nickname")
+    @Operation(summary = "닉네임 중복 검사 메서드")
+    public void duplicateNickname(@RequestBody DuplicateNicknameRequest request) {
+        userService.duplicateNicknameCheck(request.nickname());
+    }
 
 }
