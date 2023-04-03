@@ -8,12 +8,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.Random;
+
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface UserMapper {
 
     default User toEntity(RegisterUserRequest request){
+        Random random = new Random();
+        int randomNumber = random.nextInt(100000); // 랜덤한 5자리 숫자 생성 (~100000)
+        String nickname = "퍼디" + randomNumber;
         return User.builder()
                 .account(request.account())
                 .password(request.password())
@@ -21,7 +26,7 @@ public interface UserMapper {
                 .username(request.username())
                 .role(UserRole.USER.getRole())
                 .isNotificated(request.isNotificated())
-                .nickname("퍼디1234")
+                .nickname(nickname)
                 .build();
     }
 

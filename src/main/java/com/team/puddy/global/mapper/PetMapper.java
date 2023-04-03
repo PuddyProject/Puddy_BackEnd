@@ -3,6 +3,7 @@ package com.team.puddy.global.mapper;
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.pet.dto.request.RequestPetDto;
 import com.team.puddy.domain.pet.dto.response.ResponsePetDto;
+import com.team.puddy.domain.user.domain.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
@@ -13,9 +14,10 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PetMapper {
 
-    default Pet toEntity(RequestPetDto request,String imagePath) {
+    default Pet toEntity(User user ,RequestPetDto request, String imagePath) {
         return Pet.builder()
                 .name(request.name())
+                .user(user)
                 .age(request.age())
                 .breed(request.breed())
                 .gender(request.gender())
