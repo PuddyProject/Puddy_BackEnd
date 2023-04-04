@@ -1,7 +1,9 @@
 package com.team.puddy.domain.pet.service;
 
+import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.pet.dto.request.RequestPetDto;
 import com.team.puddy.domain.pet.dto.response.ResponsePetDto;
+import com.team.puddy.domain.pet.repository.PetQueryRepository;
 import com.team.puddy.domain.pet.repository.PetRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserRepository;
@@ -20,6 +22,7 @@ public class PetService {
     private final UserRepository userRepository;
 
     private final PetRepository petRepository;
+    private final PetQueryRepository petQueryRepository;
 
     private final PetMapper petMapper;
 
@@ -29,4 +32,9 @@ public class PetService {
     }
 
 
+    public ResponsePetDto getPetByUserId(Long userId) {
+        Pet findPet = petQueryRepository.findPetByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.PET_NOT_FOUND));
+
+        return petMapper.toDto(findPet);
+    }
 }
