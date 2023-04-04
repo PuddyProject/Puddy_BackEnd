@@ -48,12 +48,9 @@ public class PetController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/pets/detail")
     public Response<?> getPet(@AuthenticationPrincipal JwtUserDetails user) {
-        if (user == null) {
-            throw new UnAuthorizedException();
-        }
-        //TODO: 펫 정보 By User?
+        ResponsePetDto response = petService.getPetByUserId(user.getUserId());
 
-        return Response.success();
+        return Response.success(response);
     }
 
 
