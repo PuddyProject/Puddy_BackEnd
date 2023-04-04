@@ -1,5 +1,6 @@
 package com.team.puddy.domain.pet.domain;
 
+import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class Pet {
+public class Pet extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
