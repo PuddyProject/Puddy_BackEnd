@@ -49,7 +49,7 @@ public class QuestionController {
         String imagePath = "";
         if (file != null && !file.isEmpty()) {
             String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
-            imagePath = s3UpdateUtil.uploadToS3(file, fileName);
+            imagePath = s3UpdateUtil.uploadQuestionToS3(file, fileName);
         }
         questionService.addQuestion(requestDto, imagePath, user.getUserId());
 
