@@ -35,7 +35,7 @@ public class    JwtAuthorizationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(AuthConstants.HEADER_STRING.getValue());
-        log.info("Header Authorization : {}", authorizationHeader);
+//        log.info("Header Authorization : {}", authorizationHeader);
 
         if (authorizationHeader == null || !authorizationHeader.startsWith(AuthConstants.TOKEN_PREFIX.getValue())) {
             filterChain.doFilter(request, response);
