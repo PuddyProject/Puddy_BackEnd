@@ -38,7 +38,7 @@ public class PetController {
         String imagePath = "";
         if (file != null && !file.isEmpty()) {
             String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
-            imagePath = s3UpdateUtil.uploadToS3(file, fileName);
+            imagePath = s3UpdateUtil.uploadPetToS3(file, fileName);
         }
         petService.addPet(user.getUserId(),imagePath,requestDto);
 
@@ -48,12 +48,9 @@ public class PetController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/pets/detail")
     public Response<?> getPet(@AuthenticationPrincipal JwtUserDetails user) {
-        if (user == null) {
-            throw new UnAuthorizedException();
-        }
-        //TODO: 펫 정보 By User?
+        ResponsePetDto response = petService.getPetByUserId(user.getUserId());
 
-        return Response.success();
+        return Response.success(response);
     }
 
 

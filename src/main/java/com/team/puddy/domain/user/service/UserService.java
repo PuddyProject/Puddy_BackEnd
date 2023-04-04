@@ -114,9 +114,10 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfileImage(Long userId, String imagePath) {
+    public void updateProfileImage(Long userId,String nickname, String imagePath) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         findUser.setImagePath(imagePath);
+        findUser.setNickname(nickname);
     }
 
     @Transactional
