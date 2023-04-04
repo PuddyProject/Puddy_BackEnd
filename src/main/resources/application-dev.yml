@@ -55,3 +55,9 @@ cloud:
 jwt:
   secret-key: ${JWT_SECRET}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+

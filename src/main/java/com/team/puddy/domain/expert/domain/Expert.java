@@ -23,7 +23,8 @@ public class Expert extends BaseTimeEntity {
     @Column(name = "expert_id")
     private Long id;
 
-    @OneToOne(mappedBy = "expert",fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     private String username;

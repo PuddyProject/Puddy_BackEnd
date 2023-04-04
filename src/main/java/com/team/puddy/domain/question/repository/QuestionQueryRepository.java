@@ -41,12 +41,17 @@ public class QuestionQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
-        long totalCount = queryFactory.selectFrom(question)
-                .fetch().size();
+        
+        Long totalCount = getTotalCount();
 
         return new PageImpl<>(questionList, pageable, totalCount);
 
+    }
+
+    public Long getTotalCount() {
+        return queryFactory.select(question.count())
+                .from(question)
+                .fetchOne();
     }
 
 

@@ -1,14 +1,20 @@
 package com.team.puddy.domain.question.controller;
 
 
+import com.team.puddy.domain.expert.dto.ResponseExpertDto;
+import com.team.puddy.domain.expert.service.ExpertService;
 import com.team.puddy.domain.question.dto.response.MainPageResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.service.QuestionService;
+import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
+import com.team.puddy.domain.user.service.UserService;
 import com.team.puddy.global.common.dto.Response;
+import com.team.puddy.global.config.auth.JwtUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,16 +31,26 @@ public class HomeController {
 
     private final QuestionService questionService;
 
+    private final UserService userService;
+
+    private final ExpertService expertService;
+
     @GetMapping
     @Operation(summary = "메인 페이지 데이터 조회 메서드")
-    public Response<MainPageResponseDto> mainPage() {
+    public Response<MainPageResponseDto> mainPage(@AuthenticationPrincipal JwtUserDetails user) {
+        boolean hasPet = false;
+        if (user != null) {
+            hasPet = userService.checkHasPet(user.getUserId());
+        }
+        List<ResponseExpertDto> expertList = expertService.getExpertList();
         List<QuestionResponeDtoExcludeAnswer> popularQuestions = questionService.getPopularQuestions();
         List<QuestionResponeDtoExcludeAnswer> recentQuestions = questionService.getRecentQuestions();
 
-        //TODO: 그 외의 요청정보 추가시 수정
         MainPageResponseDto mainPageData = MainPageResponseDto.builder()
                 .recentQuestions(recentQuestions)
                 .popularQuestions(popularQuestions)
+                .recentExperts(expertList)
+                .hasPet(hasPet)
                 .build();
 
         return Response.success(mainPageData);

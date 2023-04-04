@@ -12,12 +12,12 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Entity
-@Table(name="\"user\"")
+@Table(name = "\"user\"")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @AllArgsConstructor
 @Builder
-public class User extends BaseTimeEntity{
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,8 @@ public class User extends BaseTimeEntity{
 
     private String username;
 
-    @Setter private String nickname;
+    @Setter
+    private String nickname;
 
     @Setter
     private boolean isNotificated;
@@ -50,24 +51,23 @@ public class User extends BaseTimeEntity{
 
     @Setter
     @Builder.Default
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Question> questionList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name="expert_id")
-    private Expert expert;
+    @Builder.Default
+    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Expert expert = null;
 
     @Builder.Default
-    @OneToOne
-    @JoinColumn(name= "pet_id")
-    private Pet pet= null;
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Pet pet = null;
 
     public void updateAuth() {
         this.role = UserRole.EXPERT.getRole();
     }
 
     public void setExpert(Expert expert) {
-        this.expert=expert;
+        this.expert = expert;
     }
 
     public void setPet(Pet pet) {

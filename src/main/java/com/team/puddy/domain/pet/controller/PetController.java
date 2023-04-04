@@ -38,7 +38,7 @@ public class PetController {
         String imagePath = "";
         if (file != null && !file.isEmpty()) {
             String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
-            imagePath = s3UpdateUtil.uploadToS3(file, fileName);
+            imagePath = s3UpdateUtil.uploadPetToS3(file, fileName);
         }
         petService.addPet(user.getUserId(),imagePath,requestDto);
 

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,5 +53,10 @@ public class ExpertService {
 
         return expertMapper.toDto(findUser.getExpert());
 
+    }
+
+    public List<ResponseExpertDto> getExpertList() {
+        return expertRepository.findTop5ByOrderByCreatedDateDesc().stream()
+                .map(expertMapper::toDto).toList();
     }
 }

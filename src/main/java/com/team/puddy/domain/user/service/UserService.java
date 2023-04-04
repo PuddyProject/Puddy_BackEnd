@@ -3,6 +3,7 @@ package com.team.puddy.domain.user.service;
 import com.team.puddy.domain.answer.domain.Answer;
 import com.team.puddy.domain.answer.dto.ResponseAnswerDtoExcludeUser;
 import com.team.puddy.domain.answer.repository.AnswerQueryRepository;
+import com.team.puddy.domain.pet.repository.PetQueryRepository;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.repository.QuestionQueryRepository;
@@ -31,7 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
+import static com.team.puddy.global.error.ErrorCode.*;
 import static com.team.puddy.global.error.ErrorCode.USER_NOT_FOUND;
 
 @Slf4j
@@ -44,10 +47,12 @@ public class UserService {
     private final UserQueryRepository userQueryRepository;
     private final QuestionQueryRepository questionQueryRepository;
     private final AnswerQueryRepository answerQueryRepository;
+    private final PetQueryRepository petQueryRepository;
 
     private final QuestionMapper questionMapper;
     private final AnswerMapper answerMapper;
     private final UserMapper userMapper;
+
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtils;
@@ -58,7 +63,7 @@ public class UserService {
         User user = userRepository.findByAccount(request.account()).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
+            throw new BusinessException(INVALID_PASSWORD);
         }
 
         // 토큰 생성
@@ -70,8 +75,9 @@ public class UserService {
     public void join(RegisterUserRequest request) {
         //회원가입된 유저가 있는지
         userRepository.findByAccount(request.account()).ifPresent(it -> {
-            throw new BusinessException(ErrorCode.DUPLICATE_ACCOUNT, String.format("%s is duplicated", request.account()));
+            throw new BusinessException(DUPLICATE_ACCOUNT, String.format("%s is duplicated", request.account()));
         });
+
         //회원가입 진행
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.password()));
@@ -89,33 +95,17 @@ public class UserService {
         return jwtTokenUtils.createLoginToken(user);
     }
 
-    @Transactional(readOnly = true)
-    public void duplicateEmailCheck(String email) {
-        if (userQueryRepository.isExistsEmail(email)) {
-            log.error("중복 에러 발생");
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
-        }
-
-    }
-
-    @Transactional(readOnly = true)
-    public void duplicateAccountCheck(String account) {
-        if (userQueryRepository.isExistsAccount(account)) {
-            throw new BusinessException(ErrorCode.DUPLICATE_ACCOUNT);
-        }
-    }
-
 
     @Transactional
     public void logout(long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         jwtVerifier.expireRefreshToken(user.getAccount());
     }
 
     @Transactional(readOnly = true)
     public ResponseUserInfoDto getUserInfo(Long userId) {
-        User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        User findUser = userQueryRepository.findByIdWithPet(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         boolean hasPet = true;
         if (findUser.getPet() == null) {
             hasPet = false;
@@ -124,9 +114,10 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfileImage(Long userId, String imagePath) {
+    public void updateProfileImage(Long userId,String nickname, String imagePath) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         findUser.setImagePath(imagePath);
+        findUser.setNickname(nickname);
     }
 
     @Transactional
@@ -139,12 +130,41 @@ public class UserService {
         List<Question> questionList = questionQueryRepository.findQuestionListByUserId(userId);
         List<Answer> answerList = answerQueryRepository.findAnswerListByUserId(userId);
 
-        //TODO: 엔티티 -> DTO 변경 후 응답 로직 구현
         List<QuestionResponeDtoExcludeAnswer> questionDtoList = questionList.stream().map(questionMapper::toDto).toList();
         List<ResponseAnswerDtoExcludeUser> answerDtoList = answerList.stream().map(answerMapper::toDto).toList();
 
         return ResponsePostDto.builder()
                 .questionList(questionDtoList)
                 .answerList(answerDtoList).build();
+    }
+
+    @Transactional(readOnly = true)
+    public void duplicateEmailCheck(String email) {
+        if (userQueryRepository.isExistsEmail(email)) {
+            log.error("중복 에러 발생");
+            throw new BusinessException(DUPLICATE_EMAIL, DUPLICATE_EMAIL.getMessage());
+        }
+
+    }
+
+    @Transactional(readOnly = true)
+    public void duplicateAccountCheck(String account) {
+        if (userQueryRepository.isExistsAccount(account)) {
+            throw new BusinessException(DUPLICATE_ACCOUNT, DUPLICATE_ACCOUNT.getMessage());
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public void duplicateNicknameCheck(String nickname) {
+        if (userQueryRepository.isExistsNickname(nickname)) {
+            log.error("중복 에러 발생");
+            throw new BusinessException(DUPLICATE_NICKNAME, DUPLICATE_NICKNAME.getMessage());
+        }
+
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkHasPet(Long userId) {
+        return petQueryRepository.existsPetByUserId(userId); // 펫이 있으면 true, 없으면 false
     }
 }
