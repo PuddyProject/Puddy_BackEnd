@@ -1,6 +1,7 @@
 package com.team.puddy.domain.pet.controller;
 
 import com.team.puddy.domain.pet.dto.request.RequestPetDto;
+import com.team.puddy.domain.pet.dto.request.UpdatePetDto;
 import com.team.puddy.domain.pet.dto.response.ResponsePetDto;
 import com.team.puddy.domain.pet.service.PetService;
 import com.team.puddy.domain.user.service.UserService;
@@ -52,6 +53,21 @@ public class PetController {
 
         return Response.success(response);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/pets/update")
+    public Response<?> updatePet(@RequestPart("request") UpdatePetDto updateDto,
+                                 @RequestParam(value = "file",required = false) MultipartFile file,
+                                 @AuthenticationPrincipal JwtUserDetails user) throws IOException {
+        String imagePath = "";
+        if (file != null && !file.isEmpty()) {
+            String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
+            imagePath = s3UpdateUtil.uploadPetToS3(file, fileName);
+        }
+        petService.updatePet(updateDto,user.getUserId(),imagePath);
+        return Response.success();
+    }
+
 
 
 }

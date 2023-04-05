@@ -1,6 +1,7 @@
 package com.team.puddy.domain.pet.domain;
 
 import com.team.puddy.domain.BaseTimeEntity;
+import com.team.puddy.domain.pet.dto.request.UpdatePetDto;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -35,10 +36,22 @@ public class Pet extends BaseTimeEntity {
 
     private boolean isNeutered;
 
+    @Setter
     private String imagePath;
+
     @Lob
     @Type(type = "text")
     private String note;
 
+    public void updatePet(UpdatePetDto updatePetDto, String imagePath) {
+        this.name = updatePetDto.name();
+        this.age = updatePetDto.age();
+        this.breed = updatePetDto.breed();
+        this.isNeutered = updatePetDto.isNeutered();
+        this.weight = updatePetDto.weight();
+        this.gender = updatePetDto.gender();
+        this.note = updatePetDto.note();
+        this.imagePath = imagePath;
+    }
 
 }
