@@ -2,19 +2,17 @@ package com.team.puddy.global.mapper;
 
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.pet.dto.request.RequestPetDto;
+import com.team.puddy.domain.pet.dto.request.UpdatePetDto;
 import com.team.puddy.domain.pet.dto.response.ResponsePetDto;
 import com.team.puddy.domain.user.domain.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PetMapper {
 
-    default Pet toEntity(User user ,RequestPetDto request, String imagePath) {
+    default Pet toEntity(User user, RequestPetDto request, String imagePath) {
         return Pet.builder()
                 .name(request.name())
                 .user(user)
@@ -28,7 +26,7 @@ public interface PetMapper {
                 .build();
     }
 
-   default ResponsePetDto toDto(Pet pet) {
+    default ResponsePetDto toDto(Pet pet) {
         return ResponsePetDto.builder()
                 .name(pet.getName())
                 .age(pet.getAge())
@@ -37,5 +35,7 @@ public interface PetMapper {
                 .imagePath(pet.getImagePath())
                 .note(pet.getNote())
                 .isNeutered(pet.isNeutered()).build();
-   }
+    }
+
+
 }
