@@ -8,7 +8,9 @@
 
 ### BackEnd
 
+- Java 17
 - Spring Boot 2.7.9
+- Spring Security
 - Gradle
 - JPA
 - Querydsl
