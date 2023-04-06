@@ -34,14 +34,10 @@ public class PetController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/pets")
     public Response<Void> addPet(@RequestPart("request") RequestPetDto requestDto,
-                                 @RequestParam(value = "file",required = false) MultipartFile file,
+                                 @RequestParam(value = "images",required = false) MultipartFile file,
                                  @AuthenticationPrincipal JwtUserDetails user) throws IOException {
-        String imagePath = "";
-        if (file != null && !file.isEmpty()) {
-            String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
-            imagePath = s3UpdateUtil.uploadPetToS3(file, fileName);
-        }
-        petService.addPet(user.getUserId(),imagePath,requestDto);
+
+        petService.addPet(user.getUserId(),file,requestDto);
 
         return Response.success();
     }
@@ -49,6 +45,7 @@ public class PetController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/pets/detail")
     public Response<?> getPet(@AuthenticationPrincipal JwtUserDetails user) {
+
         ResponsePetDto response = petService.getPetByUserId(user.getUserId());
 
         return Response.success(response);
@@ -59,12 +56,8 @@ public class PetController {
     public Response<?> updatePet(@RequestPart("request") UpdatePetDto updateDto,
                                  @RequestParam(value = "file",required = false) MultipartFile file,
                                  @AuthenticationPrincipal JwtUserDetails user) throws IOException {
-        String imagePath = "";
-        if (file != null && !file.isEmpty()) {
-            String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
-            imagePath = s3UpdateUtil.uploadPetToS3(file, fileName);
-        }
-        petService.updatePet(updateDto,user.getUserId(),imagePath);
+
+        petService.updatePet(updateDto,user.getUserId(),file);
         return Response.success();
     }
 

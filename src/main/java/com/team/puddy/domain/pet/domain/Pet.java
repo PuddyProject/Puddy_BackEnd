@@ -1,6 +1,7 @@
 package com.team.puddy.domain.pet.domain;
 
 import com.team.puddy.domain.BaseTimeEntity;
+import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.pet.dto.request.UpdatePetDto;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
@@ -36,14 +37,19 @@ public class Pet extends BaseTimeEntity {
 
     private boolean isNeutered;
 
-    @Setter
-    private String imagePath;
+    @Builder.Default
+    @OneToOne(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
+    private Image image = null;
 
     @Lob
     @Type(type = "text")
     private String note;
 
-    public void updatePet(UpdatePetDto updatePetDto, String imagePath) {
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public void updatePet(UpdatePetDto updatePetDto) {
         this.name = updatePetDto.name();
         this.age = updatePetDto.age();
         this.breed = updatePetDto.breed();
@@ -51,7 +57,6 @@ public class Pet extends BaseTimeEntity {
         this.weight = updatePetDto.weight();
         this.gender = updatePetDto.gender();
         this.note = updatePetDto.note();
-        this.imagePath = imagePath;
     }
 
 }
