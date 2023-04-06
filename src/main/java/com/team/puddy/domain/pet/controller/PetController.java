@@ -52,7 +52,7 @@ public class PetController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/pets/update")
+    @PutMapping("/pets/update")
     public Response<?> updatePet(@RequestPart("request") UpdatePetDto updateDto,
                                  @RequestParam(value = "file",required = false) MultipartFile file,
                                  @AuthenticationPrincipal JwtUserDetails user) throws IOException {

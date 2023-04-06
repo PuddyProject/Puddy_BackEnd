@@ -48,7 +48,7 @@ public class User extends BaseTimeEntity {
 
 
     @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "image_id")
     private Image image;
 
     @Setter
