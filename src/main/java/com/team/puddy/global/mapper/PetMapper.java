@@ -1,5 +1,6 @@
 package com.team.puddy.global.mapper;
 
+import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.pet.dto.request.RequestPetDto;
 import com.team.puddy.domain.pet.dto.request.UpdatePetDto;
@@ -12,14 +13,13 @@ import org.mapstruct.*;
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PetMapper {
 
-    default Pet toEntity(User user, RequestPetDto request, String imagePath) {
+    default Pet toEntity(User user, RequestPetDto request) {
         return Pet.builder()
                 .name(request.name())
                 .user(user)
                 .age(request.age())
                 .breed(request.breed())
                 .gender(request.gender())
-                .imagePath(imagePath)
                 .weight(request.weight())
                 .isNeutered(request.isNeutered())
                 .note(request.note())
@@ -32,7 +32,8 @@ public interface PetMapper {
                 .age(pet.getAge())
                 .breed(pet.getBreed())
                 .gender(pet.isGender())
-                .imagePath(pet.getImagePath())
+                .weight(pet.getWeight())
+                .imagePath(pet.getImage().getImagePath())
                 .note(pet.getNote())
                 .isNeutered(pet.isNeutered()).build();
     }

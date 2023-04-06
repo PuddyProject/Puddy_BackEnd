@@ -3,6 +3,7 @@ package com.team.puddy.domain.question.service;
 import com.team.puddy.domain.TestEntityUtils;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
+import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
@@ -55,12 +56,12 @@ public class QuestionServiceTest {
     void givenRequestDto_whenAddQuestion_thenSuccess() throws IOException {
         //given
         User user = TestEntityUtils.user();
-        QuestionRequestDto requestDto = TestEntityUtils.questionRequestDto();
+        RequestQuestionDto requestDto = TestEntityUtils.questionRequestDto();
         Question question = TestEntityUtils.question(user);
         given(userRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(user));
-        given(questionMapper.toEntity(any(QuestionRequestDto.class),any(String.class),any(User.class))).willReturn(question);
+        given(questionMapper.toEntity(any(RequestQuestionDto.class),any(List.class),any(User.class))).willReturn(question);
         //when
-        questionService.addQuestion(requestDto,"", Objects.requireNonNull(user).getId());
+        questionService.addQuestion(requestDto,Collections.emptyList(), Objects.requireNonNull(user).getId());
 
         //then
         verify(questionRepository).save(any());

@@ -2,6 +2,7 @@ package com.team.puddy.domain.question.domain;
 
 import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.answer.domain.Answer;
+import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.type.Category;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
@@ -58,7 +59,12 @@ public class Question extends BaseTimeEntity {
             orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
 
-    @Column(length = 500)
-    private String imagePath;
+//    @Column(length = 500)
+//    private String imagePath;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "question_id")
+    @Builder.Default
+    private List<Image> images = new ArrayList<>();
 
 }

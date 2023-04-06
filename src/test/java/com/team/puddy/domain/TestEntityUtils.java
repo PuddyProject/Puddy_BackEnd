@@ -4,6 +4,7 @@ import com.team.puddy.domain.expert.domain.Expert;
 import com.team.puddy.domain.expert.dto.RequestExpertDto;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
+import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.type.Category;
@@ -41,7 +42,6 @@ public class TestEntityUtils {
                 .content("content")
                 .answerList(List.of())
                 .category(Category.짖기)
-                .imagePath("")
                 .user(user)
                 .isSolved(false)
                 .postCategory(2)
@@ -50,8 +50,8 @@ public class TestEntityUtils {
                 .build();
     }
 
-    public static QuestionRequestDto questionRequestDto() {
-        return QuestionRequestDto.builder()
+    public static RequestQuestionDto questionRequestDto() {
+        return RequestQuestionDto.builder()
                 .title("test title")
                 .content("test content")
                 .postCategory(2)

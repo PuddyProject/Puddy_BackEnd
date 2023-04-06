@@ -18,6 +18,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"),
     SERVLET_ERROR(HttpStatus.BAD_REQUEST, "Servlet Error"),
     INVALID_ERROR(HttpStatus.BAD_REQUEST, "Invalid Error"),
+    IMAGE_PROCESSING_ERROR(HttpStatus.BAD_REQUEST,"이미지 처리중 오류가 발생했습니다."),
 
 
     // JWT

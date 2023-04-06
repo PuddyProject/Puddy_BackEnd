@@ -1,8 +1,10 @@
 package com.team.puddy.global.mapper;
 
 import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
+import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
+import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
@@ -25,12 +27,14 @@ public interface QuestionMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", source = "user")
-    @Mapping(target = "imagePath", source = "imagePath")
     @Mapping(target = "viewCount", ignore = true)
+    @Mapping(target = "images", source = "images")
     @Mapping(target = "answerList", ignore = true)
     @Mapping(target = "isSolved",ignore = true)
     @Mapping(target = "isDeleted",ignore = true)
-    Question toEntity(QuestionRequestDto requestDto, String imagePath, User user);
+    Question toEntity(RequestQuestionDto requestDto, List<Image> images, User user);
+
+
 
     default  QuestionResponeDtoExcludeAnswer toDto(Question question) {
         return QuestionResponeDtoExcludeAnswer.builder()
@@ -54,7 +58,7 @@ public interface QuestionMapper {
                 .isSolved(question.isSolved())
                 .nickname(question.getUser().getNickname())
                 .createdDate(question.getCreatedDate())
-                .imagePath(question.getImagePath())
+                .images(question.getImages().stream().map(Image::getImagePath).toList())
                 .category(question.getCategory().name())
                 .postCategory(question.getPostCategory())
                 .viewCount(question.getViewCount())
