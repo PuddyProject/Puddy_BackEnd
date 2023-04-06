@@ -2,6 +2,7 @@ package com.team.puddy.domain.user.domain;
 
 import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.expert.domain.Expert;
+import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.type.UserRole;
@@ -45,9 +46,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "role")
     private String role;
 
-    @Setter
-    @Column(length = 1000)
-    private String imagePath;
+
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private Image image;
 
     @Setter
     @Builder.Default
@@ -55,7 +57,7 @@ public class User extends BaseTimeEntity {
     private List<Question> questionList = new ArrayList<>();
 
     @Builder.Default
-    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Expert expert = null;
 
     @Builder.Default
@@ -64,6 +66,10 @@ public class User extends BaseTimeEntity {
 
     public void updateAuth() {
         this.role = UserRole.EXPERT.getRole();
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public void setExpert(Expert expert) {

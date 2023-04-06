@@ -1,6 +1,7 @@
 package com.team.puddy.domain.pet.controller;
 
 import com.team.puddy.domain.pet.dto.request.RequestPetDto;
+import com.team.puddy.domain.pet.dto.request.UpdatePetDto;
 import com.team.puddy.domain.pet.dto.response.ResponsePetDto;
 import com.team.puddy.domain.pet.service.PetService;
 import com.team.puddy.domain.user.service.UserService;
@@ -33,14 +34,10 @@ public class PetController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/pets")
     public Response<Void> addPet(@RequestPart("request") RequestPetDto requestDto,
-                                 @RequestParam(value = "file",required = false) MultipartFile file,
+                                 @RequestParam(value = "images",required = false) MultipartFile file,
                                  @AuthenticationPrincipal JwtUserDetails user) throws IOException {
-        String imagePath = "";
-        if (file != null && !file.isEmpty()) {
-            String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
-            imagePath = s3UpdateUtil.uploadPetToS3(file, fileName);
-        }
-        petService.addPet(user.getUserId(),imagePath,requestDto);
+
+        petService.addPet(user.getUserId(),file,requestDto);
 
         return Response.success();
     }
@@ -48,13 +45,22 @@ public class PetController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/pets/detail")
     public Response<?> getPet(@AuthenticationPrincipal JwtUserDetails user) {
-        if (user == null) {
-            throw new UnAuthorizedException();
-        }
-        //TODO: 펫 정보 By User?
 
+        ResponsePetDto response = petService.getPetByUserId(user.getUserId());
+
+        return Response.success(response);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/pets/update")
+    public Response<?> updatePet(@RequestPart("request") UpdatePetDto updateDto,
+                                 @RequestParam(value = "file",required = false) MultipartFile file,
+                                 @AuthenticationPrincipal JwtUserDetails user) throws IOException {
+
+        petService.updatePet(updateDto,user.getUserId(),file);
         return Response.success();
     }
+
 
 
 }

@@ -2,6 +2,7 @@ package com.team.puddy.domain.question.controller;
 
 
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
+import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.service.QuestionService;
@@ -36,24 +37,18 @@ import java.util.UUID;
 @Slf4j
 public class QuestionController {
 
-    private final S3UpdateUtil s3UpdateUtil;
 
     private final QuestionService questionService;
 
 
     @PostMapping(value = "/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "QNA 게시글 등록 메서드")
-    public Response<?> registerQuestion(@RequestPart(value = "request") @Valid QuestionRequestDto requestDto,
-                                        @RequestParam(value = "file", required = false) MultipartFile file,
-                                        @AuthenticationPrincipal JwtUserDetails user) throws IOException {
-        String imagePath = "";
-        if (file != null && !file.isEmpty()) {
-            String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
-            imagePath = s3UpdateUtil.uploadQuestionToS3(file, fileName);
-        }
-        questionService.addQuestion(requestDto, imagePath, user.getUserId());
-
-        return Response.success(imagePath);
+    public Response<?> registerQuestion(@RequestPart("request") RequestQuestionDto requestDto,
+                                        @RequestParam("images") List<MultipartFile> images,
+                                        @AuthenticationPrincipal JwtUserDetails user) {
+        questionService.addQuestion(requestDto, images, user.getUserId());
+//
+        return Response.success();
     }
 
 
@@ -79,6 +74,15 @@ public class QuestionController {
     @GetMapping("/count")
     public Response<Long> getQuestionCount(@AuthenticationPrincipal JwtUserDetails jwtUserDetails) {
         return Response.success(questionService.getQuestionCount());
+    }
+
+    @PutMapping("/update")
+    public Response<?> updateQuestion(@RequestPart("request") RequestQuestionDto requestDto,
+                                      @RequestParam("images") List<MultipartFile> images,
+                                      @AuthenticationPrincipal JwtUserDetails user) {
+
+        questionService.updateQuestion(requestDto,images);
+        return Response.success();
     }
 
 }

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.team.puddy.domain.answer.domain.QAnswer.answer;
+import static com.team.puddy.domain.image.domain.QImage.image;
 import static com.team.puddy.domain.question.domain.QQuestion.question;
 import static com.team.puddy.domain.user.domain.QUser.user;
 

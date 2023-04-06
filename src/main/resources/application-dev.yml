@@ -7,7 +7,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
-    username: root
+    username: wave
     password: ${DB_PASSWORD}
 
   redis:
@@ -56,8 +56,12 @@ jwt:
   secret-key: ${JWT_SECRET}
 
 management:
+  endpoint:
+    health:
+      show-details: always
   endpoints:
     web:
       exposure:
         include: "*"
+
 

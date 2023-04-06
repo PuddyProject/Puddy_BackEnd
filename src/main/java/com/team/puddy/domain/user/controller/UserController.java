@@ -87,16 +87,12 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/update-profile")
-    public Response<?> updateProfileImageAndNickname(@RequestParam(value = "file", required = false) MultipartFile file,
+    public Response<?> updateProfile(@RequestParam(value = "images", required = false) MultipartFile file,
                                                      @RequestPart("request") UpdateNicknameDto requestDto,
                                                      @AuthenticationPrincipal JwtUserDetails user) throws IOException {
-        String imagePath = "";
-        if (file != null && !file.isEmpty()) {
-            String fileName = s3UpdateUtil.createFileName(file.getOriginalFilename());
-            imagePath = s3UpdateUtil.uploadUserToS3(file, fileName);
-        }
-        userService.updateProfileImage(user.getUserId(), requestDto.nickname(), imagePath);
-        return Response.success(imagePath);
+
+        userService.updateProfile(user.getUserId(), requestDto.nickname(), file);
+        return Response.success();
     }
 
 

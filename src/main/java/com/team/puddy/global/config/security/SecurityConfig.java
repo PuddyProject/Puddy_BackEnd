@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS,"/**/*").permitAll()
                 .antMatchers("/users/experts").hasRole("EXPERT")
-                .antMatchers("/questions/write","/users/update-auth","/users/pets","/users/update-profile","/users/me","/questions/{questionId}/answers/write").hasAnyRole("USER","EXPERT")
+                .antMatchers("/questions/write","/users/update-auth","/users/pets/**","/users/update-profile","/users/me","/questions/{questionId}/answers/write").hasAnyRole("USER","EXPERT")
                 .antMatchers("/users/**","/experts/**").permitAll()
                 .antMatchers("/answers/**","/questions/**").permitAll()
                 .and()

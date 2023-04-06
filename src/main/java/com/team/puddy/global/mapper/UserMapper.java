@@ -1,10 +1,12 @@
 package com.team.puddy.global.mapper;
 
+import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.type.UserRole;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
 import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -29,6 +31,6 @@ public interface UserMapper {
                 .nickname(nickname)
                 .build();
     }
-
-    ResponseUserInfoDto toDto(User user,boolean hasPet);
+    @Mapping(target = "imagePath",source = "imagePath")
+    ResponseUserInfoDto toDto(User user,String imagePath, boolean hasPet);
 }

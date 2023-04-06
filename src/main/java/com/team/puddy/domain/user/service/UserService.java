@@ -3,6 +3,8 @@ package com.team.puddy.domain.user.service;
 import com.team.puddy.domain.answer.domain.Answer;
 import com.team.puddy.domain.answer.dto.ResponseAnswerDtoExcludeUser;
 import com.team.puddy.domain.answer.repository.AnswerQueryRepository;
+import com.team.puddy.domain.image.domain.Image;
+import com.team.puddy.domain.image.service.ImageService;
 import com.team.puddy.domain.pet.repository.PetQueryRepository;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
@@ -29,7 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -52,6 +57,7 @@ public class UserService {
     private final QuestionMapper questionMapper;
     private final AnswerMapper answerMapper;
     private final UserMapper userMapper;
+    private final ImageService imageService;
 
 
     private final PasswordEncoder passwordEncoder;
@@ -110,13 +116,22 @@ public class UserService {
         if (findUser.getPet() == null) {
             hasPet = false;
         }
-        return userMapper.toDto(findUser, hasPet);
+        return userMapper.toDto(findUser, findUser.getImage().getImagePath(), hasPet);
     }
 
     @Transactional
-    public void updateProfileImage(Long userId,String nickname, String imagePath) {
-        User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-        findUser.setImagePath(imagePath);
+    public void updateProfile(Long userId, String nickname, MultipartFile file) throws IOException {
+        User findUser = userQueryRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+        Image findImage = findUser.getImage();
+        if (file != null && !file.isEmpty()) { //이미지가 있을 경우
+            Image savedImage = imageService.uploadImageForUsers(file);
+
+            if (findImage == null) { // 해당 유저의 이미지가 없는 경우
+                findUser.setImage(savedImage);
+            } else { // 해당 유저의 이미지가 있는 경우
+                findImage.updateImage(savedImage.getImagePath(), savedImage.getOriginalName());
+            }
+        }
         findUser.setNickname(nickname);
     }
 
@@ -126,6 +141,7 @@ public class UserService {
         findUser.updateAuth();
     }
 
+    @Transactional(readOnly = true)
     public ResponsePostDto getMyPost(Long userId) {
         List<Question> questionList = questionQueryRepository.findQuestionListByUserId(userId);
         List<Answer> answerList = answerQueryRepository.findAnswerListByUserId(userId);

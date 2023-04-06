@@ -18,6 +18,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"),
     SERVLET_ERROR(HttpStatus.BAD_REQUEST, "Servlet Error"),
     INVALID_ERROR(HttpStatus.BAD_REQUEST, "Invalid Error"),
+    IMAGE_PROCESSING_ERROR(HttpStatus.BAD_REQUEST,"이미지 처리중 오류가 발생했습니다."),
 
 
     // JWT
@@ -43,7 +44,11 @@ public enum ErrorCode {
     //EXPERT
     EXPERT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 문제입니다."),
 
-    DUPLICATE_EXPERT(HttpStatus.BAD_REQUEST, "이미 등록된 전문가 유저입니다."), DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 닉네임입니다.");
+    DUPLICATE_EXPERT(HttpStatus.BAD_REQUEST, "이미 등록된 전문가 유저입니다."),
+
+    DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
+
+    PET_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 유저는 펫을 가지지 않았습니다");
 
 
     private final HttpStatus status;
