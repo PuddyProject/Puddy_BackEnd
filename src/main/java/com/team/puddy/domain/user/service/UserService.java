@@ -111,13 +111,15 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ResponseUserInfoDto getUserInfo(Long userId) {
-        User findUser = userQueryRepository.findByIdWithPet(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-        boolean hasPet = true;
-        if (findUser.getPet() == null) {
-            hasPet = false;
+        User findUser = userQueryRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        Image userImage = findUser.getImage();
+        boolean hasPet = findUser.getPet() != null;
+        if (userImage == null) { // 해당 유저의 이미지가 없는 경우
+            return userMapper.toDto(findUser,"",hasPet);
         }
-        return userMapper.toDto(findUser, findUser.getImage().getImagePath(), hasPet);
+        return userMapper.toDto(findUser, userImage.getImagePath(),hasPet);
     }
+
 
     @Transactional
     public void updateProfile(Long userId, String nickname, MultipartFile file) throws IOException {
