@@ -28,18 +28,18 @@ public class S3UpdateUtil {
     }
 
 
-    public String uploadQuestionToS3(MultipartFile file, String fileName) throws IOException {
+    public String uploadQuestionToS3(MultipartFile file,String uuidImageName) throws IOException {
 
         ObjectMetadata objectMetaData = new ObjectMetadata();
         objectMetaData.setContentType(file.getContentType());
         objectMetaData.setContentLength(file.getSize());
         // S3에 업로드
         amazonS3Client.putObject(
-                new PutObjectRequest(BUCKET, "questions/" + fileName, file.getInputStream(), objectMetaData)
+                new PutObjectRequest(BUCKET, "questions/" + uuidImageName, file.getInputStream(), objectMetaData)
                         .withCannedAcl(CannedAccessControlList.PublicRead)
         );
 
-        return amazonS3Client.getUrl(BUCKET, "questions/" + fileName).toString();
+        return amazonS3Client.getUrl(BUCKET, "questions/" + uuidImageName).toString();
     }
 
     public String uploadUserToS3(MultipartFile file, String fileName) throws IOException {
