@@ -3,13 +3,7 @@ package com.team.puddy.global.config.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.team.puddy.global.config.auth.AuthConstants;
-import com.team.puddy.global.config.security.jwt.JwtVerifier;
-import com.team.puddy.global.config.security.jwt.RefreshToken;
-import com.team.puddy.global.config.security.jwt.RefreshTokenRepository;
-import com.team.puddy.global.error.ErrorCode;
 import com.team.puddy.global.error.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,13 +14,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @DisplayName("토큰 검증 테스트")
 @ExtendWith(MockitoExtension.class)
@@ -35,8 +26,6 @@ public class JwtVerifierTest {
     @InjectMocks
     private JwtVerifier jwtVerifier;
 
-    @Mock
-    private RefreshTokenRepository refreshTokenRepository;
 
     private final String testSecret = "testSecret";
     private final String testAccount = "testAccount";
