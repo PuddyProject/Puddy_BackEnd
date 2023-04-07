@@ -53,6 +53,7 @@ public class Article extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Category category;
 
+    @Builder.Default
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ArticleTag> tagList = new ArrayList<>();
 
