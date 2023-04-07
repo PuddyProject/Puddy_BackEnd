@@ -5,9 +5,7 @@ import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.global.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,33 +24,26 @@ public class QuestionQueryRepository {
     private final JPAQueryFactory queryFactory;
 
 
-    public Question getQuestion(Long questionId) {
-        return queryFactory
+    public Optional<Question> getQuestion(Long questionId) {
+        return Optional.ofNullable(queryFactory
                 .selectFrom(question)
                 .leftJoin(question.user, user).fetchJoin() // User 엔티티를 함께 조회하기 위한 조인
                 .leftJoin(question.answerList, answer).fetchJoin() // Answer 엔티티를 함께 조회하기 위한 조인
                 .where(question.id.eq(questionId)) // 주어진 questionId에 해당하는 엔티티를 조회하기 위한 조건
-                .fetchOne();
+                .fetchOne());
     }
 
-    public Page<Question> getQuestionList(Pageable pageable) {
+    public Slice<Question> getQuestionList(Pageable pageable) {
         List<Question> questionList = queryFactory.selectFrom(question)
                 .join(question.user, user).fetchJoin()
                 .orderBy(question.modifiedDate.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
-        
-        Long totalCount = getTotalCount();
 
-        return new PageImpl<>(questionList, pageable, totalCount);
 
-    }
+        return new SliceImpl<>(questionList, pageable, questionList.size() > pageable.getPageSize());
 
-    public Long getTotalCount() {
-        return queryFactory.select(question.count())
-                .from(question)
-                .fetchOne();
     }
 
 
@@ -73,7 +64,7 @@ public class QuestionQueryRepository {
 
     public Optional<Question> findByIdWithUser(Long questionId) {
         return Optional.ofNullable(queryFactory.selectFrom(question)
-                .leftJoin(question.user,user).fetchJoin()
+                .leftJoin(question.user, user).fetchJoin()
                 .where(question.id.eq(questionId))
                 .fetchOne());
     }
@@ -84,6 +75,15 @@ public class QuestionQueryRepository {
                 .fetchJoin()
                 .where(user.id.eq(userId))
                 .fetch();
+    }
+
+    public Question findQuestionWithImageAndUser(Long questionId) {
+        return queryFactory
+                .selectFrom(question)
+                .leftJoin(question.images, image).fetchJoin()
+                .leftJoin(question.user, user).fetchJoin()
+                .where(question.id.eq(questionId))
+                .fetchOne();
     }
 
 }
