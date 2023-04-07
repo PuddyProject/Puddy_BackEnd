@@ -103,7 +103,7 @@ public class UserService {
 
 
     @Transactional
-    public void logout(long userId) {
+    public void logout(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         jwtVerifier.expireRefreshToken(user.getAccount());
@@ -131,6 +131,7 @@ public class UserService {
             if (findImage == null) { // 해당 유저의 이미지가 없는 경우
                 findUser.setImage(savedImage);
             } else { // 해당 유저의 이미지가 있는 경우
+                imageService.deleteImage(findImage);
                 findImage.updateImage(savedImage.getImagePath(), savedImage.getOriginalName());
             }
         }

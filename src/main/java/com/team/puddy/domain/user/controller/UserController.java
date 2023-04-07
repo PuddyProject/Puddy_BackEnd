@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/logout", produces = "application/json")
-    public void logout(@AuthenticationPrincipal JwtUserDetails userDetails, HttpServletResponse response) {
+    public void logout(@AuthenticationPrincipal JwtUserDetails userDetails) {
         userService.logout(userDetails.getUserId());
     }
 
@@ -88,8 +88,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/update-profile")
     public Response<?> updateProfile(@RequestParam(value = "images", required = false) MultipartFile file,
-                                                     @RequestPart("request") UpdateNicknameDto requestDto,
-                                                     @AuthenticationPrincipal JwtUserDetails user) throws IOException {
+                                     @RequestPart("request") UpdateNicknameDto requestDto,
+                                     @AuthenticationPrincipal JwtUserDetails user) throws IOException {
 
         userService.updateProfile(user.getUserId(), requestDto.nickname(), file);
         return Response.success();
