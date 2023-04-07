@@ -49,10 +49,6 @@ public class Article extends BaseTimeEntity {
 
     private int postCategory;
 
-    @Setter
-    @Enumerated(value = EnumType.STRING)
-    private Category category;
-
     @Builder.Default
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ArticleTag> tagList = new ArrayList<>();
@@ -66,14 +62,13 @@ public class Article extends BaseTimeEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "article_id")
     @Builder.Default
-    private List<Image> images = new ArrayList<>();
+    private List<Image> imageList = new ArrayList<>();
 
-    public void updateArticle(String title, String content, String category, List<Image> images) {
+    public void updateArticle(String title, String content, List<Image> images) {
         this.title = title;
         this.content = content;
-        this.category = Category.valueOf(category);
-        this.images.clear();
-        this.images.addAll(images);
+        this.imageList.clear();
+        this.imageList.addAll(images);
     }
 
     public void setTagList(List<ArticleTag> tagList) {
