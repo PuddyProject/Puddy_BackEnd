@@ -1,6 +1,7 @@
 package com.team.puddy.domain.question.service;
 
 import com.team.puddy.domain.TestEntityUtils;
+import com.team.puddy.domain.image.service.ImageService;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
@@ -49,6 +50,9 @@ public class QuestionServiceTest {
     private QuestionMapper questionMapper;
     @Mock
     private AnswerMapper answerMapper;
+
+    @Mock
+    private ImageService imageService;
 
 
     @DisplayName("문제 등록 테스트")
@@ -104,7 +108,7 @@ public class QuestionServiceTest {
     void givenQuestionId_whenGetQuestion_thenQuestionResponseDto() {
         Long questionsId = 2L;
         User user = TestEntityUtils.user();
-        Question question = TestEntityUtils.question(user);
+        Optional<Question> question = Optional.ofNullable(TestEntityUtils.question(user));
         //given
         given(questionQueryRepository.getQuestion(any(Long.class))).willReturn(question);
         //when
