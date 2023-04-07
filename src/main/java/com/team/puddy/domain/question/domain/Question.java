@@ -59,13 +59,13 @@ public class Question extends BaseTimeEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id")
     @Builder.Default
-    private List<Image> images = new ArrayList<>();
+    private List<Image> imageList = new ArrayList<>();
 
-    public void updateQuestion(String title, String content, String category, List<Image> images) {
+    public void updateQuestion(String title, String content, String category, List<Image> imageList) {
         this.title = title;
         this.content = content;
         this.category = Category.valueOf(category);
-        this.images.clear();
-        this.images.addAll(images);
+        this.imageList.clear();
+        this.imageList.addAll(imageList);
     }
 }
