@@ -29,8 +29,6 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtTokenUtils jwtTokenUtils;
-
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -49,11 +47,18 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS,"/**/*").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
                 .antMatchers("/users/experts").hasRole("EXPERT")
-                .antMatchers("/questions/write","/users/update-auth","/users/pets/**","/users/update-profile","/users/me","/questions/{questionId}/answers/write").hasAnyRole("USER","EXPERT")
-                .antMatchers("/users/**","/experts/**").permitAll()
-                .antMatchers("/answers/**","/questions/**").permitAll()
+                .antMatchers("/questions/write",
+                        "/users/update-auth",
+                        "/users/pets/**",
+                        "/users/update-profile",
+                        "/users/me",
+                        "/questions/{questionId}/answers/write",
+                        "/articles/write",
+                        "/comments/write",
+                        "/reviews/**").hasAnyRole("USER", "EXPERT")
+                .antMatchers("/users/**", "/experts/**", "/answers/**", "/questions/**", "/articles/**").permitAll()
                 .and()
                 .formLogin().disable()
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -64,6 +69,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
