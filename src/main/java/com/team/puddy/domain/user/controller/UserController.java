@@ -95,6 +95,18 @@ public class UserController {
         return Response.success();
     }
 
+    @PostMapping("/find-account")
+    public Response<String> findAccount(@RequestBody FindAccountDto accountDto) {
+        //TODO : 아이디 찾기
+        return Response.success("");
+    }
+
+    @PostMapping("/find-password")
+    public Response<String> findAccount(@RequestBody FindPasswordDto passwordDto) {
+        //TODO : 아이디 찾기
+        return Response.success("");
+    }
+
 
     @PostMapping("/duplicate-email")
     @Operation(summary = "이메일 중복 검사 메서드")
