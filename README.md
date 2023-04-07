@@ -23,3 +23,9 @@
 ## 시스템 아키텍처
 
 ![image](https://user-images.githubusercontent.com/93868431/230275264-20f15fc0-3b38-47d5-8577-eb8645e37571.png)
+
+## ERD(2023.04.07)
+
+![puddy_erd](https://user-images.githubusercontent.com/93868431/230530670-f29b93c4-53f4-4932-9aee-fe3891a5b55a.png)
+
+
