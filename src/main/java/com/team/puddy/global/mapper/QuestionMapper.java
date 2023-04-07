@@ -26,14 +26,13 @@ public interface QuestionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", source = "user")
     @Mapping(target = "viewCount", ignore = true)
-    @Mapping(target = "images", source = "images")
+    @Mapping(target = "imageList", source = "imageList")
     @Mapping(target = "answerList", ignore = true)
-    @Mapping(target = "isSolved",ignore = true)
-    Question toEntity(RequestQuestionDto requestDto, List<Image> images, User user);
+    @Mapping(target = "isSolved", ignore = true)
+    Question toEntity(RequestQuestionDto requestDto, List<Image> imageList, User user);
 
 
-
-    default  QuestionResponeDtoExcludeAnswer toDto(Question question) {
+    default QuestionResponeDtoExcludeAnswer toDto(Question question) {
         return QuestionResponeDtoExcludeAnswer.builder()
                 .questionId(question.getId())
                 .title(question.getTitle())
@@ -55,7 +54,7 @@ public interface QuestionMapper {
                 .isSolved(question.isSolved())
                 .nickname(question.getUser().getNickname())
                 .createdDate(question.getCreatedDate())
-                .images(question.getImages().stream().map(Image::getImagePath).toList())
+                .images(question.getImageList().stream().map(Image::getImagePath).toList())
                 .category(question.getCategory().name())
                 .postCategory(question.getPostCategory())
                 .viewCount(question.getViewCount())
@@ -64,14 +63,13 @@ public interface QuestionMapper {
     }
 
     default Page<Question> toPageList(List<Question> questionList, Pageable pageable, long totalCount) {
-        return new PageImpl<>(questionList,pageable,totalCount);
+        return new PageImpl<>(questionList, pageable, totalCount);
     }
 
     default QuestionListResponseDto toDto(List<QuestionResponeDtoExcludeAnswer> questionList, boolean hasNextPage) {
         return QuestionListResponseDto.builder().questionList(questionList)
                 .hasNextPage(hasNextPage).build();
     }
-
 
 
 }
