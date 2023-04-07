@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Response<T> {
+
+
     private String resultCode;
     private T data;
 

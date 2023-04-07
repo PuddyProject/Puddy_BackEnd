@@ -1,6 +1,8 @@
 package com.team.puddy.domain.user.domain;
 
 import com.team.puddy.domain.BaseTimeEntity;
+import com.team.puddy.domain.article.domain.Article;
+import com.team.puddy.domain.comment.domain.Comment;
 import com.team.puddy.domain.expert.domain.Expert;
 import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.pet.domain.Pet;
@@ -64,6 +66,14 @@ public class User extends BaseTimeEntity {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Pet pet = null;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
+    private List<Article> articleList = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
+    private List<Comment> commentList = new ArrayList<>();
+
     public void updateAuth() {
         this.role = UserRole.EXPERT.getRole();
     }
@@ -74,6 +84,7 @@ public class User extends BaseTimeEntity {
 
     public void setExpert(Expert expert) {
         this.expert = expert;
+        expert.setUser(this);
     }
 
     public void setPet(Pet pet) {

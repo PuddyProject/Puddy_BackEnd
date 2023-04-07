@@ -61,6 +61,7 @@ public class PetService {
             if (findImage == null) { // 해당 펫의 이미지가 없는 경우
                 findPet.setImage(savedImage);
             } else { // 해당 펫의 이미지가 있는 경우
+                imageService.deleteImage(findImage);
                 findImage.updateImage(savedImage.getImagePath(), savedImage.getOriginalName());
             }
         }

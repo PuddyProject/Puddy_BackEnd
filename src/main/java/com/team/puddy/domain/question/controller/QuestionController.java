@@ -3,6 +3,7 @@ package com.team.puddy.domain.question.controller;
 
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
+import com.team.puddy.domain.question.dto.request.UpdateQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.service.QuestionService;
@@ -44,10 +45,29 @@ public class QuestionController {
     @PostMapping(value = "/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "QNA 게시글 등록 메서드")
     public Response<?> registerQuestion(@RequestPart("request") RequestQuestionDto requestDto,
-                                        @RequestParam("images") List<MultipartFile> images,
+                                        @RequestPart(value = "images",required = false) List<MultipartFile> images,
                                         @AuthenticationPrincipal JwtUserDetails user) {
         questionService.addQuestion(requestDto, images, user.getUserId());
-//
+
+        return Response.success();
+    }
+
+    @PutMapping(value = "/{questionId}")
+    public Response<?> updateQuestion(@PathVariable("questionId") Long questionId,
+                                      @RequestPart("request") UpdateQuestionDto requestDto,
+                                      @RequestParam(value = "images",required = false) List<MultipartFile> images,
+                                      @AuthenticationPrincipal JwtUserDetails user) {
+
+        questionService.updateQuestion(questionId,requestDto,images,user.getUserId());
+        return Response.success();
+
+    }
+
+    @DeleteMapping("/{questionId}")
+    public Response<?> deleteQuestion(@PathVariable("questionId") Long questionId,
+                                      @AuthenticationPrincipal JwtUserDetails user) {
+        questionService.deleteQuestion(questionId,user.getUserId());
+
         return Response.success();
     }
 
@@ -76,13 +96,5 @@ public class QuestionController {
         return Response.success(questionService.getQuestionCount());
     }
 
-    @PutMapping("/update")
-    public Response<?> updateQuestion(@RequestPart("request") RequestQuestionDto requestDto,
-                                      @RequestParam("images") List<MultipartFile> images,
-                                      @AuthenticationPrincipal JwtUserDetails user) {
-
-        questionService.updateQuestion(requestDto,images);
-        return Response.success();
-    }
 
 }
