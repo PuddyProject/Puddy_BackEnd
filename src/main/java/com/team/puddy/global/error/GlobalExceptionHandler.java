@@ -24,13 +24,12 @@ public class GlobalExceptionHandler {
                 .body(Response.error(e.getErrorCode().name()));
     }
 
-    //@유효성 검증 실패 예외를 처리하기 위한 핸들러 메서드
+    //유효성 검증 실패 예외를 처리하기 위한 핸들러 메서드
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<?> invalidException(final MethodArgumentNotValidException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Response.error(e.getMessage()));
     }
-
     //엔티티 찾지 못하는 예외를 처리하기 위한 핸들러 메서드
     @ExceptionHandler(NotFoundException.class)
     protected ResponseEntity<?> notFoundException(final NotFoundException e) {
