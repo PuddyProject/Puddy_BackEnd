@@ -67,4 +67,10 @@ public class UserQueryRepository {
                 .where(user.id.eq(userId))
                 .fetchOne());
     }
+
+    public Optional<User> findOnlyUserById(Long userId) {
+        return Optional.ofNullable(queryFactory.selectFrom(user)
+                .where(user.id.eq(userId))
+                .fetchFirst());
+    }
 }

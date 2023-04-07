@@ -31,9 +31,7 @@ public class S3UpdateUtil {
 
     public String uploadQuestionToS3(MultipartFile file,String uuidImageName) throws IOException {
 
-        ObjectMetadata objectMetaData = new ObjectMetadata();
-        objectMetaData.setContentType(file.getContentType());
-        objectMetaData.setContentLength(file.getSize());
+        ObjectMetadata objectMetaData = createMetaDate(file);
         // S3에 업로드
         amazonS3Client.putObject(
                 new PutObjectRequest(BUCKET, "questions/" + uuidImageName, file.getInputStream(), objectMetaData)
@@ -43,11 +41,22 @@ public class S3UpdateUtil {
         return amazonS3Client.getUrl(BUCKET, "questions/" + uuidImageName).toString();
     }
 
+    public String uploadArticleToS3(MultipartFile file,String uuidImageName) throws IOException {
+
+        ObjectMetadata objectMetaData = createMetaDate(file);
+        // S3에 업로드
+        amazonS3Client.putObject(
+                new PutObjectRequest(BUCKET, "questions/" + uuidImageName, file.getInputStream(), objectMetaData)
+                        .withCannedAcl(CannedAccessControlList.PublicRead)
+        );
+
+        return amazonS3Client.getUrl(BUCKET, "questions/" + uuidImageName).toString();
+    }
+
+
     public String uploadUserToS3(MultipartFile file, String fileName) throws IOException {
 
-        ObjectMetadata objectMetaData = new ObjectMetadata();
-        objectMetaData.setContentType(file.getContentType());
-        objectMetaData.setContentLength(file.getSize());
+        ObjectMetadata objectMetaData = createMetaDate(file);
         // S3에 업로드
         amazonS3Client.putObject(
                 new PutObjectRequest(BUCKET, "users/" + fileName, file.getInputStream(), objectMetaData)
@@ -59,9 +68,7 @@ public class S3UpdateUtil {
 
     public String uploadPetToS3(MultipartFile file, String fileName) throws IOException {
 
-        ObjectMetadata objectMetaData = new ObjectMetadata();
-        objectMetaData.setContentType(file.getContentType());
-        objectMetaData.setContentLength(file.getSize());
+        ObjectMetadata objectMetaData = createMetaDate(file);
         // S3에 업로드
         amazonS3Client.putObject(
                 new PutObjectRequest(BUCKET, "pets/" + fileName, file.getInputStream(), objectMetaData)
@@ -69,6 +76,13 @@ public class S3UpdateUtil {
         );
 
         return amazonS3Client.getUrl(BUCKET, "pets/" + fileName).toString();
+    }
+
+    protected static ObjectMetadata createMetaDate(MultipartFile file) {
+        ObjectMetadata objectMetaData = new ObjectMetadata();
+        objectMetaData.setContentType(file.getContentType());
+        objectMetaData.setContentLength(file.getSize());
+        return objectMetaData;
     }
 
     public void deleteImage(Image image) {

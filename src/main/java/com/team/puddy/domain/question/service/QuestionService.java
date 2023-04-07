@@ -1,6 +1,7 @@
 package com.team.puddy.domain.question.service;
 
 import com.team.puddy.domain.image.domain.Image;
+import com.team.puddy.domain.image.repository.ImageRepository;
 import com.team.puddy.domain.image.service.ImageService;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
@@ -57,6 +58,7 @@ public class QuestionService {
     private final AnswerMapper answerMapper;
 
     private final ImageService imageService;
+    private final ImageRepository imageRepository;
 
     @Transactional(readOnly = true)
     public QuestionListResponseDto getQuestionList(Pageable page) {
@@ -86,7 +88,6 @@ public class QuestionService {
     public QuestionResponseDto getQuestion(Long questionId) {
         Question question = questionQueryRepository.getQuestion(questionId).orElseThrow(
                 () -> new NotFoundException(ErrorCode.QUESTION_NOT_FOUND));
-
         return questionMapper.toDto(question, question.getAnswerList().stream()
                 .map(answer -> answerMapper.toDto(answer, answer.getUser())).toList());
     }
@@ -108,7 +109,7 @@ public class QuestionService {
     public void addQuestion(RequestQuestionDto requestDto, List<MultipartFile> images, Long userId) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        List<Image> imageList = imageService.saveImageList(images);
+        List<Image> imageList = imageService.saveImageListToQuestion(images);
 
         Question question = questionMapper.toEntity(requestDto, imageList, findUser);
         questionRepository.save(question);
@@ -123,12 +124,12 @@ public class QuestionService {
             throw new UnAuthorizedException();
         }
         //기존의 이미지를 지운다.
-        List<Image> findImages = findQuestion.getImages();
+        List<Image> findImages = findQuestion.getImageList();
         if (findImages != null) {
             findImages.forEach(imageService::deleteImage);
         }
         //새로운 이미지를 저장한다.
-        List<Image> imageList = imageService.saveImageList(images);
+        List<Image> imageList = imageService.saveImageListToQuestion(images);
         //질문글을 수정한다.
         findQuestion.updateQuestion(requestDto.title(), requestDto.content(), requestDto.category(), imageList);
     }
@@ -140,7 +141,7 @@ public class QuestionService {
             throw new UnAuthorizedException();
         }
         //S3에 저장된 이미지를 지운다.
-        List<Image> findImages = findQuestion.getImages();
+        List<Image> findImages = findQuestion.getImageList();
         if (findImages != null) {
             findImages.forEach(imageService::deleteImage);
         }

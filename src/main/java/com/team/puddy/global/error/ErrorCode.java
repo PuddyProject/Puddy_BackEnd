@@ -46,7 +46,10 @@ public enum ErrorCode {
     NOT_THE_EXPERT(HttpStatus.BAD_REQUEST,"해당 유저는 전문가가 아닙니다."),
     DUPLICATE_EXPERT(HttpStatus.BAD_REQUEST, "이미 등록된 전문가 유저입니다."),
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
-    PET_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 유저는 펫을 가지지 않았습니다");
+    PET_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 유저는 펫을 가지지 않았습니다"),
+
+    //ARTICLE
+    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 게시글입니다.");
 
 
     private final HttpStatus status;

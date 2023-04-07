@@ -1,10 +1,7 @@
 package com.team.puddy.domain.user.service;
 
 import com.team.puddy.domain.TestEntityUtils;
-import com.team.puddy.domain.answer.domain.Answer;
 import com.team.puddy.domain.answer.repository.AnswerQueryRepository;
-import com.team.puddy.domain.question.domain.Question;
-import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.repository.QuestionQueryRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
@@ -13,9 +10,7 @@ import com.team.puddy.domain.user.repository.UserRepository;
 import com.team.puddy.global.config.security.jwt.JwtTokenUtils;
 import com.team.puddy.global.config.security.jwt.JwtVerifier;
 import com.team.puddy.global.config.security.jwt.LoginToken;
-import com.team.puddy.global.config.security.jwt.RefreshTokenRepository;
 import com.team.puddy.global.mapper.UserMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
@@ -55,8 +49,6 @@ public class UserServiceTest {
     @Mock
     private JwtTokenUtils jwtTokenUtils;
 
-    @Mock
-    private RefreshTokenRepository refreshTokenRepository;
     @Mock
     private JwtVerifier jwtVerifier;
 

@@ -1,5 +1,6 @@
 package com.team.puddy.domain.comment.domain;
 
+import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.article.domain.Article;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.user.domain.User;
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
