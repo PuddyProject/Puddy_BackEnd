@@ -1,5 +1,7 @@
 package com.team.puddy.domain.pet.dto.request;
 
+import lombok.Builder;
+
 public record RequestPetDto(String name,
                             int age,
                             String breed,
@@ -9,6 +11,8 @@ public record RequestPetDto(String name,
                             String note
 
 
-
 ) {
+    @Builder
+    public RequestPetDto {
+    }
 }

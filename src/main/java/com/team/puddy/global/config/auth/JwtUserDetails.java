@@ -13,7 +13,7 @@ import java.util.Collections;
 @Slf4j
 @NoArgsConstructor
 public class JwtUserDetails implements UserDetails {
-    private long id;
+    private Long id;
     private String role;
     private boolean isAuthenticated;
 
@@ -62,7 +62,7 @@ public class JwtUserDetails implements UserDetails {
         return false;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return id;
     }
 }

@@ -42,7 +42,6 @@ public class ExpertService {
         }
         Expert expert = expertMapper.toEntity(requestExpertDto, findUser);
         findUser.setExpert(expert);
-
         expertRepository.save(expert);
     }
 

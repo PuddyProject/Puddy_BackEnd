@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.team.puddy.domain.image.domain.Image;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -68,5 +69,9 @@ public class S3UpdateUtil {
         );
 
         return amazonS3Client.getUrl(BUCKET, "pets/" + fileName).toString();
+    }
+
+    public void deleteImage(Image image) {
+        amazonS3Client.deleteObject(BUCKET,"questions/" + image.getStoredName());
     }
 }

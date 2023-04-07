@@ -23,6 +23,8 @@ public class Image extends BaseTimeEntity {
 
     private String originalName;
 
+    private String storedName;
+
 
     public void updateImage(String imagePath, String originalName) {
         this.imagePath = imagePath;

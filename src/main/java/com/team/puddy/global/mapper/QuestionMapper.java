@@ -5,14 +5,12 @@ import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
+import com.team.puddy.domain.question.dto.request.UpdateQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.user.domain.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +29,6 @@ public interface QuestionMapper {
     @Mapping(target = "images", source = "images")
     @Mapping(target = "answerList", ignore = true)
     @Mapping(target = "isSolved",ignore = true)
-    @Mapping(target = "isDeleted",ignore = true)
     Question toEntity(RequestQuestionDto requestDto, List<Image> images, User user);
 
 
@@ -74,6 +71,7 @@ public interface QuestionMapper {
         return QuestionListResponseDto.builder().questionList(questionList)
                 .hasNextPage(hasNextPage).build();
     }
+
 
 
 }
