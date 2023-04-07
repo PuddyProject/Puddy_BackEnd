@@ -44,9 +44,6 @@ public class Question extends BaseTimeEntity {
     @ColumnDefault("false")
     private boolean isSolved;
 
-    @ColumnDefault("false")
-    private boolean isDeleted;
-
     private int postCategory;
 
     @Setter
@@ -59,12 +56,16 @@ public class Question extends BaseTimeEntity {
             orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
 
-//    @Column(length = 500)
-//    private String imagePath;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id")
     @Builder.Default
     private List<Image> images = new ArrayList<>();
 
+    public void updateQuestion(String title, String content, String category, List<Image> images) {
+        this.title = title;
+        this.content = content;
+        this.category = Category.valueOf(category);
+        this.images.clear();
+        this.images.addAll(images);
+    }
 }
