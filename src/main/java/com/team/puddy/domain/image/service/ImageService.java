@@ -49,8 +49,16 @@ public class ImageService {
                 .storedName(storedFileName).build();
     }
 
+    public Image uploadImageForArticles(MultipartFile image) throws IOException {
+        String storedFileName = s3UpdateUtil.createFileName(image.getOriginalFilename());
+        String imagePath = s3UpdateUtil.uploadArticleToS3(image, storedFileName);
+        return Image.builder().imagePath(imagePath)
+                .originalName(image.getOriginalFilename())
+                .storedName(storedFileName).build();
+    }
+
     @Transactional
-    public List<Image> saveImageList(List<MultipartFile> images) {
+    public List<Image> saveImageListToQuestion(List<MultipartFile> images) {
         if (images == null || images.isEmpty()) {
             return new ArrayList<>();
         }
@@ -67,9 +75,29 @@ public class ImageService {
                 .toList();
     }
 
+    @Transactional
+    public List<Image> saveImageListToArticle(List<MultipartFile> images) {
+        if (images == null || images.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return images.stream()
+                .map(multipartFile -> {
+                    try {
+                        return uploadImageForArticles(multipartFile);
+                    } catch (IOException e) {
+                        // 예외 처리 코드 (예: 로그 남기기)
+                        throw new BusinessException(ErrorCode.IMAGE_PROCESSING_ERROR);
+                    }
+                })
+                .toList();
+    }
+
+
 
 
     public void deleteImage(Image image) {
         s3UpdateUtil.deleteImage(image);
     }
+
 }
