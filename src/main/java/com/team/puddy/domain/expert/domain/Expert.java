@@ -2,6 +2,7 @@ package com.team.puddy.domain.expert.domain;
 
 
 import com.team.puddy.domain.BaseTimeEntity;
+import com.team.puddy.domain.review.domain.Review;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
 
@@ -19,12 +20,11 @@ import java.util.List;
 public class Expert extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "expert_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @MapsId
     private User user;
 
     private String username;
@@ -33,8 +33,8 @@ public class Expert extends BaseTimeEntity {
     private String introduce;
 
     @ElementCollection
-    @CollectionTable(name="career",joinColumns =
-            @JoinColumn(name="expert_id"))
+    @CollectionTable(name = "career", joinColumns =
+    @JoinColumn(name = "expert_id"))
     @Column(name = "content")
     @Builder.Default
     private List<String> careerList = new ArrayList<>();
@@ -43,8 +43,18 @@ public class Expert extends BaseTimeEntity {
 
     private String education;
 
-    public void setCareerList(List<String> careerList) {
-        this.careerList = careerList;
+    @OneToMany(mappedBy = "expert", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Review> reviewList = new ArrayList<>();
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    //리뷰 추가 로직 컨트롤러 어디에 할건지 생각하기
+    public void updateCareerList(List<String> careerList) {
+        this.careerList.clear();
+        this.careerList.addAll(careerList);
     }
 
 }
