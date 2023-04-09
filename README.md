@@ -14,11 +14,13 @@
 - Gradle
 - JPA
 - Querydsl
-- GCP Ubuntu 20.04
 - S3
 - AWS RDBMS
 - MySQL
 - Redis
+- GCP Ubuntu 20.04
+- Docker
+- Jenkins
 
 ## 시스템 아키텍처
 
@@ -26,7 +28,7 @@
 
 ## ERD(2023.04.07)
 
-![puddy_erd](https://user-images.githubusercontent.com/93868431/230530670-f29b93c4-53f4-4932-9aee-fe3891a5b55a.png)
+![erd 0410](https://user-images.githubusercontent.com/93868431/230784458-59f831ae-8161-42af-9889-fc9bd2fb75e0.png)
 
 ## API 명세서
 
@@ -35,8 +37,11 @@
 ## 트러블 슈팅 및 기술적 도전
 
 - [조회수 동시성 문제 해결하기](https://waveofymymind.tistory.com/108)
+
 - [일대일 연관관계에서의 지연로딩 트레이트 오프](https://waveofymymind.tistory.com/112)
+
 - [Redis 캐시를 사용한 JWT 리프레시 토큰 관리하기](https://waveofymymind.tistory.com/113)
+
 - [JPA N+1 해결하기](https://waveofymymind.tistory.com/114)
 
 ## [회의 기록 노션](https://puddy.notion.site/PUDDY-cbab6d6425cd4103b9461eff301ca7e5)
