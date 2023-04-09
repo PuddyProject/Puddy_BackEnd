@@ -48,17 +48,16 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
-                .antMatchers("/users/experts").hasRole("EXPERT")
-                .antMatchers("/questions/write",
-                        "/users/update-auth",
-                        "/users/pets/**",
-                        "/users/update-profile",
-                        "/users/me",
-                        "/questions/{questionId}/answers/write",
-                        "/articles/write",
-                        "/comments/write",
+                .antMatchers(HttpMethod.POST,"/users/experts").hasRole("EXPERT")
+                .antMatchers(HttpMethod.POST,"/users/pets","/users/experts","/questions/**","/articles/**","/reviews/**","/users/reissue").hasAnyRole("USER","EXPERT")
+                .antMatchers(HttpMethod.PUT,"/questions/**","/users/**").hasAnyRole("USER","EXPERT")
+                .antMatchers(HttpMethod.DELETE,"/questions/**","/articles/**","/users/**").hasAnyRole("USER","EXPERT")
+                .antMatchers(HttpMethod.PATCH,"/users/**","/questions/**").hasAnyRole("USER","EXPERT")
+                .antMatchers(HttpMethod.POST,"/users/**").permitAll()
+                .antMatchers(HttpMethod.GET,
+                        "/users/**",
                         "/reviews/**").hasAnyRole("USER", "EXPERT")
-                .antMatchers("/users/**", "/experts/**", "/answers/**", "/questions/**", "/articles/**").permitAll()
+                .antMatchers("/users/**", "/experts/**", "/questions/**", "/articles/**","/home").permitAll()
                 .and()
                 .formLogin().disable()
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
