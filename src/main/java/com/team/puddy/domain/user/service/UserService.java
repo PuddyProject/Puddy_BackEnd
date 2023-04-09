@@ -184,6 +184,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public boolean checkHasPet(Long userId) {
-        return petQueryRepository.existsPetByUserId(userId); // 펫이 있으면 true, 없으면 false
+        return userQueryRepository.findByIdWithPet(userId).orElseThrow(() -> new BusinessException(USER_NOT_FOUND))
+                .getPet() != null; // 펫이 있으면 true, 없으면 false
     }
 }
