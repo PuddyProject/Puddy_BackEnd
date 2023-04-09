@@ -28,4 +28,8 @@
 
 ![puddy_erd](https://user-images.githubusercontent.com/93868431/230530670-f29b93c4-53f4-4932-9aee-fe3891a5b55a.png)
 
+## 트러블 슈팅 및 기술적 도전
+
+- [조회수 동시성 문제 해결하기](https://waveofymymind.tistory.com/108)
+- [일대일 연관관계에서의 지연로딩 트레이트 오프](https://waveofymymind.tistory.com/112)
 
