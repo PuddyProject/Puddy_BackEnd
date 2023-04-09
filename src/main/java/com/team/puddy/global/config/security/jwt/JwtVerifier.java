@@ -42,7 +42,7 @@ public class JwtVerifier {
         Optional<String> findRefreshToken = Optional.ofNullable(redisTemplate.opsForValue().get(account));
         findRefreshToken.ifPresentOrElse(findToken -> {
             if(!findToken.equals(refreshToken)) {
-                throw new NotFoundException(ErrorCode.REFRESH_TOKEN_NOT_FOUND);
+                throw new NotFoundException(ErrorCode.TOKEN_VERIFY_FAIL);
             }
         },
                 () -> {
