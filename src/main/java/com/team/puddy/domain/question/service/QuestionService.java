@@ -118,28 +118,34 @@ public class QuestionService {
 
     @Transactional
     public void updateQuestion(Long questionId, UpdateQuestionDto requestDto, List<MultipartFile> images, Long userId) {
-        Question findQuestion = questionQueryRepository.findQuestionWithImageAndUser(questionId);
-        //질문글 작성자가 요청한 작성자인지 확인한다.
-        if (!findQuestion.getUser().getId().equals(userId)) {
-            throw new UnAuthorizedException();
-        }
-        //기존의 이미지를 지운다.
-        List<Image> findImages = findQuestion.getImageList();
-        if (findImages != null) {
-            findImages.forEach(imageService::deleteImage);
-        }
-        //새로운 이미지를 저장한다.
-        List<Image> imageList = imageService.saveImageListToQuestion(images);
-        //질문글을 수정한다.
-        findQuestion.updateQuestion(requestDto.title(), requestDto.content(), requestDto.category(), imageList);
+        Question findQuestion = questionQueryRepository.findQuestionForUpdate(questionId, userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION));
+
+        TrySaveImageList(findQuestion, images);
+
+        findQuestion.updateQuestion(requestDto.title(), requestDto.content(), requestDto.category());
+
     }
+
+    private void TrySaveImageList(Question findQuestion,List<MultipartFile> images) {
+        //요청으로 들어온 이미지가 null이 아닐 경우에만 이미지 삭제 시도
+        if (images != null && !images.isEmpty()) {
+            // 기존의 이미지를 지운다.
+            List<Image> findImages = findQuestion.getImageList();
+            if (findImages != null) {
+                findImages.forEach(imageService::deleteImage);
+            }
+            //새로운 이미지를 저장한다.
+            List<Image> imageList = imageService.saveImageListToQuestion(images);
+            //질문글을 수정한다.
+            findQuestion.updateImageList(imageList);
+        }
+    }
+
     @Transactional
     public void deleteQuestion(Long questionId, Long userId) {
-        Question findQuestion = questionQueryRepository.findQuestionWithImageAndUser(questionId);
-        //질문글 작성자가 요청한 작성자인지 확인한다.
-        if (!findQuestion.getUser().getId().equals(userId)) {
-            throw new UnAuthorizedException();
-        }
+        Question findQuestion = questionQueryRepository.findQuestionForDelete(questionId,userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION));
         //S3에 저장된 이미지를 지운다.
         List<Image> findImages = findQuestion.getImageList();
         if (findImages != null) {

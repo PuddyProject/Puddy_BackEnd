@@ -4,6 +4,6 @@ import javax.validation.constraints.NotBlank;
 
 public record UpdateQuestionDto(@NotBlank String title,
                                 @NotBlank String content,
-                                @NotBlank String category,
-                                int postCategory) {
+                                @NotBlank String category
+) {
 }
