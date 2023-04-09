@@ -4,6 +4,7 @@ import com.team.puddy.domain.article.domain.Article;
 import com.team.puddy.domain.article.domain.ArticleTag;
 import com.team.puddy.domain.article.domain.Tag;
 import com.team.puddy.domain.article.dto.request.RequestArticleDto;
+import com.team.puddy.domain.article.dto.request.UpdateArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleDto;
 import com.team.puddy.domain.article.repository.ArticleQueryRepository;
 import com.team.puddy.domain.article.repository.ArticleRepository;
@@ -45,7 +46,7 @@ public class ArticleService {
     @Transactional
     public void addArticle(RequestArticleDto requestDto, List<MultipartFile> images, Long userId) {
         //작성 유저 찾기
-        User findUser = userQueryRepository.findOnlyUserById(userId).orElseThrow(
+        User findUser = userQueryRepository.findByUserId(userId).orElseThrow(
                 () -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
         //이미지 저장하기
         List<Image> imageList = imageService.saveImageListToArticle(images);
@@ -71,5 +72,10 @@ public class ArticleService {
 
         return articleMapper.toDto(findArticle,findArticle.getCommentList().stream().map(comment ->
                 commentMapper.toDto(comment,comment.getUser().getNickname())).toList());
+    }
+
+    @Transactional
+    public void updateArticle(UpdateArticleDto updateDto,Long userId) {
+
     }
 }

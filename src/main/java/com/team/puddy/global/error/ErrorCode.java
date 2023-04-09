@@ -35,7 +35,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "가입된 유저가 아닙니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "유효하지 않은 패스워드입니다."),
     IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "업데이트할 이미지가 없습니다."),
-    UNAUTHORIZED_OPERATION(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
+    UNAUTHORIZED_OPERATION(HttpStatus.UNAUTHORIZED, "수정,삭제 권한이 없습니다."),
 
     //QUESTION
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 문제입니다."),
@@ -49,7 +49,8 @@ public enum ErrorCode {
     PET_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 유저는 펫을 가지지 않았습니다"),
 
     //ARTICLE
-    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 게시글입니다.");
+    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 게시글입니다."),
+    ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "작성자만 답변글을 변경할 수 있습니다");
 
 
     private final HttpStatus status;

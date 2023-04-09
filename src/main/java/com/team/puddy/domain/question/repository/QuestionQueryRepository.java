@@ -33,6 +33,7 @@ public class QuestionQueryRepository {
                 .leftJoin(user.pet, pet).fetchJoin() // Pet 엔티티를 함께 조회하기 위한 조인
                 .leftJoin(user.expert, expert).fetchJoin() // Expert 엔티티를 함께 조회하기 위한 조인
                 .leftJoin(question.answerList, answer).fetchJoin() // Answer 엔티티를 함께 조회하기 위한 조인
+                .leftJoin(answer.user, user).fetchJoin()
                 .where(question.id.eq(questionId)) // 주어진 questionId에 해당하는 엔티티를 조회하기 위한 조건
                 .fetchOne());
     }
@@ -90,4 +91,19 @@ public class QuestionQueryRepository {
                 .fetchOne();
     }
 
+    public Optional<Question> findQuestionForUpdate(Long questionId,Long userId) {
+        return Optional.ofNullable(queryFactory.selectFrom(question)
+                .leftJoin(question.imageList,image).fetchJoin()
+                .where(question.id.eq(questionId)
+                        .and(question.user.id.eq(userId)))
+                .fetchOne());
+    }
+
+    public Optional<Question> findQuestionForDelete(Long questionId,Long userId) {
+        return Optional.ofNullable(queryFactory.selectFrom(question)
+                .leftJoin(question.imageList,image).fetchJoin()
+                .where(question.id.eq(questionId)
+                        .and(question.user.id.eq(userId)))
+                .fetchOne());
+    }
 }

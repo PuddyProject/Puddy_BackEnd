@@ -38,4 +38,8 @@ public class Answer extends BaseTimeEntity {
     @ColumnDefault("0")
     private boolean selected;
 
+    public void updateAnswer(String content) {
+        this.content = content;
+    }
+
 }

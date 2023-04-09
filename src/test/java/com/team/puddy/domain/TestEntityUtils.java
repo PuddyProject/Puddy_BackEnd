@@ -111,8 +111,7 @@ public class TestEntityUtils {
                 .education("테스트대학교")
                 .introduce("저는 테스트입니다.")
                 .location("테스트시 테스트동")
-                .careerList(List.of("테스트 대학원 석사", "테스트 대학교 수의학과 학사"))
-                .user(null).build();
+                .careerList(List.of("테스트 대학원 석사", "테스트 대학교 수의학과 학사")).build();
     }
 
     public static RequestPetDto requestPetDto() {
@@ -135,5 +134,15 @@ public class TestEntityUtils {
                 .note("테스트메모")
                 .name("아롱이")
                 .build();
+    }
+
+    public static QuestionResponseDto responseQuestionDto() {
+        return QuestionResponseDto.builder().questionId(1L).title("22")
+                .category("산책")
+                .content("내용")
+                .nickname("보배")
+                .isSolved(true)
+                .postCategory(2)
+                .viewCount(2L).build();
     }
 }
