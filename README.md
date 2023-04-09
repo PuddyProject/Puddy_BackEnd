@@ -28,8 +28,13 @@
 
 ![puddy_erd](https://user-images.githubusercontent.com/93868431/230530670-f29b93c4-53f4-4932-9aee-fe3891a5b55a.png)
 
+## API 명세서
+
+[API 명세서](https://documenter.getpostman.com/view/23164315/2s93RMVFEm#22ba6470-2481-40e0-a70f-dbf2b4361306)
+
 ## 트러블 슈팅 및 기술적 도전
 
 - [조회수 동시성 문제 해결하기](https://waveofymymind.tistory.com/108)
 - [일대일 연관관계에서의 지연로딩 트레이트 오프](https://waveofymymind.tistory.com/112)
+- [RedisTemplate을 이용하여 Refresh Token 캐시에 저장하기]
 
