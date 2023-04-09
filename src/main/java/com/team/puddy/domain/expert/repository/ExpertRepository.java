@@ -11,9 +11,7 @@ import java.util.Optional;
 
 public interface ExpertRepository extends JpaRepository<Expert, Long> {
 
-    boolean existsByUserId(Long id);
-
-    Optional<Expert> findByUserId(Long userId);
+//    boolean existsByUserId(Long id);
 
     List<Expert> findTop5ByOrderByCreatedDateDesc();
 

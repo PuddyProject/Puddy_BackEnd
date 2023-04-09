@@ -9,6 +9,8 @@ import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.type.UserRole;
 import lombok.*;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -59,11 +61,13 @@ public class User extends BaseTimeEntity {
     private List<Question> questionList = new ArrayList<>();
 
     @Builder.Default
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="expert_id")
     private Expert expert = null;
 
     @Builder.Default
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="pet_id")
     private Pet pet = null;
 
     @Builder.Default
@@ -84,7 +88,6 @@ public class User extends BaseTimeEntity {
 
     public void setExpert(Expert expert) {
         this.expert = expert;
-        expert.setUser(this);
     }
 
     public void setPet(Pet pet) {

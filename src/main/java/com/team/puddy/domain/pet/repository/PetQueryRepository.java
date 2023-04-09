@@ -17,18 +17,4 @@ public class PetQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public boolean existsPetByUserId(Long userId) {
-        return queryFactory
-                .selectOne()
-                .from(pet)
-                .where(pet.user.id.eq(userId))
-                .fetchFirst() != null;
-    }
-
-    public Optional<Pet> findPetByUserId(Long userId) {
-        return Optional.ofNullable(queryFactory.selectFrom(pet)
-                .join(pet.user, user)
-                .where(user.id.eq(userId))
-                .fetchOne());
-    }
 }

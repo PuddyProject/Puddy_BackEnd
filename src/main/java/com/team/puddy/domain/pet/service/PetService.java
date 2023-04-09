@@ -38,7 +38,7 @@ public class PetService {
 
     public void addPet(Long userId, MultipartFile file, RequestPetDto request) throws IOException {
         User findUser = userQueryRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
-        Pet pet = petMapper.toEntity(findUser, request);
+        Pet pet = petMapper.toEntity(request);
         if (file != null && !file.isEmpty()) { //이미지가 있을 경우
             Image savedimage = imageService.uploadImageForPets(file);
             pet.setImage(savedimage);
@@ -48,13 +48,18 @@ public class PetService {
 
     @Transactional(readOnly = true)
     public ResponsePetDto getPetByUserId(Long userId) {
-        Pet findPet = petQueryRepository.findPetByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.PET_NOT_FOUND));
-
-        return petMapper.toDto(findPet);
+        Pet findPet = userQueryRepository.findByIdWithPet(userId).orElseThrow(() -> new NotFoundException(ErrorCode.PET_NOT_FOUND))
+                .getPet();
+        if (findPet.getImage() == null) {
+            return petMapper.toDto(findPet,"");
+        }
+        return petMapper.toDto(findPet,findPet.getImage().getImagePath());
     }
+
     @Transactional
     public void updatePet(UpdatePetDto updateDto, Long userId, MultipartFile file) throws IOException {
-        Pet findPet = petRepository.findPetByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.PET_NOT_FOUND));
+        Pet findPet = userQueryRepository.findByIdWithPet(userId).orElseThrow(() -> new NotFoundException(ErrorCode.PET_NOT_FOUND))
+                .getPet();
         Image findImage = findPet.getImage();
         if (file != null && !file.isEmpty()) { //이미지가 있을 경우
             Image savedImage = imageService.uploadImageForPets(file);

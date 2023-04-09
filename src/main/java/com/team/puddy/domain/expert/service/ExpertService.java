@@ -36,8 +36,8 @@ public class ExpertService {
     private final ExpertMapper expertMapper;
 
     public void registerExpert(RequestExpertDto requestExpertDto, Long userId){
-        User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
-        if(expertRepository.existsByUserId(userId)) {
+        User findUser = userQueryRepository.findByIdWithExpert(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+        if(findUser.getExpert() != null) {
             throw new DuplicateException(ErrorCode.DUPLICATE_EXPERT);
         }
         Expert expert = expertMapper.toEntity(requestExpertDto, findUser);
@@ -47,8 +47,8 @@ public class ExpertService {
 
 
     public ResponseExpertDto getExpertByUserId(Long userId) {
-        User findUser = userQueryRepository.findUserWithExpertByUserId(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+        User findUser = userQueryRepository.findByIdWithExpert(userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.EXPERT_NOT_FOUND));
 
         return expertMapper.toDto(findUser.getExpert());
 
