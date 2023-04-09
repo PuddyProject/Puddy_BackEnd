@@ -2,7 +2,7 @@
 
 > 전문가 기반 반려동물 질의응답 중심의 커뮤니티 서비스
 
-![image](https://user-images.githubusercontent.com/93868431/229270240-348bcf7a-5efe-44a5-96b1-a819f892c9ce.png)
+![puddt](https://user-images.githubusercontent.com/93868431/230781341-cd83cda9-e3b9-45ce-b86d-60fc3eea08e2.png)
 
 ## 기술 스택
 
@@ -37,4 +37,6 @@
 - [조회수 동시성 문제 해결하기](https://waveofymymind.tistory.com/108)
 - [일대일 연관관계에서의 지연로딩 트레이트 오프](https://waveofymymind.tistory.com/112)
 - [RedisTemplate을 이용하여 Refresh Token 캐시에 저장하기]
+
+## [회의 기록 노션](https://puddy.notion.site/PUDDY-cbab6d6425cd4103b9461eff301ca7e5)
 
