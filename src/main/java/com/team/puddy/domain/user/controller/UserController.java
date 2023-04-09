@@ -38,7 +38,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
-    
+
 
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
