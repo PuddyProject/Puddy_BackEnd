@@ -30,4 +30,6 @@ public class ArticleQueryRepository {
                         .where(article.id.eq(articleId))
                         .fetchOne());
     }
+
+
 }
