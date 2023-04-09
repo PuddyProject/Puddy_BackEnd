@@ -31,7 +31,7 @@ public class QuestionQueryRepository {
                 .selectFrom(question)
                 .leftJoin(question.user, user).fetchJoin() // User 엔티티를 함께 조회하기 위한 조인
                 .leftJoin(user.pet, pet).fetchJoin() // Pet 엔티티를 함께 조회하기 위한 조인
-                .leftJoin(user.expert, expert).fetchJoin() // Expert 엔티티를 함께 조회하기 위한 조인
+//                .leftJoin(user.expert, expert).fetchJoin() // Expert 엔티티를 함께 조회하기 위한 조인
                 .leftJoin(question.answerList, answer).fetchJoin() // Answer 엔티티를 함께 조회하기 위한 조인
                 .leftJoin(answer.user, user).fetchJoin()
                 .where(question.id.eq(questionId)) // 주어진 questionId에 해당하는 엔티티를 조회하기 위한 조건

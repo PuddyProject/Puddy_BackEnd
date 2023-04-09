@@ -7,7 +7,7 @@ import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.image.service.ImageService;
 import com.team.puddy.domain.pet.repository.PetQueryRepository;
 import com.team.puddy.domain.question.domain.Question;
-import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
+import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.question.repository.QuestionQueryRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
@@ -149,7 +149,7 @@ public class UserService {
         List<Question> questionList = questionQueryRepository.findQuestionListByUserId(userId);
         List<Answer> answerList = answerQueryRepository.findAnswerListByUserId(userId);
 
-        List<QuestionResponeDtoExcludeAnswer> questionDtoList = questionList.stream().map(questionMapper::toDto).toList();
+        List<ResponseQuestionExcludeAnswerDto> questionDtoList = questionList.stream().map(questionMapper::toDto).toList();
         List<ResponseAnswerDtoExcludeUser> answerDtoList = answerList.stream().map(answerMapper::toDto).toList();
 
         return ResponsePostDto.builder()

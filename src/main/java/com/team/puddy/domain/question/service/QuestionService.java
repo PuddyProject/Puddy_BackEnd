@@ -8,8 +8,8 @@ import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 import com.team.puddy.domain.question.dto.request.UpdateQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
-import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
+import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.question.repository.QuestionQueryRepository;
 import com.team.puddy.domain.question.repository.QuestionRepository;
 import com.team.puddy.domain.type.Category;
@@ -68,7 +68,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionResponeDtoExcludeAnswer> getPopularQuestions() {
+    public List<ResponseQuestionExcludeAnswerDto> getPopularQuestions() {
         List<Question> popularQuestions = questionQueryRepository.getPopularQuestionList();
         return popularQuestions.stream()
                 .map(questionMapper::toDto)
@@ -76,7 +76,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionResponeDtoExcludeAnswer> getRecentQuestions() {
+    public List<ResponseQuestionExcludeAnswerDto> getRecentQuestions() {
         List<Question> recentQuestionList = questionQueryRepository.getRecentQuestionList();
         return recentQuestionList.stream()
                 .map(questionMapper::toDto)
