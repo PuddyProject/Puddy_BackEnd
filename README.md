@@ -37,7 +37,7 @@
 - [조회수 동시성 문제 해결하기](https://waveofymymind.tistory.com/108)
 - [일대일 연관관계에서의 지연로딩 트레이트 오프](https://waveofymymind.tistory.com/112)
 - [Redis 캐시를 사용한 JWT 리프레시 토큰 관리하기](https://waveofymymind.tistory.com/113)
-- [JPA N+1 해결하기]
+- [JPA N+1 해결하기](https://waveofymymind.tistory.com/114)
 
 ## [회의 기록 노션](https://puddy.notion.site/PUDDY-cbab6d6425cd4103b9461eff301ca7e5)
 
