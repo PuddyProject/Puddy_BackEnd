@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -23,6 +24,7 @@ public class JwtTokenUtils {
 
     private RedisTemplate<String, String> redisTemplate;
 
+
     private String SECRET;
 
     public JwtTokenUtils(@Value("${jwt.secret-key}") String SECRET,
@@ -30,7 +32,6 @@ public class JwtTokenUtils {
         this.SECRET = SECRET;
         this.redisTemplate = redisTemplate;
     }
-
     public static long ACCESS_EXPIRATION_TIME = 120 * 60 * 1000L; // 2시간
     public static long REFRESH_EXPIRATION_TIME = 14 * 60 * 60 * 24 * 1000L; // 14일
 

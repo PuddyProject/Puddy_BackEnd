@@ -3,6 +3,7 @@ package com.team.puddy.domain.answer.service;
 import com.team.puddy.domain.answer.domain.Answer;
 import com.team.puddy.domain.answer.dto.RequestAnswerDto;
 import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
+import com.team.puddy.domain.answer.dto.request.UpdateAnswerDto;
 import com.team.puddy.domain.answer.repository.AnswerQueryRepository;
 import com.team.puddy.domain.answer.repository.AnswerRepository;
 import com.team.puddy.domain.question.domain.Question;
@@ -46,7 +47,6 @@ public class AnswerService {
         Question findQuestion = questionRepository.findById(questionId).orElseThrow(() -> new NotFoundException(ErrorCode.QUESTION_NOT_FOUND));
 
         Answer answer = answerMapper.toEntity(requestDto, findUser, findQuestion);
-//        findQuestion.getAnswerList().add(answer);
         answerRepository.save(answer);
     }
 
@@ -63,12 +63,28 @@ public class AnswerService {
         return answerRepository.count();
     }
 
-    public void answerSelect(Long questionId, Long answerId,Long userId) {
+    public void selectAnswer(Long questionId, Long answerId, Long userId) {
         Question findQuestion = questionQueryRepository.findByIdWithUser(questionId).orElseThrow(() -> new NotFoundException(ErrorCode.QUESTION_NOT_FOUND));
         if (!findQuestion.getUser().getId().equals(userId)) {
-            throw new BusinessException(ErrorCode.NOT_THE_WRITER,ErrorCode.NOT_THE_WRITER.getMessage());
+            throw new BusinessException(ErrorCode.NOT_THE_WRITER, ErrorCode.NOT_THE_WRITER.getMessage());
         }
         questionRepository.select(questionId);
         answerRepository.select(answerId);
     }
+
+    public void updateAnswer(UpdateAnswerDto updateDto, Long answerId, Long questionId, Long userId) {
+        Answer findAnswer = answerQueryRepository.findAnswerForUpdate(answerId, userId,questionId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION));
+
+        findAnswer.updateAnswer(updateDto.content());
+
+    }
+
+    public void deleteAnswer(Long answerId ,Long questionId,Long userId) {
+        if(!answerQueryRepository.existsAnswer(answerId,questionId,userId)) {
+            throw new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION);
+        }
+        answerRepository.deleteById(answerId);
+    }
+
 }

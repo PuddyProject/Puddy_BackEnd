@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.List;
 
 public record QuestionListResponseDto(
-        List<QuestionResponeDtoExcludeAnswer> questionList,
+        List<ResponseQuestionExcludeAnswerDto> questionList,
         boolean hasNextPage
 ) {
     @Builder

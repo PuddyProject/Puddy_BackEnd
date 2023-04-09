@@ -61,10 +61,13 @@ public class Question extends BaseTimeEntity {
     @Builder.Default
     private List<Image> imageList = new ArrayList<>();
 
-    public void updateQuestion(String title, String content, String category, List<Image> imageList) {
+    public void updateQuestion(String title, String content, String category) {
         this.title = title;
         this.content = content;
         this.category = Category.valueOf(category);
+    }
+
+    public void updateImageList(List<Image> imageList) {
         this.imageList.clear();
         this.imageList.addAll(imageList);
     }

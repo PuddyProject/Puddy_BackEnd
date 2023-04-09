@@ -1,10 +1,13 @@
 package com.team.puddy.domain.user.controller;
 
 
+import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.*;
 import com.team.puddy.domain.user.dto.response.ResponsePostDto;
 import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import com.team.puddy.domain.user.dto.response.TokenReissueDto;
+import com.team.puddy.domain.user.repository.UserQueryRepository;
+import com.team.puddy.domain.user.repository.UserRepository;
 import com.team.puddy.domain.user.service.UserService;
 import com.team.puddy.global.common.S3UpdateUtil;
 import com.team.puddy.global.common.dto.Response;
@@ -34,9 +37,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final S3UpdateUtil s3UpdateUtil;
-
     private final UserService userService;
+
 
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
@@ -129,5 +131,6 @@ public class UserController {
     public void duplicateNickname(@RequestBody DuplicateNicknameRequest request) {
         userService.duplicateNicknameCheck(request.nickname());
     }
+
 
 }

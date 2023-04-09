@@ -18,11 +18,8 @@ import javax.persistence.*;
 public class Pet extends BaseTimeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    private User user;
 
     private String name;
 

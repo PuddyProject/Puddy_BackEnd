@@ -2,6 +2,7 @@ package com.team.puddy.domain.answer.controller;
 
 import com.team.puddy.domain.answer.dto.RequestAnswerDto;
 import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
+import com.team.puddy.domain.answer.dto.request.UpdateAnswerDto;
 import com.team.puddy.domain.answer.service.AnswerService;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
@@ -21,7 +22,7 @@ public class AnswerController {
     private final AnswerService answerService;
 
     @PostMapping("/questions/{questionId}/answers/write")
-    public Response<Void> registerAnswer(@PathVariable Long questionId,
+    public Response<Void> addAnswer(@PathVariable Long questionId,
                                          @RequestBody RequestAnswerDto requestDto,
                                          @AuthenticationPrincipal JwtUserDetails user) {
 
@@ -29,11 +30,30 @@ public class AnswerController {
         return Response.success();
     }
 
-    @PatchMapping("/questions/{questionId}/answers/{answerId}")
-    public Response<Void> answerSelect(@PathVariable Long questionId,
+    @PutMapping("/questions/{questionId}/answers/{answerId}")
+    public Response<Void> updateAnswer(@PathVariable Long questionId,
+                                       @PathVariable Long answerId,
+                                       @RequestBody UpdateAnswerDto updateDto,
+                                       @AuthenticationPrincipal JwtUserDetails user) {
+        answerService.updateAnswer(updateDto,answerId,questionId,user.getUserId());
+        return Response.success();
+    }
+
+    @DeleteMapping("/questions/{questionId}/answers/{answerId}")
+    public Response<Void> deleteAnswer(@PathVariable Long questionId,
                                        @PathVariable Long answerId,
                                        @AuthenticationPrincipal JwtUserDetails user) {
-        answerService.answerSelect(questionId, answerId,user.getUserId());
+        answerService.deleteAnswer(answerId,questionId,user.getUserId());
+        return Response.success();
+    }
+
+
+
+    @PatchMapping("/questions/{questionId}/answers/{answerId}")
+    public Response<Void> selectAnswer(@PathVariable Long questionId,
+                                       @PathVariable Long answerId,
+                                       @AuthenticationPrincipal JwtUserDetails user) {
+        answerService.selectAnswer(questionId, answerId,user.getUserId());
         return Response.success();
     }
 

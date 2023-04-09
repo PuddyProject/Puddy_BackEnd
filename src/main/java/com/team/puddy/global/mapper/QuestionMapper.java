@@ -7,8 +7,8 @@ import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 import com.team.puddy.domain.question.dto.request.UpdateQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
-import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
+import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.user.domain.User;
 import org.mapstruct.*;
 import org.springframework.data.domain.Page;
@@ -32,8 +32,8 @@ public interface QuestionMapper {
     Question toEntity(RequestQuestionDto requestDto, List<Image> imageList, User user);
 
 
-    default QuestionResponeDtoExcludeAnswer toDto(Question question) {
-        return QuestionResponeDtoExcludeAnswer.builder()
+    default ResponseQuestionExcludeAnswerDto toDto(Question question) {
+        return ResponseQuestionExcludeAnswerDto.builder()
                 .questionId(question.getId())
                 .title(question.getTitle())
                 .content(question.getContent())
@@ -66,7 +66,7 @@ public interface QuestionMapper {
         return new PageImpl<>(questionList, pageable, totalCount);
     }
 
-    default QuestionListResponseDto toDto(List<QuestionResponeDtoExcludeAnswer> questionList, boolean hasNextPage) {
+    default QuestionListResponseDto toDto(List<ResponseQuestionExcludeAnswerDto> questionList, boolean hasNextPage) {
         return QuestionListResponseDto.builder().questionList(questionList)
                 .hasNextPage(hasNextPage).build();
     }

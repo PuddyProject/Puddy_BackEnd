@@ -13,10 +13,9 @@ import org.mapstruct.*;
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PetMapper {
 
-    default Pet toEntity(User user, RequestPetDto request) {
+    default Pet toEntity(RequestPetDto request) {
         return Pet.builder()
                 .name(request.name())
-                .user(user)
                 .age(request.age())
                 .breed(request.breed())
                 .gender(request.gender())
@@ -26,14 +25,14 @@ public interface PetMapper {
                 .build();
     }
 
-    default ResponsePetDto toDto(Pet pet) {
+    default ResponsePetDto toDto(Pet pet,String imagePath) {
         return ResponsePetDto.builder()
                 .name(pet.getName())
                 .age(pet.getAge())
                 .breed(pet.getBreed())
                 .gender(pet.isGender())
                 .weight(pet.getWeight())
-                .imagePath(pet.getImage().getImagePath())
+                .imagePath(imagePath)
                 .note(pet.getNote())
                 .isNeutered(pet.isNeutered()).build();
     }

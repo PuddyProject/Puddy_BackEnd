@@ -6,8 +6,8 @@ import lombok.Builder;
 
 import java.util.List;
 
-public record MainPageResponseDto(List<QuestionResponeDtoExcludeAnswer> popularQuestions,
-                                      List<QuestionResponeDtoExcludeAnswer> recentQuestions,
+public record MainPageResponseDto(List<ResponseQuestionExcludeAnswerDto> popularQuestions,
+                                      List<ResponseQuestionExcludeAnswerDto> recentQuestions,
                                   List<ResponseExpertDto> recentExperts,
                                   boolean hasPet) {
     @Builder
