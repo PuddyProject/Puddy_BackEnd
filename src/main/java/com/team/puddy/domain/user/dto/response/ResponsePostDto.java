@@ -2,12 +2,12 @@ package com.team.puddy.domain.user.dto.response;
 
 import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
 import com.team.puddy.domain.answer.dto.ResponseAnswerDtoExcludeUser;
-import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
+import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import lombok.Builder;
 
 import java.util.List;
 
-public record ResponsePostDto(List<QuestionResponeDtoExcludeAnswer> questionList,
+public record ResponsePostDto(List<ResponseQuestionExcludeAnswerDto> questionList,
                               List<ResponseAnswerDtoExcludeUser> answerList
 ) {
 

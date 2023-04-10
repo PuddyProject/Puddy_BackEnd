@@ -1,6 +1,7 @@
 package com.team.puddy.domain.question.dto.response;
 
 import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
+import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.global.mapper.validator.Category;
 import lombok.*;
 
@@ -13,6 +14,7 @@ public record QuestionResponseDto (Long questionId,
                                    String title,
                                    String content,
                                    String nickname,
+                                   Pet pet,
                                    LocalDateTime createdDate,
                                    List<String> images,
                                    @Category String category,

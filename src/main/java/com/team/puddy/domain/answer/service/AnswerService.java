@@ -73,7 +73,7 @@ public class AnswerService {
     }
 
     public void updateAnswer(UpdateAnswerDto updateDto, Long answerId, Long questionId, Long userId) {
-        Answer findAnswer = answerQueryRepository.findAnswerForUpdate(answerId, userId,questionId)
+        Answer findAnswer = answerQueryRepository.findAnswerForUpdate(answerId, userId, questionId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION));
 
         findAnswer.updateAnswer(updateDto.content());

@@ -3,13 +3,14 @@ package com.team.puddy.domain.question.service;
 import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.image.repository.ImageRepository;
 import com.team.puddy.domain.image.service.ImageService;
+import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 import com.team.puddy.domain.question.dto.request.UpdateQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
-import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
+import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.question.repository.QuestionQueryRepository;
 import com.team.puddy.domain.question.repository.QuestionRepository;
 import com.team.puddy.domain.type.Category;
@@ -68,7 +69,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionResponeDtoExcludeAnswer> getPopularQuestions() {
+    public List<ResponseQuestionExcludeAnswerDto> getPopularQuestions() {
         List<Question> popularQuestions = questionQueryRepository.getPopularQuestionList();
         return popularQuestions.stream()
                 .map(questionMapper::toDto)
@@ -76,7 +77,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionResponeDtoExcludeAnswer> getRecentQuestions() {
+    public List<ResponseQuestionExcludeAnswerDto> getRecentQuestions() {
         List<Question> recentQuestionList = questionQueryRepository.getRecentQuestionList();
         return recentQuestionList.stream()
                 .map(questionMapper::toDto)
@@ -86,9 +87,11 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public QuestionResponseDto getQuestion(Long questionId) {
-        Question question = questionQueryRepository.getQuestion(questionId).orElseThrow(
+        Question findquestion = questionQueryRepository.getQuestion(questionId).orElseThrow(
                 () -> new NotFoundException(ErrorCode.QUESTION_NOT_FOUND));
-        return questionMapper.toDto(question, question.getAnswerList().stream()
+
+        Pet findpet = findquestion.getUser().getPet(); // Pet이 없으면 null 반환
+        return questionMapper.toDto(findquestion, findpet, findquestion.getAnswerList().stream()
                 .map(answer -> answerMapper.toDto(answer, answer.getUser())).toList());
     }
 
@@ -127,7 +130,7 @@ public class QuestionService {
 
     }
 
-    private void TrySaveImageList(Question findQuestion,List<MultipartFile> images) {
+    private void TrySaveImageList(Question findQuestion, List<MultipartFile> images) {
         //요청으로 들어온 이미지가 null이 아닐 경우에만 이미지 삭제 시도
         if (images != null && !images.isEmpty()) {
             // 기존의 이미지를 지운다.
@@ -144,7 +147,7 @@ public class QuestionService {
 
     @Transactional
     public void deleteQuestion(Long questionId, Long userId) {
-        Question findQuestion = questionQueryRepository.findQuestionForDelete(questionId,userId)
+        Question findQuestion = questionQueryRepository.findQuestionForDelete(questionId, userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION));
         //S3에 저장된 이미지를 지운다.
         List<Image> findImages = findQuestion.getImageList();

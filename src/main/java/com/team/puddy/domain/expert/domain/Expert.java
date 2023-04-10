@@ -20,8 +20,12 @@ import java.util.List;
 public class Expert extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "user_id")
+    @MapsId
+    private User user;
 
     private String username;
 
@@ -49,4 +53,14 @@ public class Expert extends BaseTimeEntity {
         this.careerList.addAll(careerList);
     }
 
+    public void updateExpert(String username, String location, String education,String introduce){
+        this.introduce=introduce;
+        this.username=username;
+        this.location=location;
+        this.education=education;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

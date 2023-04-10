@@ -4,8 +4,8 @@ package com.team.puddy.domain.question.controller;
 import com.team.puddy.domain.expert.dto.ResponseExpertDto;
 import com.team.puddy.domain.expert.service.ExpertService;
 import com.team.puddy.domain.question.dto.response.MainPageResponseDto;
-import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
+import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.question.service.QuestionService;
 import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import com.team.puddy.domain.user.service.UserService;
@@ -42,9 +42,9 @@ public class HomeController {
         if (user != null) {
             hasPet = userService.checkHasPet(user.getUserId());
         }
-        List<ResponseExpertDto> expertList = expertService.getExpertList();
-        List<QuestionResponeDtoExcludeAnswer> popularQuestions = questionService.getPopularQuestions();
-        List<QuestionResponeDtoExcludeAnswer> recentQuestions = questionService.getRecentQuestions();
+        List<ResponseExpertDto> expertList = expertService.getRecentExperts();
+        List<ResponseQuestionExcludeAnswerDto> popularQuestions = questionService.getPopularQuestions();
+        List<ResponseQuestionExcludeAnswerDto> recentQuestions = questionService.getRecentQuestions();
 
         MainPageResponseDto mainPageData = MainPageResponseDto.builder()
                 .recentQuestions(recentQuestions)

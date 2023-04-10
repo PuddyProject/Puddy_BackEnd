@@ -6,6 +6,8 @@ import com.team.puddy.domain.article.domain.Tag;
 import com.team.puddy.domain.article.dto.request.RequestArticleDto;
 import com.team.puddy.domain.article.dto.request.UpdateArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleDto;
+import com.team.puddy.domain.article.dto.response.ResponseArticleExcludeCommentDto;
+import com.team.puddy.domain.article.dto.response.ResponseArticleListDto;
 import com.team.puddy.domain.article.repository.ArticleQueryRepository;
 import com.team.puddy.domain.article.repository.ArticleRepository;
 import com.team.puddy.domain.article.repository.TagRepository;
@@ -23,6 +25,8 @@ import com.team.puddy.global.mapper.ArticleMapper;
 import com.team.puddy.global.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,5 +81,12 @@ public class ArticleService {
     @Transactional
     public void updateArticle(UpdateArticleDto updateDto,Long userId) {
 
+    }
+
+    public ResponseArticleListDto getArticleList(Pageable pageable) {
+        Slice<Article> articleList = articleQueryRepository.findArticleList(pageable);
+        List<ResponseArticleExcludeCommentDto> articleDtoList = articleList.stream().map(articleMapper::toDto).toList();
+
+        return articleMapper.toDto(articleDtoList,articleList.hasNext());
     }
 }

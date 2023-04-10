@@ -61,8 +61,7 @@ public class User extends BaseTimeEntity {
     private List<Question> questionList = new ArrayList<>();
 
     @Builder.Default
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="expert_id")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Expert expert = null;
 
     @Builder.Default
