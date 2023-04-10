@@ -1,25 +1,27 @@
-package com.team.puddy.domain.question.dto.response;
+package com.team.puddy.domain.article.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.team.puddy.domain.article.domain.ArticleTag;
+import com.team.puddy.domain.comment.dto.response.ResponseCommentDto;
 import com.team.puddy.domain.image.domain.Image;
-import com.team.puddy.global.mapper.validator.Category;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ResponseQuestionExcludeAnswerDto(Long questionId,
+public record ResponseArticleExcludeCommentDto(Long articleId,
                                                String title,
                                                String content,
                                                String nickname,
                                                LocalDateTime createdDate,
-                                               @Category String category,
                                                long viewCount,
-                                               boolean isSolved,
+                                               long likeCount,
+                                               int postCategory,
                                                List<Image> imageList,
-                                               int postCategory) {
+                                               @JsonIgnoreProperties({"article"})
+                                               List<ArticleTag> tagList) {
 
     @Builder
-    public ResponseQuestionExcludeAnswerDto {
+    public ResponseArticleExcludeCommentDto {
     }
 }

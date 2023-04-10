@@ -3,6 +3,8 @@ package com.team.puddy.global.mapper;
 import com.team.puddy.domain.article.domain.Article;
 import com.team.puddy.domain.article.dto.request.RequestArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleDto;
+import com.team.puddy.domain.article.dto.response.ResponseArticleExcludeCommentDto;
+import com.team.puddy.domain.article.dto.response.ResponseArticleListDto;
 import com.team.puddy.domain.article.dto.response.TagDto;
 import com.team.puddy.domain.comment.dto.response.ResponseCommentDto;
 import com.team.puddy.domain.image.domain.Image;
@@ -42,5 +44,24 @@ public interface ArticleMapper {
                 .likeCount(article.getLikeCount())
                 .postCategory(article.getPostCategory())
                 .build();
+    }
+
+    default ResponseArticleExcludeCommentDto toDto(Article article) {
+        return ResponseArticleExcludeCommentDto.builder()
+                .articleId(article.getId())
+                .title(article.getTitle())
+                .nickname(article.getUser().getNickname())
+                .content(article.getContent())
+                .viewCount(article.getViewCount())
+                .likeCount(article.getLikeCount())
+                .imageList(article.getImageList())
+                .createdDate(article.getCreatedDate())
+                .tagList(article.getTagList())
+                .postCategory(article.getPostCategory()).build();
+    }
+    default ResponseArticleListDto toDto (List<ResponseArticleExcludeCommentDto> articleList, boolean hasNextPage) {
+        return ResponseArticleListDto.builder()
+                .articleList(articleList)
+                .hasNextPage(hasNextPage).build();
     }
 }

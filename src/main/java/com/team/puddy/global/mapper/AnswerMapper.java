@@ -35,6 +35,7 @@ public interface AnswerMapper {
                 .nickname(user.getNickname())
                 .selected(answer.isSelected())
                 .userRole(user.getRole())
+                .createDate(answer.getCreatedDate())
                 .postCategory(answer.getPostCategory()).build();
     }
 }

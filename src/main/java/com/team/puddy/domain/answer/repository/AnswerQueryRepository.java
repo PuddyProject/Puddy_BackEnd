@@ -35,7 +35,7 @@ public class AnswerQueryRepository {
                 .fetch();
     }
 
-    public Optional<Answer> findAnswerForUpdate(Long answerId,Long questionId,Long userId) {
+    public Optional<Answer> findAnswerForUpdate(Long answerId,Long userId,Long questionId) {
         return Optional.ofNullable(queryFactory.selectFrom(answer)
                 .where(answer.id.eq(answerId)
                         .and(user.id.eq(userId))

@@ -42,7 +42,7 @@ public class HomeController {
         if (user != null) {
             hasPet = userService.checkHasPet(user.getUserId());
         }
-        List<ResponseExpertDto> expertList = expertService.getExpertList();
+        List<ResponseExpertDto> expertList = expertService.getRecentExperts();
         List<ResponseQuestionExcludeAnswerDto> popularQuestions = questionService.getPopularQuestions();
         List<ResponseQuestionExcludeAnswerDto> recentQuestions = questionService.getRecentQuestions();
 

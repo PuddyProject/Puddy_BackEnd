@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public record RequestExpertDto(@NotBlank
+public record RequestExpertDto(String username,
+
                                String introduce,
 
-                               @NotNull
+
                                List<String> careerList,
 
                                @NotBlank

@@ -3,11 +3,16 @@ package com.team.puddy.domain.article.controller;
 import com.team.puddy.domain.article.dto.request.RequestArticleDto;
 import com.team.puddy.domain.article.dto.request.UpdateArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleDto;
+import com.team.puddy.domain.article.dto.response.ResponseArticleListDto;
 import com.team.puddy.domain.article.service.ArticleService;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
+import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,8 +44,12 @@ public class ArticleController {
     }
 
     @GetMapping
-    public void getArticleList() {
-        //TODO
+    public Response<ResponseArticleListDto> getArticleList(@RequestParam int page) {
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        ResponseArticleListDto articleList = articleService.getArticleList(pageable);
+
+        return Response.success(articleList);
+
     }
 
     @PutMapping("/{articleId}")

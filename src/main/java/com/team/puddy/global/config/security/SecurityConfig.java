@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
                 .antMatchers(HttpMethod.POST,"/users/experts").hasRole("EXPERT")
+                .antMatchers(HttpMethod.PUT,"/users/experts","/experts/**").hasRole("EXPERT")
                 .antMatchers(HttpMethod.POST,"/users/pets","/users/experts","/questions/**","/articles/**","/reviews/**","/users/reissue").hasAnyRole("USER","EXPERT")
                 .antMatchers(HttpMethod.PUT,"/questions/**","/users/**").hasAnyRole("USER","EXPERT")
                 .antMatchers(HttpMethod.DELETE,"/questions/**","/articles/**","/users/**").hasAnyRole("USER","EXPERT")
