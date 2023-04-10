@@ -31,7 +31,7 @@ public class QuestionQueryRepository {
                 .selectFrom(question)
                 .leftJoin(question.user, user).fetchJoin() // User 엔티티를 함께 조회하기 위한 조인
                 .leftJoin(user.pet, pet).fetchJoin() // Pet 엔티티를 함께 조회하기 위한 조인
-//                .leftJoin(user.expert, expert).fetchJoin() // Expert 엔티티를 함께 조회하기 위한 조인
+                .leftJoin(user.expert, expert).fetchJoin() // Expert 엔티티를 함께 조회하기 위한 조인
                 .leftJoin(question.answerList, answer).fetchJoin() // Answer 엔티티를 함께 조회하기 위한 조인
                 .leftJoin(answer.user, user).fetchJoin()
                 .where(question.id.eq(questionId)) // 주어진 questionId에 해당하는 엔티티를 조회하기 위한 조건
@@ -41,6 +41,7 @@ public class QuestionQueryRepository {
     public Slice<Question> getQuestionList(Pageable pageable) {
         List<Question> questionList = queryFactory.selectFrom(question)
                 .join(question.user, user).fetchJoin()
+                .leftJoin(question.imageList, image).fetchJoin()
                 .orderBy(question.modifiedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
@@ -91,17 +92,17 @@ public class QuestionQueryRepository {
                 .fetchOne();
     }
 
-    public Optional<Question> findQuestionForUpdate(Long questionId,Long userId) {
+    public Optional<Question> findQuestionForUpdate(Long questionId, Long userId) {
         return Optional.ofNullable(queryFactory.selectFrom(question)
-                .leftJoin(question.imageList,image).fetchJoin()
+                .leftJoin(question.imageList, image).fetchJoin()
                 .where(question.id.eq(questionId)
                         .and(question.user.id.eq(userId)))
                 .fetchOne());
     }
 
-    public Optional<Question> findQuestionForDelete(Long questionId,Long userId) {
+    public Optional<Question> findQuestionForDelete(Long questionId, Long userId) {
         return Optional.ofNullable(queryFactory.selectFrom(question)
-                .leftJoin(question.imageList,image).fetchJoin()
+                .leftJoin(question.imageList, image).fetchJoin()
                 .where(question.id.eq(questionId)
                         .and(question.user.id.eq(userId)))
                 .fetchOne());
