@@ -40,9 +40,10 @@ public class ExpertQueryRepository {
     }
 
     public List<Expert> findExpertListForMainPage() {
-        return queryFactory.selectFrom(expert)
-                .leftJoin(expert.user,user).fetchJoin()
-                .leftJoin(expert.user.image, image).fetchJoin()
+        return queryFactory.select(expert)
+                .from(expert)
+                .leftJoin(expert.user, user).fetchJoin()
+                .leftJoin(user.image, image).fetchJoin()
                 .orderBy(expert.modifiedDate.desc())
                 .limit(5).fetch();
     }
@@ -59,17 +60,4 @@ public class ExpertQueryRepository {
         return new SliceImpl<>(expertList,pageable,expertList.size() > pageable.getPageSize());
     }
 
-    public Slice<Question> getQuestionList(org.springframework.data.domain.Pageable pageable) {
-        List<Question> questionList = queryFactory.selectFrom(question)
-                .join(question.user, user).fetchJoin()
-                .leftJoin(question.imageList, image).fetchJoin()
-                .orderBy(question.modifiedDate.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1)
-                .fetch();
-
-
-        return new SliceImpl<>(questionList, pageable, questionList.size() > pageable.getPageSize());
-
-    }
 }
