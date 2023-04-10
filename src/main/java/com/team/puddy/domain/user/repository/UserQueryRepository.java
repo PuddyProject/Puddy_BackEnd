@@ -37,6 +37,7 @@ public class UserQueryRepository {
 
         return Optional.ofNullable(queryFactory
                 .selectFrom(user)
+                .leftJoin(user.image, image).fetchJoin()
                 .leftJoin(user.expert, expert).fetchJoin() // INNER JOIN을 사용한 페치 조인
                 .where(user.id.eq(userId))
                 .fetchOne());
