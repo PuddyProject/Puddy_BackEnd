@@ -2,6 +2,7 @@ package com.team.puddy.global.mapper;
 
 import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
 import com.team.puddy.domain.image.domain.Image;
+import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
@@ -39,6 +40,7 @@ public interface QuestionMapper {
                 .content(question.getContent())
                 .isSolved(question.isSolved())
                 .nickname(question.getUser().getNickname())
+                .imageList(question.getImageList())
                 .createdDate(question.getCreatedDate())
                 .category(question.getCategory().name())
                 .postCategory(question.getPostCategory())
@@ -46,13 +48,14 @@ public interface QuestionMapper {
                 .build();
     }
 
-    default QuestionResponseDto toDto(Question question, List<ResponseAnswerDto> answerList) {
+    default QuestionResponseDto toDto(Question question, Pet pet, List<ResponseAnswerDto> answerList) {
         return QuestionResponseDto.builder()
                 .questionId(question.getId())
                 .title(question.getTitle())
                 .content(question.getContent())
                 .isSolved(question.isSolved())
                 .nickname(question.getUser().getNickname())
+                .pet(pet)
                 .createdDate(question.getCreatedDate())
                 .images(question.getImageList().stream().map(Image::getImagePath).toList())
                 .category(question.getCategory().name())
