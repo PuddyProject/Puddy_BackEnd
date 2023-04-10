@@ -4,8 +4,9 @@ import lombok.Builder;
 
 import java.util.List;
 
-public record ResponseExpertListDto(List<ResponseExpertDto> expertList,
-                                   boolean hasNextPage) {
+public record ResponseExpertListDto(
+        List<ResponseExpertDto> expertList,
+        boolean hasNextPage) {
 
     @Builder
     public ResponseExpertListDto {
