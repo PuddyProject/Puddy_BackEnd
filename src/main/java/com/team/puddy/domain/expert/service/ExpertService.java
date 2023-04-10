@@ -4,6 +4,9 @@ package com.team.puddy.domain.expert.service;
 import com.team.puddy.domain.expert.domain.Expert;
 import com.team.puddy.domain.expert.dto.RequestExpertDto;
 import com.team.puddy.domain.expert.dto.ResponseExpertDto;
+import com.team.puddy.domain.expert.dto.ResponseExpertListDto;
+import com.team.puddy.domain.expert.dto.UpdateExpertDto;
+import com.team.puddy.domain.expert.repository.ExpertQueryRepository;
 import com.team.puddy.domain.expert.repository.ExpertRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserQueryRepository;
@@ -16,6 +19,8 @@ import com.team.puddy.global.mapper.ExpertMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +36,7 @@ import java.util.Optional;
 public class ExpertService {
 
     private final ExpertRepository expertRepository;
-    private final UserRepository userRepository;
+    private final ExpertQueryRepository expertQueryRepository;
     private final UserQueryRepository userQueryRepository;
     private final ExpertMapper expertMapper;
 
@@ -47,15 +52,28 @@ public class ExpertService {
 
 
     public ResponseExpertDto getExpertByUserId(Long userId) {
-        User findUser = userQueryRepository.findByIdWithExpert(userId)
+        Expert findExpert = expertQueryRepository.findByIdWithUser(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.EXPERT_NOT_FOUND));
 
-        return expertMapper.toDto(findUser.getExpert());
+        return expertMapper.toDto(findExpert,findExpert.getUser().getImage());
 
     }
 
-    public List<ResponseExpertDto> getExpertList() {
-        return expertRepository.findTop5ByOrderByCreatedDateDesc().stream()
-                .map(expertMapper::toDto).toList();
+    public void updateExpert(Long userId, UpdateExpertDto update) {
+        Expert findExpert = expertRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.EXPERT_NOT_FOUND));
+        findExpert.updateExpert(update.username(), update.location(), update.education(), update.introduce());
+        findExpert.updateCareerList(update.careerList());
     }
-}
+
+    public List<ResponseExpertDto> getRecentExperts() {
+        return expertQueryRepository.findExpertListForMainPage().stream().map(expert -> expertMapper.toDto(expert,expert.getUser().getImage())).toList();
+    }
+
+    public ResponseExpertListDto getExpertList(Pageable pageable) {
+        Slice<Expert> expertList = expertQueryRepository.findExpertList(pageable);
+        List<ResponseExpertDto> expertDtoList = expertList.stream().map(expert -> expertMapper.toDto(expert, expert.getUser().getImage())).toList();
+        return expertMapper.toListDto(expertDtoList,expertList.hasNext());
+
+    }}
+
+
