@@ -51,7 +51,7 @@ public class ExpertQueryRepository {
     public Slice<Expert> findExpertList(Pageable pageable) {
         List<Expert> expertList = queryFactory.selectFrom(expert)
                 .join(expert.user, user).fetchJoin()
-                .leftJoin(expert.user.image, image).fetchJoin()
+                .leftJoin(user.image, image).fetchJoin()
                 .orderBy(expert.modifiedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
