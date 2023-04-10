@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +49,9 @@ public class PetService {
 
     @Transactional(readOnly = true)
     public ResponsePetDto getPetByUserId(Long userId) {
-        Pet findPet = userQueryRepository.findByIdWithPet(userId).orElseThrow(() -> new NotFoundException(ErrorCode.PET_NOT_FOUND))
-                .getPet();
+        User findUser = userQueryRepository.findByIdWithPet(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+        Pet findPet = Optional.ofNullable(findUser.getPet()).orElseThrow(() -> new NotFoundException(ErrorCode.PET_NOT_FOUND));
+
         if (findPet.getImage() == null) {
             return petMapper.toDto(findPet,"");
         }
