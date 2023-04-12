@@ -45,15 +45,15 @@ public interface ArticleMapper {
                 .build();
     }
 
-    default ResponseArticleExcludeCommentDto toDto(Article article) {
+    default ResponseArticleExcludeCommentDto toDto(Article article,String imagePath) {
         return ResponseArticleExcludeCommentDto.builder()
                 .articleId(article.getId())
                 .title(article.getTitle())
                 .nickname(article.getUser().getNickname())
                 .content(article.getContent())
                 .viewCount(article.getViewCount())
+                .imagePath(imagePath)
                 .likeCount(article.getLikeCount())
-                .imageList(article.getImageList())
                 .createdDate(article.getCreatedDate())
                 .tagList(article.getTagList())
                 .postCategory(article.getPostCategory()).build();
