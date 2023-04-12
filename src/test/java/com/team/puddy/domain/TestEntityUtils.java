@@ -5,21 +5,15 @@ import com.team.puddy.domain.expert.dto.RequestExpertDto;
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.pet.dto.request.RequestPetDto;
 import com.team.puddy.domain.question.domain.Question;
-import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
-import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
+import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.type.Category;
 import com.team.puddy.domain.type.UserRole;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.data.domain.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TestEntityUtils {
@@ -82,7 +76,7 @@ public class TestEntityUtils {
 
     }
 
-    public static List<QuestionResponeDtoExcludeAnswer> questionList() {
+    public static List<ResponseQuestionExcludeAnswerDto> questionList() {
         User user = user();
         Question question1 = question(user);
         Question question2 = question(user);
@@ -90,7 +84,7 @@ public class TestEntityUtils {
         Question question4 = question(user);
         Question question5 = question(user);
         List<Question> questions = List.of(question1, question2, question3, question4, question5);
-        return questions.stream().map(question -> QuestionResponeDtoExcludeAnswer.builder().questionId(question.getId())
+        return questions.stream().map(question -> ResponseQuestionExcludeAnswerDto.builder().questionId(question.getId())
                 .nickname(question.getUser().getNickname())
                 .postCategory(question.getPostCategory())
                 .title(question.getTitle())
@@ -99,8 +93,8 @@ public class TestEntityUtils {
                 .category(question.getCategory().name()).build()).toList();
     }
 
-    public static Page<QuestionResponeDtoExcludeAnswer> questionPageList() {
-        List<QuestionResponeDtoExcludeAnswer> questions = questionList();
+    public static Slice<ResponseQuestionExcludeAnswerDto> questionPageList() {
+        List<ResponseQuestionExcludeAnswerDto> questions = questionList();
         PageRequest page = PageRequest.of(1, 10);
 
         return new PageImpl<>(questions, page, questions.size());

@@ -1,13 +1,11 @@
-package com.team.puddy.domain.question.controller;
+package com.team.puddy.domain;
 
 
 import com.team.puddy.domain.expert.dto.ResponseExpertDto;
 import com.team.puddy.domain.expert.service.ExpertService;
 import com.team.puddy.domain.question.dto.response.MainPageResponseDto;
-import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.question.service.QuestionService;
-import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import com.team.puddy.domain.user.service.UserService;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;

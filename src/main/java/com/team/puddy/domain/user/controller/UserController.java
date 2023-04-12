@@ -1,34 +1,29 @@
 package com.team.puddy.domain.user.controller;
 
 
-import com.team.puddy.domain.user.domain.User;
+
 import com.team.puddy.domain.user.dto.request.*;
 import com.team.puddy.domain.user.dto.response.ResponsePostDto;
 import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import com.team.puddy.domain.user.dto.response.TokenReissueDto;
-import com.team.puddy.domain.user.repository.UserQueryRepository;
-import com.team.puddy.domain.user.repository.UserRepository;
+
 import com.team.puddy.domain.user.service.UserService;
-import com.team.puddy.global.common.S3UpdateUtil;
+
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
 import com.team.puddy.global.config.security.jwt.LoginToken;
-import com.team.puddy.global.error.ErrorCode;
-import com.team.puddy.global.error.exception.BusinessException;
-import com.team.puddy.global.error.exception.NotFoundException;
+
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.UUID;
+
 
 @Slf4j
 @RestController
@@ -99,12 +94,12 @@ public class UserController {
 
     @PostMapping("/find-account")
     public Response<String> findAccount(@RequestBody FindAccountDto accountDto) {
-        //TODO : 아이디 찾기
-        return Response.success("");
+        String findAccount = userService.findAccount(accountDto);
+        return Response.success(findAccount);
     }
 
     @PostMapping("/find-password")
-    public Response<String> findAccount(@RequestBody FindPasswordDto passwordDto) {
+    public Response<String> findPassword(@RequestBody FindPasswordDto passwordDto) {
         //TODO : 아이디 찾기
         return Response.success("");
     }

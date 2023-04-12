@@ -5,11 +5,8 @@ import com.team.puddy.domain.article.dto.request.UpdateArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleListDto;
 import com.team.puddy.domain.article.service.ArticleService;
-import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
-import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,12 +41,10 @@ public class ArticleController {
     }
 
     @GetMapping
-    public Response<ResponseArticleListDto> getArticleList(@RequestParam int page) {
+    public Response<ResponseArticleListDto> getArticleList(@RequestParam int page, @RequestParam(required = false,defaultValue = "") String tagName) {
         Pageable pageable = PageRequest.of(page - 1, 10);
-        ResponseArticleListDto articleList = articleService.getArticleList(pageable);
-
+        ResponseArticleListDto articleList = articleService.getArticleListByTag(pageable, tagName);
         return Response.success(articleList);
-
     }
 
     @PutMapping("/{articleId}")
