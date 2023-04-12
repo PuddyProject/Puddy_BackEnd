@@ -22,7 +22,6 @@ public class ReviewController {
     public Response<Void> addReview(@PathVariable("expertId") Long expertId,
                                     @RequestBody RequestReviewDto requestDto,
                                     @AuthenticationPrincipal JwtUserDetails user) {
-        //TODO: 리뷰에 작성자 정보 필요시 user.getId() 사용하기
         reviewService.addReview(expertId, requestDto);
 
         return Response.success();

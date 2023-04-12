@@ -2,7 +2,6 @@ package com.team.puddy.domain.expert.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team.puddy.domain.expert.domain.Expert;
-import com.team.puddy.domain.question.domain.Question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -14,7 +13,6 @@ import java.util.Optional;
 
 import static com.team.puddy.domain.expert.domain.QExpert.expert;
 import static com.team.puddy.domain.image.domain.QImage.image;
-import static com.team.puddy.domain.question.domain.QQuestion.question;
 import static com.team.puddy.domain.review.domain.QReview.review;
 import static com.team.puddy.domain.user.domain.QUser.user;
 
