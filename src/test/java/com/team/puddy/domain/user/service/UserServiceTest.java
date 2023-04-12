@@ -2,7 +2,7 @@ package com.team.puddy.domain.user.service;
 
 import com.team.puddy.domain.TestEntityUtils;
 import com.team.puddy.domain.answer.repository.AnswerQueryRepository;
-import com.team.puddy.domain.question.repository.QuestionQueryRepository;
+import com.team.puddy.domain.question.repository.querydsl.QuestionQueryRepositoryImpl;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
 import com.team.puddy.domain.user.repository.UserQueryRepository;
@@ -37,7 +37,7 @@ public class UserServiceTest {
     private UserQueryRepository userQueryRepository;
     @Mock
 
-    private QuestionQueryRepository questionQueryRepository;
+    private QuestionQueryRepositoryImpl questionQueryRepositoryImpl;
     @Mock
 
     private AnswerQueryRepository answerQueryRepository;

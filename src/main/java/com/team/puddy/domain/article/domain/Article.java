@@ -59,7 +59,7 @@ public class Article extends BaseTimeEntity {
             orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     @Builder.Default
     private List<Image> imageList = new ArrayList<>();

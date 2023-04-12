@@ -1,8 +1,7 @@
-package com.team.puddy.domain.question.repository;
+package com.team.puddy.domain.question.repository.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team.puddy.domain.question.domain.Question;
-import com.team.puddy.global.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
@@ -21,7 +20,7 @@ import static com.team.puddy.domain.user.domain.QUser.user;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class QuestionQueryRepository {
+public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
@@ -39,30 +38,38 @@ public class QuestionQueryRepository {
     }
 
     public Slice<Question> getQuestionList(Pageable pageable) {
+
         List<Question> questionList = queryFactory.selectFrom(question)
                 .join(question.user, user).fetchJoin()
-                .leftJoin(question.imageList, image).fetchJoin()
                 .orderBy(question.modifiedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
+        boolean hasNext = questionList.size() > pageable.getPageSize();
+        if (hasNext) {
+            questionList.remove(questionList.size() - 1);
+        }
 
-        return new SliceImpl<>(questionList, pageable, questionList.size() > pageable.getPageSize());
+
+        return new SliceImpl<>(questionList, pageable, hasNext);
 
     }
 
 
+
     public List<Question> getPopularQuestionList() {
 
-        return queryFactory.selectFrom(question)
+        return queryFactory.selectFrom(question).distinct()
+                .leftJoin(question.user, user).fetchJoin()
                 .orderBy(question.viewCount.desc())
                 .limit(5)
                 .fetch();
     }
 
     public List<Question> getRecentQuestionList() {
-        return queryFactory.selectFrom(question)
+        return queryFactory.selectFrom(question).distinct()
+                .leftJoin(question.user, user).fetchJoin()
                 .orderBy(question.modifiedDate.desc())
                 .limit(5)
                 .fetch();

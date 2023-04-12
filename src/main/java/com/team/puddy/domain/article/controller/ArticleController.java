@@ -5,11 +5,8 @@ import com.team.puddy.domain.article.dto.request.UpdateArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleListDto;
 import com.team.puddy.domain.article.service.ArticleService;
-import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
-import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,28 +35,44 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public Response<ResponseArticleDto> getArticle(@PathVariable("articleId") Long articleId) {
 
+        articleService.increaseViewCount(articleId);
         ResponseArticleDto findArticle = articleService.getArticle(articleId);
 
         return Response.success(findArticle);
     }
 
     @GetMapping
-    public Response<ResponseArticleListDto> getArticleList(@RequestParam int page) {
+    public Response<ResponseArticleListDto> getArticleList(@RequestParam int page, @RequestParam(required = false, defaultValue = "") String keyword) {
         Pageable pageable = PageRequest.of(page - 1, 10);
-        ResponseArticleListDto articleList = articleService.getArticleList(pageable);
-
+        ResponseArticleListDto articleList = articleService.getArticleListByTitleStartWith(pageable, keyword);
         return Response.success(articleList);
-
     }
 
     @PutMapping("/{articleId}")
     public Response<Void> updateArticle(@PathVariable("articleId") Long articleId,
                                         @RequestPart("request") UpdateArticleDto updateDto,
-                                        @RequestPart(value = "images",required = false) List<MultipartFile> images,
+                                        @RequestPart(value = "images", required = false) List<MultipartFile> images,
                                         @AuthenticationPrincipal JwtUserDetails user) {
-
         //TODO
         return Response.success();
-
     }
+
+    @PatchMapping("/{articleId}/like")
+    public Response<Void> like(@PathVariable("articleId") Long articleId,
+                               @AuthenticationPrincipal JwtUserDetails user) {
+
+        articleService.increaseLikeCount(articleId);
+
+        return Response.success();
+    }
+
+    @DeleteMapping("/{articleId}/unlike")
+    public Response<Void> unLike(@PathVariable("articleId") Long articleId,
+                                 @AuthenticationPrincipal JwtUserDetails user) {
+
+        articleService.increaseLikeCount(articleId);
+
+        return Response.success();
+    }
+
 }

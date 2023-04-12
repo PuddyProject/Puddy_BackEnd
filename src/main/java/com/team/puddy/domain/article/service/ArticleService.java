@@ -8,17 +8,12 @@ import com.team.puddy.domain.article.dto.request.UpdateArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleExcludeCommentDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleListDto;
-import com.team.puddy.domain.article.repository.ArticleQueryRepository;
 import com.team.puddy.domain.article.repository.ArticleRepository;
 import com.team.puddy.domain.article.repository.TagRepository;
-import com.team.puddy.domain.comment.dto.response.ResponseCommentDto;
 import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.image.service.ImageService;
-import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserQueryRepository;
-import com.team.puddy.domain.user.service.UserService;
-import com.team.puddy.global.common.S3UpdateUtil;
 import com.team.puddy.global.error.ErrorCode;
 import com.team.puddy.global.error.exception.NotFoundException;
 import com.team.puddy.global.mapper.ArticleMapper;
@@ -32,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -41,7 +36,6 @@ public class ArticleService {
 
     private final UserQueryRepository userQueryRepository;
     private final ArticleRepository articleRepository;
-    private final ArticleQueryRepository articleQueryRepository;
     private final ArticleMapper articleMapper;
     private final CommentMapper commentMapper;
     private final ImageService imageService;
@@ -70,23 +64,62 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public ResponseArticleDto getArticle(Long articleId) {
-        Article findArticle = articleQueryRepository.findArticleWithUserById(articleId).orElseThrow(
+        Article findArticle = articleRepository.findArticleWithUserById(articleId).orElseThrow(
                 () -> new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND)
         );
 
-        return articleMapper.toDto(findArticle,findArticle.getCommentList().stream().map(comment ->
-                commentMapper.toDto(comment,comment.getUser().getNickname())).toList());
+        return articleMapper.toDto(findArticle, findArticle.getCommentList().stream().map(comment ->
+                commentMapper.toDto(comment, comment.getUser().getNickname())).toList());
     }
 
     @Transactional
-    public void updateArticle(UpdateArticleDto updateDto,Long userId) {
-
+    public void updateArticle(UpdateArticleDto updateDto, Long userId) {
+        //TODO
     }
 
-    public ResponseArticleListDto getArticleList(Pageable pageable) {
-        Slice<Article> articleList = articleQueryRepository.findArticleList(pageable);
-        List<ResponseArticleExcludeCommentDto> articleDtoList = articleList.stream().map(articleMapper::toDto).toList();
+    @Transactional(readOnly = true)
+    public List<ResponseArticleExcludeCommentDto> getPopularArticleList() {
+        List<Article> popularArticleList = articleRepository.findPopularArticleList();
+        return popularArticleList.stream().map(article -> articleMapper.toDto(article, "")).toList();
+    }
 
-        return articleMapper.toDto(articleDtoList,articleList.hasNext());
+    @Transactional(readOnly = true)
+    public List<ResponseArticleExcludeCommentDto> getRecentArticleList() {
+        List<Article> recentArticleList = articleRepository.findRecentArticleList();
+        return recentArticleList.stream().map(article -> articleMapper.toDto(article, "")).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseArticleListDto getArticleListByTitleStartWith(Pageable pageable, String keyword) {
+        Slice<Article> articleList = articleRepository.findAllByTitleStartingWithOrderByModifiedDateDesc(keyword, pageable);
+        List<ResponseArticleExcludeCommentDto> articleDtos = articleList.stream().map(article -> {
+
+            String imagePath = getFirstImagePath(article.getImageList());
+
+            return articleMapper.toDto(article, imagePath);
+        }).toList();
+        return articleMapper.toDto(articleDtos, articleList.hasNext());
+    }
+
+    @Transactional
+    public void increaseViewCount(Long articleId) {
+        if (!articleRepository.existsById(articleId)) {
+            throw new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND);
+        }
+        articleRepository.increaseViewCount(articleId);
+    }
+
+    private String getFirstImagePath(List<Image> imageList) {
+        return Optional.ofNullable(imageList)
+                .filter(images -> !images.isEmpty())
+                .map(images -> images.get(0).getImagePath())
+                .orElse("");
+    }
+
+    public void increaseLikeCount(Long articleId) {
+        if(!articleRepository.existsById(articleId)) {
+            throw new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND);
+        }
+        articleRepository.increaseLikeCount(articleId);
     }
 }

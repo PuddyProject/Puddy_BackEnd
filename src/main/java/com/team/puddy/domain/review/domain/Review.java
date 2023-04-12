@@ -20,7 +20,7 @@ public class Review extends BaseTimeEntity {
 
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="expert_id")
     private Expert expert;
 

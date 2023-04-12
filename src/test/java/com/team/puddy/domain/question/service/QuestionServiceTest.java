@@ -3,12 +3,10 @@ package com.team.puddy.domain.question.service;
 import com.team.puddy.domain.TestEntityUtils;
 import com.team.puddy.domain.image.service.ImageService;
 import com.team.puddy.domain.question.domain.Question;
-import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
-import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
-import com.team.puddy.domain.question.dto.response.QuestionResponeDtoExcludeAnswer;
-import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
-import com.team.puddy.domain.question.repository.QuestionQueryRepository;
+
+import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
+import com.team.puddy.domain.question.repository.querydsl.QuestionQueryRepositoryImpl;
 import com.team.puddy.domain.question.repository.QuestionRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserRepository;
@@ -21,11 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -43,7 +37,7 @@ public class QuestionServiceTest {
     @Mock
     private QuestionRepository questionRepository;
     @Mock
-    private QuestionQueryRepository questionQueryRepository;
+    private QuestionQueryRepositoryImpl questionQueryRepositoryImpl;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -81,15 +75,15 @@ public class QuestionServiceTest {
         Page<Question> questionPage = new PageImpl<>(Collections.singletonList(
                 TestEntityUtils.question(user)
         ));
-        List<QuestionResponeDtoExcludeAnswer> questionList = List.of(
-                QuestionResponeDtoExcludeAnswer.builder().content("s").build()
+        List<ResponseQuestionExcludeAnswerDto> questionList = List.of(
+                ResponseQuestionExcludeAnswerDto.builder().content("s").build()
         );
-        Page<QuestionResponeDtoExcludeAnswer> questions = TestEntityUtils.questionPageList();
-        given(questionQueryRepository.getQuestionList(any(Pageable.class))).willReturn(questionPage);
+        Slice<ResponseQuestionExcludeAnswerDto> questions = TestEntityUtils.questionPageList();
+        given(questionQueryRepositoryImpl.getQuestionList(any())).willReturn(questionPage);
         //when
         questionService.getQuestionList(page);
         //then
-        verify(questionQueryRepository).getQuestionList(page);
+        verify(questionQueryRepositoryImpl).getQuestionList(page);
     }
 
     @DisplayName("문제 전체 개수 조회 테스트")
@@ -110,11 +104,11 @@ public class QuestionServiceTest {
         User user = TestEntityUtils.user();
         Optional<Question> question = Optional.ofNullable(TestEntityUtils.question(user));
         //given
-        given(questionQueryRepository.getQuestion(any(Long.class))).willReturn(question);
+        given(questionQueryRepositoryImpl.getQuestion(any(Long.class))).willReturn(question);
         //when
         questionService.getQuestion(questionsId);
         //then
-        verify(questionQueryRepository).getQuestion(questionsId);
+        verify(questionQueryRepositoryImpl).getQuestion(questionsId);
 
     }
 

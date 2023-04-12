@@ -1,11 +1,11 @@
 package com.team.puddy.global.mapper;
 
-import com.team.puddy.domain.image.domain.Image;
+
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.pet.dto.request.RequestPetDto;
-import com.team.puddy.domain.pet.dto.request.UpdatePetDto;
+
 import com.team.puddy.domain.pet.dto.response.ResponsePetDto;
-import com.team.puddy.domain.user.domain.User;
+
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring",
@@ -25,7 +25,7 @@ public interface PetMapper {
                 .build();
     }
 
-    default ResponsePetDto toDto(Pet pet,String imagePath) {
+    default ResponsePetDto toDto(Pet pet, String imagePath) {
         return ResponsePetDto.builder()
                 .name(pet.getName())
                 .age(pet.getAge())

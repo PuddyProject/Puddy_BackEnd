@@ -4,18 +4,13 @@ import com.team.puddy.domain.answer.dto.ResponseAnswerDto;
 import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.question.domain.Question;
-import com.team.puddy.domain.question.dto.request.QuestionRequestDto;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
-import com.team.puddy.domain.question.dto.request.UpdateQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionListResponseDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.user.domain.User;
 import org.mapstruct.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.List;
 
@@ -40,7 +35,6 @@ public interface QuestionMapper {
                 .content(question.getContent())
                 .isSolved(question.isSolved())
                 .nickname(question.getUser().getNickname())
-                .imageList(question.getImageList())
                 .createdDate(question.getCreatedDate())
                 .category(question.getCategory().name())
                 .postCategory(question.getPostCategory())
@@ -63,10 +57,6 @@ public interface QuestionMapper {
                 .viewCount(question.getViewCount())
                 .answerList(answerList)
                 .build();
-    }
-
-    default Page<Question> toPageList(List<Question> questionList, Pageable pageable, long totalCount) {
-        return new PageImpl<>(questionList, pageable, totalCount);
     }
 
     default QuestionListResponseDto toDto(List<ResponseQuestionExcludeAnswerDto> questionList, boolean hasNextPage) {

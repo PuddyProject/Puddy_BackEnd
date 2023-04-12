@@ -5,11 +5,11 @@ import com.team.puddy.domain.answer.dto.ResponseAnswerDtoExcludeUser;
 import com.team.puddy.domain.answer.repository.AnswerQueryRepository;
 import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.image.service.ImageService;
-import com.team.puddy.domain.pet.repository.PetQueryRepository;
 import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
-import com.team.puddy.domain.question.repository.QuestionQueryRepository;
+import com.team.puddy.domain.question.repository.QuestionRepository;
 import com.team.puddy.domain.user.domain.User;
+import com.team.puddy.domain.user.dto.request.FindAccountDto;
 import com.team.puddy.domain.user.dto.request.LoginUserRequest;
 import com.team.puddy.domain.user.dto.request.RegisterUserRequest;
 import com.team.puddy.domain.user.dto.response.ResponsePostDto;
@@ -34,10 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import static com.team.puddy.global.error.ErrorCode.*;
 import static com.team.puddy.global.error.ErrorCode.USER_NOT_FOUND;
@@ -50,9 +47,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
-    private final QuestionQueryRepository questionQueryRepository;
+    private final QuestionRepository questionRepository;
     private final AnswerQueryRepository answerQueryRepository;
-    private final PetQueryRepository petQueryRepository;
 
     private final QuestionMapper questionMapper;
     private final AnswerMapper answerMapper;
@@ -146,7 +142,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ResponsePostDto getMyPost(Long userId) {
-        List<Question> questionList = questionQueryRepository.findQuestionListByUserId(userId);
+        List<Question> questionList = questionRepository.findQuestionListByUserId(userId);
         List<Answer> answerList = answerQueryRepository.findAnswerListByUserId(userId);
 
         List<ResponseQuestionExcludeAnswerDto> questionDtoList = questionList.stream().map(questionMapper::toDto).toList();
@@ -186,5 +182,11 @@ public class UserService {
     public boolean checkHasPet(Long userId) {
         return userQueryRepository.findByIdWithPet(userId).orElseThrow(() -> new BusinessException(USER_NOT_FOUND))
                 .getPet() != null; // 펫이 있으면 true, 없으면 false
+    }
+
+    public String findAccount(FindAccountDto accountDto) {
+        User findUser = userRepository.findByUsernameAndEmail(accountDto.username(), accountDto.email())
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        return findUser.getAccount();
     }
 }

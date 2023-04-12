@@ -1,13 +1,13 @@
-package com.team.puddy.domain.question.controller;
+package com.team.puddy.domain;
 
 
+import com.team.puddy.domain.article.dto.response.ResponseArticleExcludeCommentDto;
+import com.team.puddy.domain.article.service.ArticleService;
 import com.team.puddy.domain.expert.dto.ResponseExpertDto;
 import com.team.puddy.domain.expert.service.ExpertService;
 import com.team.puddy.domain.question.dto.response.MainPageResponseDto;
-import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.question.service.QuestionService;
-import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
 import com.team.puddy.domain.user.service.UserService;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
@@ -32,7 +32,7 @@ public class HomeController {
     private final QuestionService questionService;
 
     private final UserService userService;
-
+    private final ArticleService articleService;
     private final ExpertService expertService;
 
     @GetMapping
@@ -45,10 +45,14 @@ public class HomeController {
         List<ResponseExpertDto> expertList = expertService.getRecentExperts();
         List<ResponseQuestionExcludeAnswerDto> popularQuestions = questionService.getPopularQuestions();
         List<ResponseQuestionExcludeAnswerDto> recentQuestions = questionService.getRecentQuestions();
+        List<ResponseArticleExcludeCommentDto> popularArticles = articleService.getPopularArticleList();
+        List<ResponseArticleExcludeCommentDto> recentArticles = articleService.getRecentArticleList();
 
         MainPageResponseDto mainPageData = MainPageResponseDto.builder()
                 .recentQuestions(recentQuestions)
                 .popularQuestions(popularQuestions)
+                .popularArticles(popularArticles)
+                .recentArticles(recentArticles)
                 .recentExperts(expertList)
                 .hasPet(hasPet)
                 .build();
