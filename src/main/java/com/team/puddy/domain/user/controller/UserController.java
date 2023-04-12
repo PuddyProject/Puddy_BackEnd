@@ -100,7 +100,7 @@ public class UserController {
 
     @PostMapping("/find-password")
     public Response<String> findPassword(@RequestBody FindPasswordDto passwordDto) {
-        //TODO : 아이디 찾기
+        //TODO : 비밀번호 찾기 로직 구현하기
         return Response.success("");
     }
 

@@ -7,10 +7,10 @@ import com.team.puddy.domain.expert.domain.Expert;
 import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.question.domain.Question;
+import com.team.puddy.domain.type.JwtProvider;
 import com.team.puddy.domain.type.UserRole;
 import lombok.*;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -46,6 +46,15 @@ public class User extends BaseTimeEntity {
     @Setter
     private boolean isNotificated;
 
+    @Enumerated(value = EnumType.STRING)
+    private JwtProvider provider;
+
+    public void setProvider(JwtProvider provider) {
+        if(this.provider == null) {
+            this.provider = provider;
+        }
+    }
+
     @NotNull
     @Column(name = "role")
     private String role;
@@ -76,6 +85,15 @@ public class User extends BaseTimeEntity {
     @Builder.Default
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
+
+    public static User fromOAuth2User(OAuth2User oAuth2User, JwtProvider provider) {
+        return User.builder()
+                .provider(provider)
+                .account(oAuth2User.getAttribute("id"))
+                .email(oAuth2User.getAttribute("email"))
+                .username(oAuth2User.getAttribute("name"))
+                .build();
+    }
 
     public void updateAuth() {
         this.role = UserRole.EXPERT.getRole();
