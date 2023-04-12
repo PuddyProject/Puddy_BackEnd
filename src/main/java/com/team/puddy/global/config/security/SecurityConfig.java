@@ -34,6 +34,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 
+
     // 정적 자원에 대해서는 Security 설정을 적용하지 않음
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -53,7 +54,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST,"/users/pets","/users/experts","/questions/**","/articles/**","/reviews/**","/users/reissue").hasAnyRole("USER","EXPERT")
                 .antMatchers(HttpMethod.PUT,"/questions/**","/users/**").hasAnyRole("USER","EXPERT")
                 .antMatchers(HttpMethod.DELETE,"/questions/**","/articles/**","/users/**").hasAnyRole("USER","EXPERT")
-                .antMatchers(HttpMethod.PATCH,"/users/**","/questions/**").hasAnyRole("USER","EXPERT")
+                .antMatchers(HttpMethod.PATCH,"/users/**","/questions/**","/articles/**").hasAnyRole("USER","EXPERT")
                 .antMatchers(HttpMethod.POST,"/users/**").permitAll()
                 .antMatchers(HttpMethod.GET,
                         "/users/**",

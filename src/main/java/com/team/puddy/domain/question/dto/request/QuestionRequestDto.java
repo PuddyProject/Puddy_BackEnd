@@ -1,9 +1,6 @@
 package com.team.puddy.domain.question.dto.request;
 
-import com.team.puddy.domain.question.domain.Question;
 import lombok.*;
-import org.springframework.lang.Nullable;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 

@@ -35,26 +35,44 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public Response<ResponseArticleDto> getArticle(@PathVariable("articleId") Long articleId) {
 
+        articleService.increaseViewCount(articleId);
         ResponseArticleDto findArticle = articleService.getArticle(articleId);
 
         return Response.success(findArticle);
     }
 
     @GetMapping
-    public Response<ResponseArticleListDto> getArticleList(@RequestParam int page, @RequestParam(required = false,defaultValue = "") String tagName) {
+    public Response<ResponseArticleListDto> getArticleList(@RequestParam int page, @RequestParam(required = false, defaultValue = "") String keyword) {
         Pageable pageable = PageRequest.of(page - 1, 10);
-        ResponseArticleListDto articleList = articleService.getArticleListByTag(pageable, tagName);
+        ResponseArticleListDto articleList = articleService.getArticleListByTitleStartWith(pageable, keyword);
         return Response.success(articleList);
     }
 
     @PutMapping("/{articleId}")
     public Response<Void> updateArticle(@PathVariable("articleId") Long articleId,
                                         @RequestPart("request") UpdateArticleDto updateDto,
-                                        @RequestPart(value = "images",required = false) List<MultipartFile> images,
+                                        @RequestPart(value = "images", required = false) List<MultipartFile> images,
                                         @AuthenticationPrincipal JwtUserDetails user) {
-
         //TODO
         return Response.success();
-
     }
+
+    @PatchMapping("/{articleId}/like")
+    public Response<Void> like(@PathVariable("articleId") Long articleId,
+                               @AuthenticationPrincipal JwtUserDetails user) {
+
+        articleService.increaseLikeCount(articleId);
+
+        return Response.success();
+    }
+
+    @DeleteMapping("/{articleId}/unlike")
+    public Response<Void> unLike(@PathVariable("articleId") Long articleId,
+                                 @AuthenticationPrincipal JwtUserDetails user) {
+
+        articleService.increaseLikeCount(articleId);
+
+        return Response.success();
+    }
+
 }

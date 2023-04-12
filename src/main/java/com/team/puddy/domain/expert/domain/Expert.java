@@ -47,6 +47,10 @@ public class Expert extends BaseTimeEntity {
     @Builder.Default
     private List<Review> reviewList = new ArrayList<>();
 
+    public void addReview(Review review) {
+        this.reviewList.add(review);
+    }
+
     //리뷰 추가 로직 컨트롤러 어디에 할건지 생각하기
     public void updateCareerList(List<String> careerList) {
         this.careerList.clear();

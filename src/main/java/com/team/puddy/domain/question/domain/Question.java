@@ -6,6 +6,7 @@ import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.type.Category;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
 
@@ -56,7 +57,7 @@ public class Question extends BaseTimeEntity {
             orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     @Builder.Default
     private List<Image> imageList = new ArrayList<>();

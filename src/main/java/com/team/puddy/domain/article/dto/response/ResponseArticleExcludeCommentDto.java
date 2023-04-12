@@ -17,7 +17,7 @@ public record ResponseArticleExcludeCommentDto(Long articleId,
                                                long viewCount,
                                                long likeCount,
                                                int postCategory,
-                                               List<Image> imageList,
+                                               String imagePath,
                                                @JsonIgnoreProperties({"article"})
                                                List<ArticleTag> tagList) {
 

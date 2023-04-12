@@ -16,7 +16,7 @@ public record ResponseQuestionExcludeAnswerDto(Long questionId,
                                                @Category String category,
                                                long viewCount,
                                                boolean isSolved,
-                                               List<Image> imageList,
+//                                               List<Image> imageList,
                                                int postCategory) {
 
     @Builder

@@ -2,7 +2,6 @@ package com.team.puddy.domain.comment.domain;
 
 import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.article.domain.Article;
-import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
 
