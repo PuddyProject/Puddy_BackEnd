@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -73,32 +74,52 @@ public class ArticleService {
 
     @Transactional
     public void updateArticle(UpdateArticleDto updateDto, Long userId) {
-
+        //TODO
     }
 
-    public ResponseArticleListDto getArticleListByTag(Pageable pageable, String tagName) {
-        if (tagName == null || tagName.isBlank()) {
-            return getArticleList(pageable);
+    @Transactional(readOnly = true)
+    public List<ResponseArticleExcludeCommentDto> getPopularArticleList() {
+        List<Article> popularArticleList = articleRepository.findPopularArticleList();
+        return popularArticleList.stream().map(article -> articleMapper.toDto(article, "")).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ResponseArticleExcludeCommentDto> getRecentArticleList() {
+        List<Article> recentArticleList = articleRepository.findRecentArticleList();
+        return recentArticleList.stream().map(article -> articleMapper.toDto(article, "")).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseArticleListDto getArticleListByTitleStartWith(Pageable pageable, String keyword) {
+        Slice<Article> articleList = articleRepository.findAllByTitleStartingWithOrderByModifiedDateDesc(keyword, pageable);
+        List<ResponseArticleExcludeCommentDto> articleDtos = articleList.stream().map(article -> {
+
+            String imagePath = getFirstImagePath(article.getImageList());
+
+            return articleMapper.toDto(article, imagePath);
+        }).toList();
+        return articleMapper.toDto(articleDtos, articleList.hasNext());
+    }
+
+    @Transactional
+    public void increaseViewCount(Long articleId) {
+        if (!articleRepository.existsById(articleId)) {
+            throw new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND);
         }
-        //태그가 있을 경우 태그로 조회
-        return getArticleListByTagName(pageable, tagName);
-
+        articleRepository.increaseViewCount(articleId);
     }
 
-    public ResponseArticleListDto getArticleList(Pageable pageable) {
-        Slice<Article> articleList = articleRepository.findArticleList(pageable);
-        List<ResponseArticleExcludeCommentDto> articleDtoList = articleList.stream().map(articleMapper::toDto).toList();
-        return articleMapper.toDto(articleDtoList, articleList.hasNext());
+    private String getFirstImagePath(List<Image> imageList) {
+        return Optional.ofNullable(imageList)
+                .filter(images -> !images.isEmpty())
+                .map(images -> images.get(0).getImagePath())
+                .orElse("");
     }
 
-    public ResponseArticleListDto getArticleListByTagName(Pageable page, String tagName) {
-        if (tagName == null) {
-            return getArticleList(page);
+    public void increaseLikeCount(Long articleId) {
+        if(!articleRepository.existsById(articleId)) {
+            throw new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND);
         }
-        Slice<Article> articleList = articleRepository.findAllByTag(tagName, page);
-        List<ResponseArticleExcludeCommentDto> articleDtoList = articleList.stream().map(articleMapper::toDto).toList();
-        return articleMapper.toDto(articleDtoList, articleList.hasNext());
+        articleRepository.increaseLikeCount(articleId);
     }
-
-
 }
