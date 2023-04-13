@@ -21,11 +21,8 @@ public interface QuestionQueryRepository {
 
     List<Question> findQuestionListByUserId(Long userId);
 
-    Question findQuestionWithImageAndUser(Long questionId);
 
-    Optional<Question> findQuestionForUpdate(Long questionId, Long userId);
-
-    Optional<Question> findQuestionForDelete(Long questionId, Long userId);
+    Optional<Question> findQuestionForModify(Long questionId, Long userId);
 
 
     Slice<Question> findByTitleStartWithOrderByModifiedDateDesc(Pageable page, String keyword);

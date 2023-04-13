@@ -7,9 +7,6 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 import java.util.Optional;
 
-import static com.team.puddy.domain.article.domain.QArticle.article;
-import static com.team.puddy.domain.user.domain.QUser.user;
-
 public interface ArticleQueryRepository {
 
     Optional<Article> findArticleWithUserById(Long articleId);
@@ -24,5 +21,5 @@ public interface ArticleQueryRepository {
 
     List<Article> findRecentArticleList();
 
-
+    Optional<Article> findArticleForModify(Long articleId, Long userId);
 }

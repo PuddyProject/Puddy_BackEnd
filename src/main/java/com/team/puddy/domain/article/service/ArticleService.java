@@ -9,6 +9,7 @@ import com.team.puddy.domain.article.dto.response.ResponseArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleExcludeCommentDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleListDto;
 import com.team.puddy.domain.article.repository.ArticleRepository;
+import com.team.puddy.domain.article.repository.ArticleTagRepository;
 import com.team.puddy.domain.article.repository.TagRepository;
 import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.image.service.ImageService;
@@ -40,6 +41,7 @@ public class ArticleService {
     private final CommentMapper commentMapper;
     private final ImageService imageService;
     private final TagRepository tagRepository;
+    private final ArticleTagRepository articleTagRepository;
 
     @Transactional
     public void addArticle(RequestArticleDto requestDto, List<MultipartFile> images, Long userId) {
@@ -71,10 +73,23 @@ public class ArticleService {
         return articleMapper.toDto(findArticle, findArticle.getCommentList().stream().map(comment ->
                 commentMapper.toDto(comment, comment.getUser().getNickname())).toList());
     }
-
     @Transactional
-    public void updateArticle(UpdateArticleDto updateDto, Long userId) {
-        //TODO
+    public void updateArticle(Long articleId, UpdateArticleDto updateDto, List<MultipartFile> images, Long userId) {
+        Article findArticle = articleRepository.findArticleForModify(articleId, userId).orElseThrow(
+                () -> new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION)
+        );
+        //기존 이미지가 있을 경우 제거한다.
+        imageService.updateImageListForArticle(findArticle, images);
+        //기존 게시글의 태그를 찾아 지운다.
+        articleTagRepository.deleteByArticleId(articleId);
+        //새로 요청받은 태그 처리하기
+        List<ArticleTag> articleTagList = updateDto.tagList().stream().map(tagName -> tagRepository.findByTagName(tagName)
+                .map(tag -> new ArticleTag(findArticle, tag)).orElseGet(
+                        () -> new ArticleTag(findArticle, new Tag(tagName))
+                )).toList();
+
+        findArticle.updateArticle(updateDto.title(), updateDto.content(), articleTagList);
+
     }
 
     @Transactional(readOnly = true)
@@ -109,17 +124,32 @@ public class ArticleService {
         articleRepository.increaseViewCount(articleId);
     }
 
-    private String getFirstImagePath(List<Image> imageList) {
+    @Transactional
+    public String getFirstImagePath(List<Image> imageList) {
         return Optional.ofNullable(imageList)
                 .filter(images -> !images.isEmpty())
                 .map(images -> images.get(0).getImagePath())
                 .orElse("");
     }
-
+    @Transactional
     public void increaseLikeCount(Long articleId) {
         if(!articleRepository.existsById(articleId)) {
             throw new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND);
         }
         articleRepository.increaseLikeCount(articleId);
     }
+
+    @Transactional
+    public void deleteArticle(Long articleId, Long userId) {
+        Article findArticle = articleRepository.findArticleForModify(articleId, userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION));
+        //S3에 저장된 이미지를 지운다.
+        List<Image> findImages = findArticle.getImageList();
+        imageService.deleteImageListFromQuestion(findImages);
+        //태그도 지운다.
+        articleTagRepository.deleteByArticleId(articleId);
+        //질문글을 지운다.
+        articleRepository.deleteById(articleId);
+    }
+
 }

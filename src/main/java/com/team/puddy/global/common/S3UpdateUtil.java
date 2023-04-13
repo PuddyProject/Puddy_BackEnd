@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.team.puddy.domain.image.domain.Image;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class S3UpdateUtil {
 
     @Value("${cloud.aws.s3.bucket}")
@@ -27,54 +29,21 @@ public class S3UpdateUtil {
         return UUID.randomUUID().toString().concat(fileName);
     }
 
-
-    public String uploadQuestionToS3(MultipartFile file,String uuidImageName) throws IOException {
+    public String uploadToS3(MultipartFile file, String fileName, String folderName) throws IOException {
 
         ObjectMetadata objectMetaData = createMetaDate(file);
         // S3에 업로드
         amazonS3Client.putObject(
-                new PutObjectRequest(BUCKET, "questions/" + uuidImageName, file.getInputStream(), objectMetaData)
+                new PutObjectRequest(BUCKET, folderName + "/" + fileName, file.getInputStream(), objectMetaData)
                         .withCannedAcl(CannedAccessControlList.PublicRead)
         );
 
-        return amazonS3Client.getUrl(BUCKET, "questions/" + uuidImageName).toString();
+        return amazonS3Client.getUrl(BUCKET, folderName + "/" + fileName).toString();
     }
 
-    public String uploadArticleToS3(MultipartFile file,String uuidImageName) throws IOException {
-
-        ObjectMetadata objectMetaData = createMetaDate(file);
-        // S3에 업로드
-        amazonS3Client.putObject(
-                new PutObjectRequest(BUCKET, "questions/" + uuidImageName, file.getInputStream(), objectMetaData)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)
-        );
-
-        return amazonS3Client.getUrl(BUCKET, "questions/" + uuidImageName).toString();
-    }
-
-
-    public String uploadUserToS3(MultipartFile file, String fileName) throws IOException {
-
-        ObjectMetadata objectMetaData = createMetaDate(file);
-        // S3에 업로드
-        amazonS3Client.putObject(
-                new PutObjectRequest(BUCKET, "users/" + fileName, file.getInputStream(), objectMetaData)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)
-        );
-
-        return amazonS3Client.getUrl(BUCKET, "users/" + fileName).toString();
-    }
-
-    public String uploadPetToS3(MultipartFile file, String fileName) throws IOException {
-
-        ObjectMetadata objectMetaData = createMetaDate(file);
-        // S3에 업로드
-        amazonS3Client.putObject(
-                new PutObjectRequest(BUCKET, "pets/" + fileName, file.getInputStream(), objectMetaData)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)
-        );
-
-        return amazonS3Client.getUrl(BUCKET, "pets/" + fileName).toString();
+    public void deleteImageFromS3(Image image, String folderName) {
+        log.info(folderName+"/"+image.getStoredName());
+        amazonS3Client.deleteObject(BUCKET, folderName + "/" + image.getStoredName());
     }
 
     protected static ObjectMetadata createMetaDate(MultipartFile file) {
@@ -84,7 +53,5 @@ public class S3UpdateUtil {
         return objectMetaData;
     }
 
-    public void deleteImage(Image image) {
-        amazonS3Client.deleteObject(BUCKET,"questions/" + image.getStoredName());
-    }
+
 }

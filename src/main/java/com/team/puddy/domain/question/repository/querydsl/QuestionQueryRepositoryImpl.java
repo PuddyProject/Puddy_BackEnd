@@ -99,15 +99,7 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
                 .fetchOne();
     }
 
-    public Optional<Question> findQuestionForUpdate(Long questionId, Long userId) {
-        return Optional.ofNullable(queryFactory.selectFrom(question)
-                .leftJoin(question.imageList, image).fetchJoin()
-                .where(question.id.eq(questionId)
-                        .and(question.user.id.eq(userId)))
-                .fetchOne());
-    }
-
-    public Optional<Question> findQuestionForDelete(Long questionId, Long userId) {
+    public Optional<Question> findQuestionForModify(Long questionId, Long userId) {
         return Optional.ofNullable(queryFactory.selectFrom(question)
                 .leftJoin(question.imageList, image).fetchJoin()
                 .where(question.id.eq(questionId)

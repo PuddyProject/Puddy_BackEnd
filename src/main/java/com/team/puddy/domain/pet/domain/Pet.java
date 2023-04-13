@@ -35,6 +35,7 @@ public class Pet extends BaseTimeEntity {
 
     @Builder.Default
     @OneToOne(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
+    @JoinColumn(name="image_id")
     private Image image = null;
 
     @Lob
