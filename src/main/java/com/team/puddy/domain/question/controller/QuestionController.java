@@ -71,11 +71,11 @@ public class QuestionController {
 
     @GetMapping
     @Operation(summary = "QNA 리스트 조회 메서드")
-    public Response<QuestionListResponseDto> getQuestionList(
+    public Response<QuestionListResponseDto> getQuestionList(@RequestParam(value = "keyword",defaultValue = "") String keyword,
             @RequestParam int page) {
         Pageable pageable = PageRequest.of(page - 1, 10);
 
-        QuestionListResponseDto questionListDto = questionService.getQuestionList(pageable);
+        QuestionListResponseDto questionListDto = questionService.getQuestionListByTitleStartWith(pageable,keyword);
 
         return Response.success(questionListDto);
     }

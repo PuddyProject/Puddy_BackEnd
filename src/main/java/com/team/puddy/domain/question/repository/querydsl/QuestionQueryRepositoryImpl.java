@@ -114,4 +114,23 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
                         .and(question.user.id.eq(userId)))
                 .fetchOne());
     }
+
+    @Override
+    public Slice<Question> findByTitleStartWithOrderByModifiedDateDesc(Pageable pageable, String keyword) {
+        List<Question> questionList = queryFactory.selectFrom(question).distinct()
+                .leftJoin(question.user, user).fetchJoin()
+                .leftJoin(user.expert, expert).fetchJoin()
+                .leftJoin(user.pet, pet).fetchJoin()
+                .where(question.title.startsWith(keyword))
+                .orderBy(question.modifiedDate.desc())
+                .fetch();
+
+        boolean hasNext = questionList.size() > pageable.getPageSize();
+        if (hasNext) {
+            questionList.remove(questionList.size() - 1);
+        }
+
+
+        return new SliceImpl<>(questionList, pageable, hasNext);
+    }
 }
