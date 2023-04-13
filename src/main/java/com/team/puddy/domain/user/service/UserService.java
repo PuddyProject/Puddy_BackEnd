@@ -184,6 +184,7 @@ public class UserService {
                 .getPet() != null; // 펫이 있으면 true, 없으면 false
     }
 
+
     @Transactional(readOnly = true)
     public String findAccount(FindAccountDto accountDto) {
         User findUser = userRepository.findByUsernameAndEmail(accountDto.username(), accountDto.email())
@@ -197,4 +198,5 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException(CHANGE_PASSWORD_FAIL));
         findUser.updatePassword(passwordEncoder.encode(password));
     }
+
 }

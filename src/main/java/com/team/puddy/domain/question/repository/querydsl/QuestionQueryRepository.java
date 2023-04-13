@@ -27,5 +27,7 @@ public interface QuestionQueryRepository {
 
     Optional<Question> findQuestionForDelete(Long questionId, Long userId);
 
+
     Slice<Question> findByTitleStartWithOrderByModifiedDateDesc(Pageable page, String keyword);
+
 }

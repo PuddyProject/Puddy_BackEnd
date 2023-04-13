@@ -133,4 +133,5 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
 
         return new SliceImpl<>(questionList, pageable, hasNext);
     }
+
 }

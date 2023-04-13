@@ -103,6 +103,7 @@ public class UserController {
                                          @AuthenticationPrincipal JwtUserDetails user) {
         userService.changePassword(passwordDto.password(),user.getUserId());
         return Response.success();
+
     }
 
 
