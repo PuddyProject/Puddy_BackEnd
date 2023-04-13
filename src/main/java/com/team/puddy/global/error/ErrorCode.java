@@ -35,7 +35,10 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "가입된 유저가 아닙니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "유효하지 않은 패스워드입니다."),
     IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "업데이트할 이미지가 없습니다."),
+    NOT_MATCH_INFO(HttpStatus.NOT_FOUND,"입력하신 개인정보가 일치하지 않습니다."),
     UNAUTHORIZED_OPERATION(HttpStatus.UNAUTHORIZED, "수정,삭제 권한이 없습니다."),
+    SEND_EMAIL_FAIL(HttpStatus.BAD_REQUEST,"메일 전송에 실패했습니다."),
+    CHANGE_PASSWORD_FAIL(HttpStatus.BAD_REQUEST,"패스워드 변경에 실패했습니다."),
 
     //QUESTION
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 문제입니다."),

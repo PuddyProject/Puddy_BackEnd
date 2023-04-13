@@ -32,4 +32,5 @@ public class ReviewController {
         List<ResponseReviewDto> reviewList = reviewService.getReviewListByExpertId(expertId);
         return Response.success(reviewList);
     }
+
 }

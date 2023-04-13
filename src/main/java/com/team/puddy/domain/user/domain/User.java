@@ -111,5 +111,9 @@ public class User extends BaseTimeEntity {
         this.pet = pet;
     }
 
+    public void updatePassword(String tmpPassword) {
+        this.password = tmpPassword;
+
+    }
 }
 
