@@ -1,4 +1,16 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: puddyofficial1
+    password: ${EMAIL_SECRET}
+    properties:
+      mail:
+        smtp:
+          auth: true # 5
+          timeout: 5000 # 6
+          starttls:
+            enable: true # 7
   servlet:
     multipart:
       max-file-size: 10MB
@@ -9,6 +21,7 @@ spring:
     url: ${DB_URL}
     username: wave
     password: ${DB_PASSWORD}
+
 
   redis:
     host: redis
@@ -49,7 +62,6 @@ cloud:
     region:
       static: ${S3_REGION}
     s3:
-      endpoint: ${S3_ENDPOINT}
       bucket: ${S3_BUCKET}
 
 jwt:
