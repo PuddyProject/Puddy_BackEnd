@@ -19,7 +19,6 @@ import java.util.UUID;
 public class S3UpdateUtil {
 
     @Value("${cloud.aws.s3.bucket}")
-
     private String BUCKET;
 
     private final AmazonS3Client amazonS3Client;

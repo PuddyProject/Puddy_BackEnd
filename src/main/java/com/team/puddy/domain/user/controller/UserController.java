@@ -98,11 +98,13 @@ public class UserController {
         return Response.success(findAccount);
     }
 
-    @PostMapping("/find-password")
-    public Response<String> findPassword(@RequestBody FindPasswordDto passwordDto) {
-        //TODO : 비밀번호 찾기 로직 구현하기
-        return Response.success("");
+    @PatchMapping("/change-password")
+    public Response<Void> changePassword(@RequestBody ChangePasswordDto passwordDto,
+                                         @AuthenticationPrincipal JwtUserDetails user) {
+        userService.changePassword(passwordDto.password(),user.getUserId());
+        return Response.success();
     }
+
 
 
     @PostMapping("/duplicate-email")
