@@ -20,8 +20,8 @@ public class S3Config {
     @Value("${cloud.aws.credentials.secret-key}")
     private String SECRET_KEY;
 
-    @Value("${cloud.aws.s3.endpoint}")
-    private String END_POINT;
+//    @Value("${cloud.aws.s3.endpoint}")
+//    private String END_POINT;
 
 
     @Value("${cloud.aws.region.static}")
@@ -32,7 +32,7 @@ public class S3Config {
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(ACCESS_KEY,SECRET_KEY);
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(END_POINT, REGION))
+                .withRegion(REGION)
                 .build();
     }
 }
