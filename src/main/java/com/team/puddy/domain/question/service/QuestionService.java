@@ -52,6 +52,12 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
+    public QuestionListResponseDto getQuestionListByTitleStartWith(Pageable page,String keyword) {
+        Slice<Question> questionList = questionRepository.findByTitleStartWithOrderByModifiedDateDesc(page, keyword);
+        return questionMapper.toDto(questionList.stream().map(questionMapper::toDto).toList(),questionList.hasNext());
+    }
+
+    @Transactional(readOnly = true)
     public List<ResponseQuestionExcludeAnswerDto> getPopularQuestions() {
         List<Question> popularQuestions = questionRepository.getPopularQuestionList();
         return popularQuestions.stream()
