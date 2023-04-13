@@ -32,6 +32,7 @@ public class UserQueryRepository {
                 .where(user.account.eq(account))
                 .fetchOne() != null;
     }
+
     //유저 정보 전문가 테이블만 조회
     public Optional<User> findByIdWithExpert(Long userId) {
 
@@ -41,7 +42,9 @@ public class UserQueryRepository {
                 .leftJoin(user.expert, expert).fetchJoin() // INNER JOIN을 사용한 페치 조인
                 .where(user.id.eq(userId))
                 .fetchOne());
-    }public Optional<User> findByIdWithPet(Long userId) {
+    }
+
+    public Optional<User> findByIdWithPet(Long userId) {
 
         return Optional.ofNullable(queryFactory
                 .selectFrom(user)
@@ -56,6 +59,7 @@ public class UserQueryRepository {
                 .where(user.nickname.eq(nickname))
                 .fetchOne() != null;
     }
+
     //유저 정보 펫과 전문가만 조회
     public Optional<User> findByIdWithPetAndExpert(Long userId) {
         return Optional.ofNullable(queryFactory.selectFrom(user)
@@ -64,7 +68,7 @@ public class UserQueryRepository {
                 .where(user.id.eq(userId))
                 .fetchOne());
     }
-
+//삭제 로직 고치기
     //유저 정보 전체 페치조인 조회
     public Optional<User> findByUserId(Long userId) {
         return Optional.ofNullable(queryFactory.selectFrom(user)
@@ -75,4 +79,10 @@ public class UserQueryRepository {
                 .fetchOne());
     }
 
+    public Optional<User> findByAccount(String account) {
+        return Optional.ofNullable(queryFactory.selectFrom(user)
+                .leftJoin(user.expert, expert).fetchJoin()
+                .where(user.account.eq(account))
+                .fetchOne());
+    }
 }

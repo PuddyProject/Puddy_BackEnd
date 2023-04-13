@@ -53,7 +53,14 @@ public class ArticleController {
                                         @RequestPart("request") UpdateArticleDto updateDto,
                                         @RequestPart(value = "images", required = false) List<MultipartFile> images,
                                         @AuthenticationPrincipal JwtUserDetails user) {
-        //TODO
+        articleService.updateArticle(articleId, updateDto, images, user.getUserId());
+        return Response.success();
+    }
+
+    @DeleteMapping("/{articleId}")
+    public Response<Void> deleteArticle(@PathVariable("articleId") Long articleId,
+                                        @AuthenticationPrincipal JwtUserDetails user) {
+        articleService.deleteArticle(articleId, user.getUserId());
         return Response.success();
     }
 

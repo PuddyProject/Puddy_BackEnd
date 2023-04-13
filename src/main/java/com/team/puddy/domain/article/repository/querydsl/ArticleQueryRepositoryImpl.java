@@ -12,6 +12,7 @@ import static com.team.puddy.domain.article.domain.QArticle.article;
 import static com.team.puddy.domain.article.domain.QArticleTag.articleTag;
 import static com.team.puddy.domain.comment.domain.QComment.comment;
 import static com.team.puddy.domain.expert.domain.QExpert.expert;
+import static com.team.puddy.domain.image.domain.QImage.image;
 import static com.team.puddy.domain.pet.domain.QPet.pet;
 import static com.team.puddy.domain.question.domain.QQuestion.question;
 import static com.team.puddy.domain.user.domain.QUser.user;
@@ -103,6 +104,13 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .orderBy(article.modifiedDate.desc())
                 .limit(5)
                 .fetch();
+    }
+
+    public Optional<Article> findArticleForModify(Long articleId,Long userId) {
+        return Optional.ofNullable(queryFactory.selectFrom(article)
+                .leftJoin(article.imageList, image).fetchJoin()
+                .where(article.user.id.eq(userId).and(article.id.eq(articleId)))
+                .fetchOne());
     }
 
 }

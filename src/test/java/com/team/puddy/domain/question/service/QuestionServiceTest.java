@@ -6,7 +6,6 @@ import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 
 import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
-import com.team.puddy.domain.question.repository.querydsl.QuestionQueryRepositoryImpl;
 import com.team.puddy.domain.question.repository.QuestionRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserRepository;
@@ -36,8 +35,6 @@ public class QuestionServiceTest {
     private QuestionService questionService;
     @Mock
     private QuestionRepository questionRepository;
-    @Mock
-    private QuestionQueryRepositoryImpl questionQueryRepositoryImpl;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -79,11 +76,11 @@ public class QuestionServiceTest {
                 ResponseQuestionExcludeAnswerDto.builder().content("s").build()
         );
         Slice<ResponseQuestionExcludeAnswerDto> questions = TestEntityUtils.questionPageList();
-        given(questionQueryRepositoryImpl.getQuestionList(any())).willReturn(questionPage);
+        given(questionRepository.findByTitleStartWithOrderByModifiedDateDesc(any(),any(String.class))).willReturn(questionPage);
         //when
-        questionService.getQuestionList(page);
+        questionService.getQuestionListByTitleStartWith(page,"");
         //then
-        verify(questionQueryRepositoryImpl).getQuestionList(page);
+        verify(questionRepository).getQuestionList(page);
     }
 
     @DisplayName("문제 전체 개수 조회 테스트")
@@ -100,15 +97,15 @@ public class QuestionServiceTest {
     @DisplayName("질문글 단건 조회 테스트")
     @Test
     void givenQuestionId_whenGetQuestion_thenQuestionResponseDto() {
-        Long questionsId = 2L;
+        Long questionId = 2L;
         User user = TestEntityUtils.user();
         Optional<Question> question = Optional.ofNullable(TestEntityUtils.question(user));
         //given
-        given(questionQueryRepositoryImpl.getQuestion(any(Long.class))).willReturn(question);
+        given(questionRepository.getQuestion(any(Long.class))).willReturn(question);
         //when
-        questionService.getQuestion(questionsId);
+        questionService.getQuestion(questionId);
         //then
-        verify(questionQueryRepositoryImpl).getQuestion(questionsId);
+        verify(questionRepository).getQuestion(questionId);
 
     }
 
