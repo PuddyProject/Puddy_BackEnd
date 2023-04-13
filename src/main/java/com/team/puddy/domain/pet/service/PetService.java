@@ -29,21 +29,16 @@ import java.util.Optional;
 @Slf4j
 public class PetService {
 
-    private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
-
-    private final PetRepository petRepository;
-    private final PetQueryRepository petQueryRepository;
     private final ImageService imageService;
     private final PetMapper petMapper;
 
     public void addPet(Long userId, MultipartFile file, RequestPetDto request) throws IOException {
         User findUser = userQueryRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
         Pet pet = petMapper.toEntity(request);
-        if (file != null && !file.isEmpty()) { //이미지가 있을 경우
-            Image savedimage = imageService.uploadImageForPets(file);
-            pet.setImage(savedimage);
-        }
+
+        imageService.saveImagePet(pet,file);
+
         findUser.setPet(pet);
     }
 
@@ -62,16 +57,9 @@ public class PetService {
     public void updatePet(UpdatePetDto updateDto, Long userId, MultipartFile file) throws IOException {
         Pet findPet = userQueryRepository.findByIdWithPet(userId).orElseThrow(() -> new NotFoundException(ErrorCode.PET_NOT_FOUND))
                 .getPet();
-        Image findImage = findPet.getImage();
-        if (file != null && !file.isEmpty()) { //이미지가 있을 경우
-            Image savedImage = imageService.uploadImageForPets(file);
-            if (findImage == null) { // 해당 펫의 이미지가 없는 경우
-                findPet.setImage(savedImage);
-            } else { // 해당 펫의 이미지가 있는 경우
-                imageService.deleteImage(findImage);
-                findImage.updateImage(savedImage.getImagePath(), savedImage.getOriginalName());
-            }
-        }
+
+        imageService.updateImagePet(findPet,file);
+
         findPet.updatePet(updateDto);
     }
 }

@@ -54,7 +54,7 @@ public class PetController {
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/pets/update")
     public Response<?> updatePet(@RequestPart("request") UpdatePetDto updateDto,
-                                 @RequestParam(value = "file",required = false) MultipartFile file,
+                                 @RequestParam(value = "images",required = false) MultipartFile file,
                                  @AuthenticationPrincipal JwtUserDetails user) throws IOException {
 
         petService.updatePet(updateDto,user.getUserId(),file);

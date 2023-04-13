@@ -64,9 +64,14 @@ public class Article extends BaseTimeEntity {
     @Builder.Default
     private List<Image> imageList = new ArrayList<>();
 
-    public void updateArticle(String title, String content, List<Image> images) {
+    public void updateArticle(String title, String content,List<ArticleTag> articleTags) {
         this.title = title;
         this.content = content;
+        this.tagList.clear();
+        this.tagList.addAll(articleTags);
+    }
+
+    public void updateImageList(List<Image> images) {
         this.imageList.clear();
         this.imageList.addAll(images);
     }

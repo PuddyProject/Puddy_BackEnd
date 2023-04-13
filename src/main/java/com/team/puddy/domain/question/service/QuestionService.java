@@ -36,7 +36,7 @@ import java.util.List;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
-    
+
     private final UserRepository userRepository;
 
     private final QuestionMapper questionMapper;
@@ -46,10 +46,9 @@ public class QuestionService {
     private final ImageService imageService;
 
     @Transactional(readOnly = true)
-    public QuestionListResponseDto getQuestionList(Pageable page) {
-        Slice<Question> questionList = questionRepository.getQuestionList(page);
+    public QuestionListResponseDto getQuestionListByTitleStartWith(Pageable page, String keyword) {
+        Slice<Question> questionList = questionRepository.findByTitleStartWithOrderByModifiedDateDesc(page, keyword);
         return questionMapper.toDto(questionList.stream().map(questionMapper::toDto).toList(), questionList.hasNext());
-
     }
 
     @Transactional(readOnly = true)
@@ -102,7 +101,7 @@ public class QuestionService {
     public void addQuestion(RequestQuestionDto requestDto, List<MultipartFile> images, Long userId) {
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        List<Image> imageList = imageService.saveImageListToQuestion(images);
+        List<Image> imageList = imageService.saveImageListForQuestion(images);
 
         Question question = questionMapper.toEntity(requestDto, imageList, findUser);
         questionRepository.save(question);
@@ -111,39 +110,24 @@ public class QuestionService {
 
     @Transactional
     public void updateQuestion(Long questionId, UpdateQuestionDto requestDto, List<MultipartFile> images, Long userId) {
-        Question findQuestion = questionRepository.findQuestionForUpdate(questionId, userId)
+        Question findQuestion = questionRepository.findQuestionForModify(questionId, userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION));
 
-        TrySaveImageList(findQuestion, images);
+        imageService.updateImageListForQuestion(findQuestion, images);
 
         findQuestion.updateQuestion(requestDto.title(), requestDto.content(), requestDto.category());
 
     }
 
-    private void TrySaveImageList(Question findQuestion, List<MultipartFile> images) {
-        //요청으로 들어온 이미지가 null이 아닐 경우에만 이미지 삭제 시도
-        if (images != null && !images.isEmpty()) {
-            // 기존의 이미지를 지운다.
-            List<Image> findImages = findQuestion.getImageList();
-            if (findImages != null) {
-                findImages.forEach(imageService::deleteImage);
-            }
-            //새로운 이미지를 저장한다.
-            List<Image> imageList = imageService.saveImageListToQuestion(images);
-            //질문글을 수정한다.
-            findQuestion.updateImageList(imageList);
-        }
-    }
-
     @Transactional
     public void deleteQuestion(Long questionId, Long userId) {
-        Question findQuestion = questionRepository.findQuestionForDelete(questionId, userId)
+        Question findQuestion = questionRepository.findQuestionForModify(questionId, userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.UNAUTHORIZED_OPERATION));
         //S3에 저장된 이미지를 지운다.
         List<Image> findImages = findQuestion.getImageList();
-        if (findImages != null) {
-            findImages.forEach(imageService::deleteImage);
-        }
+
+        imageService.deleteImageListFromQuestion(findImages);
+
         //질문글을 지운다.
         questionRepository.deleteById(questionId);
     }

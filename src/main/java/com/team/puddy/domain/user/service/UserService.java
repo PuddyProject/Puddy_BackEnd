@@ -62,7 +62,7 @@ public class UserService {
 
     @Transactional
     public LoginToken login(LoginUserRequest request) {
-        User user = userRepository.findByAccount(request.account()).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        User user = userQueryRepository.findByAccount(request.account()).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new BusinessException(INVALID_PASSWORD);
@@ -120,17 +120,8 @@ public class UserService {
     @Transactional
     public void updateProfile(Long userId, String nickname, MultipartFile file) throws IOException {
         User findUser = userQueryRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
-        Image findImage = findUser.getImage();
-        if (file != null && !file.isEmpty()) { //이미지가 있을 경우
-            Image savedImage = imageService.uploadImageForUsers(file);
 
-            if (findImage == null) { // 해당 유저의 이미지가 없는 경우
-                findUser.setImage(savedImage);
-            } else { // 해당 유저의 이미지가 있는 경우
-                imageService.deleteImage(findImage);
-                findImage.updateImage(savedImage.getImagePath(), savedImage.getOriginalName());
-            }
-        }
+        imageService.updateImageUser(findUser, file);
         findUser.setNickname(nickname);
     }
 
