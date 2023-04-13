@@ -45,11 +45,6 @@ public class QuestionService {
 
     private final ImageService imageService;
 
-    @Transactional(readOnly = true)
-    public QuestionListResponseDto getQuestionListByTitleStartWith(Pageable page, String keyword) {
-        Slice<Question> questionList = questionRepository.findByTitleStartWithOrderByModifiedDateDesc(page, keyword);
-        return questionMapper.toDto(questionList.stream().map(questionMapper::toDto).toList(), questionList.hasNext());
-    }
 
     @Transactional(readOnly = true)
     public QuestionListResponseDto getQuestionListByTitleStartWith(Pageable page,String keyword) {
