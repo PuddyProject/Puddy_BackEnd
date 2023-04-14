@@ -7,7 +7,7 @@ import lombok.Builder;
 
 import java.util.List;
 
-public record ResponseExpertDto(
+public record ResponseExpertDto(Long expertId,
                          String username,
                          String introduce,
                          List<String> careerList,

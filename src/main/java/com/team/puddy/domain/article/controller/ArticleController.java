@@ -77,7 +77,7 @@ public class ArticleController {
     public Response<Void> unLike(@PathVariable("articleId") Long articleId,
                                  @AuthenticationPrincipal JwtUserDetails user) {
 
-        articleService.increaseLikeCount(articleId);
+        articleService.decreaseLikeCount(articleId);
 
         return Response.success();
     }
