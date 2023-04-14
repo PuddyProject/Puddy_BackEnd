@@ -1,10 +1,8 @@
 package com.team.puddy.domain.article.domain;
 
 import com.team.puddy.domain.BaseTimeEntity;
-import com.team.puddy.domain.answer.domain.Answer;
 import com.team.puddy.domain.comment.domain.Comment;
 import com.team.puddy.domain.image.domain.Image;
-import com.team.puddy.domain.type.Category;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -48,6 +46,10 @@ public class Article extends BaseTimeEntity {
     private long likeCount;
 
     private int postCategory;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Like> likeList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
