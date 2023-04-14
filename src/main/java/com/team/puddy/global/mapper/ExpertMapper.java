@@ -23,14 +23,23 @@ public interface ExpertMapper {
                 .introduce(requestDto.introduce())
                 .education(requestDto.education())
                 .location(requestDto.location())
-                .username(requestDto.username())
+                .username(user.getUsername())
                 .user(user)
                 .careerList(requestDto.careerList())
                 .build();
     }
 
-    @Mapping(target = "image",source = "image")
-    ResponseExpertDto toDto(Expert findExpert, Image image);
+    default ResponseExpertDto toDto(Expert findExpert, Image image){
+        return ResponseExpertDto.builder()
+                .expertId(findExpert.getId())
+                .username(findExpert.getUsername())
+                .introduce(findExpert.getIntroduce())
+                .careerList(findExpert.getCareerList())
+                .image(image)
+                .location(findExpert.getLocation())
+                .education(findExpert.getEducation())
+                .build();
+    }
 
     @Mapping(target = "hasNextPage",source = "hasNextPage")
     @Mapping(target = "expertList",source = "expertList")
