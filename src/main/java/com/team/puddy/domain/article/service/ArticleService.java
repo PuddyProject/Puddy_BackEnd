@@ -152,4 +152,10 @@ public class ArticleService {
         articleRepository.deleteById(articleId);
     }
 
+    public void decreaseLikeCount(Long articleId) {
+        if(!articleRepository.existsById(articleId)) {
+            throw new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND);
+        }
+        articleRepository.decreaseLikeCount(articleId);
+    }
 }
