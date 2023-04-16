@@ -1,11 +1,11 @@
 package com.team.puddy.domain.article.domain;
 
 import com.team.puddy.domain.BaseTimeEntity;
-import com.team.puddy.domain.answer.domain.Answer;
 import com.team.puddy.domain.comment.domain.Comment;
 import com.team.puddy.domain.image.domain.Image;
-import com.team.puddy.domain.type.Category;
 import com.team.puddy.domain.user.domain.User;
+import com.team.puddy.global.error.ErrorCode;
+import com.team.puddy.global.error.exception.BusinessException;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Type;
@@ -44,10 +44,11 @@ public class Article extends BaseTimeEntity {
     @ColumnDefault("0")
     private long viewCount;
 
-    @ColumnDefault("0")
-    private long likeCount;
-
     private int postCategory;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Likes> likeList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -75,6 +76,20 @@ public class Article extends BaseTimeEntity {
         this.imageList.clear();
         this.imageList.addAll(images);
     }
+
+    public void addLikes(long userId) {
+        boolean exist = likeList.stream().anyMatch(like -> like.getUserId() == userId);
+        if (exist) throw new BusinessException(ErrorCode.ARTICLE_LIKE_ERROR);
+        Likes likes = new Likes(userId);
+        this.likeList.add(likes);
+        likes.setArticle(this);
+    }
+
+    public void removeLikes(long userId) {
+        boolean removed = likeList.removeIf(like -> like.getUserId() == userId);
+        if (!removed) throw new BusinessException(ErrorCode.ARTICLE_LIKE_ERROR);
+    }
+
 
     public void setTagList(List<ArticleTag> tagList) {
         this.tagList = tagList;

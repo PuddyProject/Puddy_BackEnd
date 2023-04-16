@@ -19,6 +19,7 @@ public record ResponseArticleDto (Long articleId,
                                  long viewCount,
                                  long likeCount,
                                  int postCategory,
+                                 boolean isLike,
                                  @JsonIgnoreProperties({"article"})
                                  List<ArticleTag> tagList,
                                   @JsonIgnoreProperties({"article"})
