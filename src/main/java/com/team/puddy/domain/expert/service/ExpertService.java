@@ -8,6 +8,7 @@ import com.team.puddy.domain.expert.dto.ResponseExpertListDto;
 import com.team.puddy.domain.expert.dto.UpdateExpertDto;
 import com.team.puddy.domain.expert.repository.ExpertQueryRepository;
 import com.team.puddy.domain.expert.repository.ExpertRepository;
+import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserQueryRepository;
 import com.team.puddy.domain.user.repository.UserRepository;
@@ -40,9 +41,9 @@ public class ExpertService {
     private final UserQueryRepository userQueryRepository;
     private final ExpertMapper expertMapper;
 
-    public void registerExpert(RequestExpertDto requestExpertDto, Long userId){
+    public void registerExpert(RequestExpertDto requestExpertDto, Long userId) {
         User findUser = userQueryRepository.findByIdWithExpert(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
-        if(findUser.getExpert() != null) {
+        if (findUser.getExpert() != null) {
             throw new DuplicateException(ErrorCode.DUPLICATE_EXPERT);
         }
         Expert expert = expertMapper.toEntity(requestExpertDto, findUser);
@@ -54,8 +55,8 @@ public class ExpertService {
     public ResponseExpertDto getExpertByUserId(Long userId) {
         Expert findExpert = expertQueryRepository.findByIdWithUser(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.EXPERT_NOT_FOUND));
-
-        return expertMapper.toDto(findExpert,findExpert.getUser().getImage());
+        String imagePath = getExpertImagePath(findExpert);
+        return expertMapper.toDto(findExpert, imagePath);
 
     }
 
@@ -66,14 +67,30 @@ public class ExpertService {
     }
 
     public List<ResponseExpertDto> getRecentExperts() {
-        return expertQueryRepository.findExpertListForMainPage().stream().map(expert -> expertMapper.toDto(expert,expert.getUser().getImage())).toList();
+        return expertQueryRepository.findExpertListForMainPage().stream().map(expert -> {
+            String imagePath = getExpertImagePath(expert);
+            return expertMapper.toDto(expert, imagePath);
+        }).toList();
     }
 
     public ResponseExpertListDto getExpertList(Pageable pageable) {
         Slice<Expert> expertList = expertQueryRepository.findExpertList(pageable);
-        List<ResponseExpertDto> expertDtoList = expertList.stream().map(expert -> expertMapper.toDto(expert, expert.getUser().getImage())).toList();
-        return expertMapper.toListDto(expertDtoList,expertList.hasNext());
+        List<ResponseExpertDto> expertDtoList = expertList.stream().map(expert -> {
+            String imagePath = getExpertImagePath(expert);
+            return expertMapper.toDto(expert, imagePath);
+        }).toList();
+        return expertMapper.toListDto(expertDtoList, expertList.hasNext());
 
-    }}
+    }
+
+    private String getExpertImagePath(Expert expert) {
+        Image image = expert.getUser().getImage();
+        if (image == null) {
+            return "";
+        }
+        return image.getImagePath();
+    }
+
+}
 
 

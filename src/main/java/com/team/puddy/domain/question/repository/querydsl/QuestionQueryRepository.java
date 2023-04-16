@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface QuestionQueryRepository {
 
-    public Optional<Question> getQuestion(Long questionId);
+    Optional<Question> getQuestion(Long questionId);
 
-    public Slice<Question> getQuestionList(Pageable pageable);
+    Slice<Question> getQuestionList(Pageable pageable);
 
     List<Question> getPopularQuestionList();
 

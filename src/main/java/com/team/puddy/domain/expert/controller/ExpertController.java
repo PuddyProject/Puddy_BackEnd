@@ -39,6 +39,7 @@ public class ExpertController {
     @GetMapping("/experts/{userId}")
     public Response<ResponseExpertDto> getExpert(@PathVariable("userId") Long userId) {
         ResponseExpertDto expertDto = expertService.getExpertByUserId(userId);
+        
         return Response.success(expertDto);
     }
 
