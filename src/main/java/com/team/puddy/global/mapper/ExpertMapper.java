@@ -29,13 +29,13 @@ public interface ExpertMapper {
                 .build();
     }
 
-    default ResponseExpertDto toDto(Expert findExpert, Image image){
+    default ResponseExpertDto toDto(Expert findExpert,String imagePath){
         return ResponseExpertDto.builder()
                 .expertId(findExpert.getId())
                 .username(findExpert.getUsername())
                 .introduce(findExpert.getIntroduce())
                 .careerList(findExpert.getCareerList())
-                .image(image)
+                .imagePath(imagePath)
                 .location(findExpert.getLocation())
                 .education(findExpert.getEducation())
                 .build();

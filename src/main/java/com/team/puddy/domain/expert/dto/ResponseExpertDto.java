@@ -11,8 +11,7 @@ public record ResponseExpertDto(Long expertId,
                          String username,
                          String introduce,
                          List<String> careerList,
-                         @JsonIgnore
-                         Image image,
+                         String imagePath,
                          String location,
                          String education){
 

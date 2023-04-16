@@ -11,9 +11,6 @@ public interface ArticleQueryRepository {
 
     Optional<Article> findArticleWithUserById(Long articleId);
 
-    Slice<Article> findArticleList(Pageable pageable);
-
-    Slice<Article> findAllByTag(String tagName, Pageable pageable);
 
     Slice<Article> findAllByTitleStartingWithOrderByModifiedDateDesc(String keyword, Pageable pageable);
 

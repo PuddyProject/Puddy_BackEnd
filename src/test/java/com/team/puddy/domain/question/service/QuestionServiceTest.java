@@ -80,7 +80,7 @@ public class QuestionServiceTest {
         //when
         questionService.getQuestionListByTitleStartWith(page,"");
         //then
-        verify(questionRepository).getQuestionList(page);
+        verify(questionRepository).findByTitleStartWithOrderByModifiedDateDesc(page,"");
     }
 
     @DisplayName("문제 전체 개수 조회 테스트")
