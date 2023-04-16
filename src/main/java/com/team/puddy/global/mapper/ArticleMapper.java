@@ -46,13 +46,14 @@ public interface ArticleMapper {
                 .build();
     }
 
-    default ResponseArticleExcludeCommentDto toDto(Article article,String imagePath) {
+    default ResponseArticleExcludeCommentDto toDto(Article article,String imagePath,long likeCount) {
         return ResponseArticleExcludeCommentDto.builder()
                 .articleId(article.getId())
                 .title(article.getTitle())
                 .nickname(article.getUser().getNickname())
                 .content(article.getContent())
                 .viewCount(article.getViewCount())
+                .likeCount(likeCount)
                 .imagePath(imagePath)
                 .createdDate(article.getCreatedDate())
                 .tagList(article.getTagList())
