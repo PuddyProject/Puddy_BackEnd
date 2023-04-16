@@ -26,11 +26,13 @@ public interface ArticleMapper {
     @Mapping(target = "imageList",source = "imageList")
     @Mapping(target = "commentList",ignore = true)
     @Mapping(target = "viewCount",ignore = true)
-    @Mapping(target = "likeCount",ignore = true)
+    @Mapping(target = "likeList",ignore = true)
     Article toEntity(RequestArticleDto request, List<Image> imageList, User user);
 
-    default ResponseArticleDto toDto(Article article, List<ResponseCommentDto> commentDtoList) {
+    default ResponseArticleDto toDto(Long likeCount,boolean isLike,Article article, List<ResponseCommentDto> commentDtoList) {
         return ResponseArticleDto.builder()
+                .likeCount(likeCount)
+                .isLike(isLike)
                 .articleId(article.getId())
                 .createdDate(article.getCreatedDate())
                 .nickname(article.getUser().getNickname())
@@ -40,7 +42,6 @@ public interface ArticleMapper {
                 .tagList(article.getTagList())
                 .commentList(commentDtoList)
                 .viewCount(article.getViewCount())
-                .likeCount(article.getLikeCount())
                 .postCategory(article.getPostCategory())
                 .build();
     }
@@ -53,7 +54,6 @@ public interface ArticleMapper {
                 .content(article.getContent())
                 .viewCount(article.getViewCount())
                 .imagePath(imagePath)
-                .likeCount(article.getLikeCount())
                 .createdDate(article.getCreatedDate())
                 .tagList(article.getTagList())
                 .postCategory(article.getPostCategory()).build();

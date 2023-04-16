@@ -90,15 +90,6 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
                 .fetch();
     }
 
-    public Question findQuestionWithImageAndUser(Long questionId) {
-        return queryFactory
-                .selectFrom(question)
-                .leftJoin(question.imageList, image).fetchJoin()
-                .leftJoin(question.user, user).fetchJoin()
-                .where(question.id.eq(questionId))
-                .fetchOne();
-    }
-
     public Optional<Question> findQuestionForModify(Long questionId, Long userId) {
         return Optional.ofNullable(queryFactory.selectFrom(question)
                 .leftJoin(question.imageList, image).fetchJoin()
@@ -114,7 +105,9 @@ public class QuestionQueryRepositoryImpl implements QuestionQueryRepository {
                 .leftJoin(user.expert, expert).fetchJoin()
                 .leftJoin(user.pet, pet).fetchJoin()
                 .where(question.title.startsWith(keyword))
-                .orderBy(question.modifiedDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(question.createdDate.desc())
                 .fetch();
 
         boolean hasNext = questionList.size() > pageable.getPageSize();
