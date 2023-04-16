@@ -32,6 +32,7 @@ public class ExpertQueryRepository {
     public Optional<Expert> findByIdWithUser(Long expertId) {
         return Optional.ofNullable(queryFactory.selectFrom(expert)
                 .leftJoin(expert.user,user).fetchJoin()
+                .leftJoin(user.image,image).fetchJoin()
                 .leftJoin(expert.reviewList, review).fetchJoin()
                 .where(expert.id.eq(expertId))
                 .fetchFirst());

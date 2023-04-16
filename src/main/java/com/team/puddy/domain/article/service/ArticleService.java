@@ -73,9 +73,10 @@ public class ArticleService {
                 () -> new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND)
         );
         long likeCount = likeRepository.countByArticleId(articleId);
-        return articleMapper.toDto(likeCount, isLike,findArticle, findArticle.getCommentList().stream().map(comment ->
+        return articleMapper.toDto(likeCount, isLike, findArticle, findArticle.getCommentList().stream().map(comment ->
                 commentMapper.toDto(comment, comment.getUser().getNickname())).toList());
     }
+
     @Transactional
     public void updateArticle(Long articleId, UpdateArticleDto updateDto, List<MultipartFile> images, Long userId) {
         Article findArticle = articleRepository.findArticleForModify(articleId, userId).orElseThrow(
@@ -98,24 +99,23 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public List<ResponseArticleExcludeCommentDto> getPopularArticleList() {
         List<Article> popularArticleList = articleRepository.findPopularArticleList();
-        //TODO: 게시글 리스트 조회시 각 게시글마다 좋아요 수 체크하기
-        return popularArticleList.stream().map(article -> articleMapper.toDto(article, "")).toList();
+        return popularArticleList.stream().map(article -> articleMapper.toDto(article, "",0L)).toList();
     }
 
     @Transactional(readOnly = true)
     public List<ResponseArticleExcludeCommentDto> getRecentArticleList() {
         List<Article> recentArticleList = articleRepository.findRecentArticleList();
-        return recentArticleList.stream().map(article -> articleMapper.toDto(article, "")).toList();
+        return recentArticleList.stream().map(article -> articleMapper.toDto(article, "",0L)).toList();
     }
 
     @Transactional(readOnly = true)
     public ResponseArticleListDto getArticleListByTitleStartWith(Pageable pageable, String keyword) {
         Slice<Article> articleList = articleRepository.findAllByTitleStartingWithOrderByModifiedDateDesc(keyword, pageable);
         List<ResponseArticleExcludeCommentDto> articleDtos = articleList.stream().map(article -> {
-
+            Long likeCount = likeRepository.countByArticleId(article.getId());
             String imagePath = getFirstImagePath(article.getImageList());
 
-            return articleMapper.toDto(article, imagePath);
+            return articleMapper.toDto(article, imagePath, likeCount);
         }).toList();
         return articleMapper.toDto(articleDtos, articleList.hasNext());
     }
@@ -135,6 +135,7 @@ public class ArticleService {
                 .map(images -> images.get(0).getImagePath())
                 .orElse("");
     }
+
     @Transactional
     public void like(Long userId, Long articleId) {
         Article findArticle = articleRepository.findById(articleId).orElseThrow(() -> new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND));

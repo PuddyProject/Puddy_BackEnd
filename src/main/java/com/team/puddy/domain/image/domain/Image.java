@@ -19,16 +19,12 @@ public class Image extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 512)
     private String imagePath; //파일 S3 경로
 
     private String originalName;
 
     private String storedName;
-
-    public void updateImage(String imagePath, String originalName) {
-        this.imagePath = imagePath;
-        this.originalName = originalName;
-    }
 
 
 }

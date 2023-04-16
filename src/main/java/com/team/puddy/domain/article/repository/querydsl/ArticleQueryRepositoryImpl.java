@@ -38,47 +38,12 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
     }
 
 
-    public Slice<Article> findArticleList(Pageable pageable) {
-        List<Article> articleList = queryFactory.selectFrom(article)
-                .join(article.user, user).fetchJoin()
-                .leftJoin(user.expert,expert).fetchJoin()
-                .orderBy(article.modifiedDate.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1)
-                .fetch();
-        boolean hasNext = articleList.size() > pageable.getPageSize();
-        if (hasNext) {
-            articleList.remove(articleList.size() - 1);
-        }
-
-        return new SliceImpl<>(articleList,pageable,hasNext);
-    }
-
-    public Slice<Article> findAllByTag(String tagName, Pageable pageable) {
-        List<Article> articleList = queryFactory.selectFrom(article)
-                .join(articleTag).on(articleTag.article.eq(article))
-                .where(
-                        articleTag.tag.tagName.eq(tagName)
-                )
-                .orderBy(article.modifiedDate.desc())
-                .limit(pageable.getPageSize() + 1)
-                .offset(pageable.getOffset())
-                .fetch();
-
-        boolean hasNext = articleList.size() > pageable.getPageSize();
-        if (hasNext) {
-            articleList.remove(articleList.size()-1);
-        }
-
-        return new SliceImpl<>(articleList,pageable,articleList.size() > pageable.getPageSize());
-    }
-
     public Slice<Article> findAllByTitleStartingWithOrderByModifiedDateDesc(String keyword, Pageable pageable) {
             List<Article> articleList = queryFactory.selectFrom(article).distinct()
                     .leftJoin(article.user,user).fetchJoin()
                     .leftJoin(user.expert,expert).fetchJoin()
                     .where(article.title.startsWith(keyword))
-                    .orderBy(article.modifiedDate.desc())
+                    .orderBy(article.createdDate.desc())
                     .limit(pageable.getPageSize() + 1)
                     .offset(pageable.getOffset())
                     .fetch();

@@ -35,7 +35,7 @@ public class ReviewService {
         Expert findExpert = expertQueryRepository.findByIdWithReview(expertId).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_THE_EXPERT));
         Review review = reviewMapper.toEntity(requestDto, findExpert);
         reviewRepository.save(review);
-        findExpert.getReviewList().add(review);
+        findExpert.addReview(review);
     }
 
     public List<ResponseReviewDto> getReviewListByExpertId(Long expertId) {

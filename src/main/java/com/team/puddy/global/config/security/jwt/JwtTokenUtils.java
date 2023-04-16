@@ -22,10 +22,10 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JwtTokenUtils {
 
-    private RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
 
-    private String SECRET;
+    private final String SECRET;
 
     public JwtTokenUtils(@Value("${jwt.secret-key}") String SECRET,
                          RedisTemplate<String,String> redisTemplate) {

@@ -1,11 +1,10 @@
 package com.team.puddy.domain.user.repository;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import  com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team.puddy.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static com.team.puddy.domain.expert.domain.QExpert.expert;
