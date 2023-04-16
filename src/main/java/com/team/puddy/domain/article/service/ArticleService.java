@@ -2,6 +2,7 @@ package com.team.puddy.domain.article.service;
 
 import com.team.puddy.domain.article.domain.Article;
 import com.team.puddy.domain.article.domain.ArticleTag;
+import com.team.puddy.domain.article.domain.Likes;
 import com.team.puddy.domain.article.domain.Tag;
 import com.team.puddy.domain.article.dto.request.RequestArticleDto;
 import com.team.puddy.domain.article.dto.request.UpdateArticleDto;
@@ -10,6 +11,7 @@ import com.team.puddy.domain.article.dto.response.ResponseArticleExcludeCommentD
 import com.team.puddy.domain.article.dto.response.ResponseArticleListDto;
 import com.team.puddy.domain.article.repository.ArticleRepository;
 import com.team.puddy.domain.article.repository.ArticleTagRepository;
+import com.team.puddy.domain.article.repository.LikeRepository;
 import com.team.puddy.domain.article.repository.TagRepository;
 import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.image.service.ImageService;
@@ -42,6 +44,7 @@ public class ArticleService {
     private final ImageService imageService;
     private final TagRepository tagRepository;
     private final ArticleTagRepository articleTagRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public void addArticle(RequestArticleDto requestDto, List<MultipartFile> images, Long userId) {
@@ -65,12 +68,12 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseArticleDto getArticle(Long articleId) {
+    public ResponseArticleDto getArticle(Long articleId, boolean isLike) {
         Article findArticle = articleRepository.findArticleWithUserById(articleId).orElseThrow(
                 () -> new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND)
         );
-
-        return articleMapper.toDto(findArticle, findArticle.getCommentList().stream().map(comment ->
+        long likeCount = likeRepository.countByArticleId(articleId);
+        return articleMapper.toDto(likeCount, isLike,findArticle, findArticle.getCommentList().stream().map(comment ->
                 commentMapper.toDto(comment, comment.getUser().getNickname())).toList());
     }
     @Transactional
@@ -95,6 +98,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public List<ResponseArticleExcludeCommentDto> getPopularArticleList() {
         List<Article> popularArticleList = articleRepository.findPopularArticleList();
+        //TODO: 게시글 리스트 조회시 각 게시글마다 좋아요 수 체크하기
         return popularArticleList.stream().map(article -> articleMapper.toDto(article, "")).toList();
     }
 
@@ -132,11 +136,10 @@ public class ArticleService {
                 .orElse("");
     }
     @Transactional
-    public void increaseLikeCount(Long articleId) {
-        if(!articleRepository.existsById(articleId)) {
-            throw new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND);
-        }
-        articleRepository.increaseLikeCount(articleId);
+    public void like(Long userId, Long articleId) {
+        Article findArticle = articleRepository.findById(articleId).orElseThrow(() -> new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND));
+
+        findArticle.addLikes(userId);
     }
 
     @Transactional
@@ -152,10 +155,13 @@ public class ArticleService {
         articleRepository.deleteById(articleId);
     }
 
-    public void decreaseLikeCount(Long articleId) {
-        if(!articleRepository.existsById(articleId)) {
-            throw new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND);
-        }
-        articleRepository.decreaseLikeCount(articleId);
+    @Transactional
+    public void unlike(Long userId, Long articleId) {
+        Article findArticle = articleRepository.findById(articleId).orElseThrow(() -> new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND));
+        findArticle.removeLikes(userId);
+    }
+
+    public boolean checkIfLikeExists(long userId, long articleId) {
+        return likeRepository.findByUserIdAndArticleId(userId, articleId).isPresent();
     }
 }

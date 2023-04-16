@@ -7,6 +7,7 @@ import com.team.puddy.domain.article.dto.response.ResponseArticleListDto;
 import com.team.puddy.domain.article.service.ArticleService;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
+import com.team.puddy.global.mapper.ArticleMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,11 +34,15 @@ public class ArticleController {
     }
 
     @GetMapping("/{articleId}")
-    public Response<ResponseArticleDto> getArticle(@PathVariable("articleId") Long articleId) {
+    public Response<ResponseArticleDto> getArticle(@PathVariable("articleId") Long articleId,
+                                                   @AuthenticationPrincipal JwtUserDetails user) {
+        boolean isLiked = false;
+        if (user != null) {
+            isLiked = articleService.checkIfLikeExists(user.getUserId(), articleId);
+        }
 
         articleService.increaseViewCount(articleId);
-        ResponseArticleDto findArticle = articleService.getArticle(articleId);
-
+        ResponseArticleDto findArticle = articleService.getArticle(articleId, isLiked);
         return Response.success(findArticle);
     }
 
@@ -68,7 +73,7 @@ public class ArticleController {
     public Response<Void> like(@PathVariable("articleId") Long articleId,
                                @AuthenticationPrincipal JwtUserDetails user) {
 
-        articleService.increaseLikeCount(articleId);
+        articleService.like(user.getUserId(), articleId);
 
         return Response.success();
     }
@@ -77,7 +82,7 @@ public class ArticleController {
     public Response<Void> unLike(@PathVariable("articleId") Long articleId,
                                  @AuthenticationPrincipal JwtUserDetails user) {
 
-        articleService.decreaseLikeCount(articleId);
+        articleService.unlike(user.getUserId(), articleId);
 
         return Response.success();
     }

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Like {
+public class Likes {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
@@ -24,12 +24,13 @@ public class Like {
     @NotNull
     @Column(name = "user_id")
     private long userId;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "article_id")
     private Article article;
 
-    public Like(long userId) {
+    public Likes(long userId) {
         this.userId = userId;
     }
 
