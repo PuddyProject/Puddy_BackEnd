@@ -54,7 +54,11 @@ public enum ErrorCode {
     //ARTICLE
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 게시글입니다."),
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "작성자만 답변글을 변경할 수 있습니다"),
-    ARTICLE_LIKE_ERROR(HttpStatus.BAD_REQUEST, "게시글 좋아요 에러입니다.");
+    ARTICLE_LIKE_ERROR(HttpStatus.BAD_REQUEST, "게시글 좋아요 에러입니다."),
+    //COMMENT
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
+    COMMENT_DELETE_ERROR(HttpStatus.BAD_REQUEST, "댓글 삭제 에러입니다."),
+    MODIFIY_COMMENT_ERROR(HttpStatus.BAD_REQUEST, "댓글 수정 에러입니다.");
 
     private final HttpStatus status;
     private final String message;
