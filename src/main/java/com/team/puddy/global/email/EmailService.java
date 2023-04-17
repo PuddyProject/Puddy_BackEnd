@@ -3,6 +3,7 @@ package com.team.puddy.global.email;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserRepository;
 import com.team.puddy.domain.user.service.UserService;
+import com.team.puddy.global.error.exception.BusinessException;
 import com.team.puddy.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +13,13 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.naming.Context;
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 import java.util.Random;
 
 import static com.team.puddy.global.error.ErrorCode.NOT_MATCH_INFO;
@@ -87,4 +90,21 @@ public class EmailService {
     }
 
 
+    public void sendDocs(MultipartFile file,Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(NOT_MATCH_INFO));
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setFrom(fromAddress);
+            helper.setTo(findUser.getEmail());
+            helper.setSubject("퍼디 문서 전송 메일입니다.");
+            helper.setText("퍼디 문서 전송 메일입니다.");
+            helper.addAttachment(Objects.requireNonNull(file.getOriginalFilename()), file);
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            throw new BusinessException(SEND_EMAIL_FAIL);
+        }
+    }
 }

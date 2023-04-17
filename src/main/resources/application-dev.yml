@@ -11,6 +11,23 @@ spring:
           timeout: 5000 # 6
           starttls:
             enable: true # 7
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            clientId: ${KAKAO_CLIENT_ID}
+            scope:
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
   servlet:
     multipart:
       max-file-size: 10MB

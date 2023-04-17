@@ -2,6 +2,7 @@ package com.team.puddy.domain.comment.domain;
 
 import com.team.puddy.domain.BaseTimeEntity;
 import com.team.puddy.domain.article.domain.Article;
+import com.team.puddy.domain.comment.dto.request.UpdateCommentDto;
 import com.team.puddy.domain.user.domain.User;
 import lombok.*;
 
@@ -33,4 +34,8 @@ public class Comment extends BaseTimeEntity {
     private String content;
 
     private int postCategory;
+
+    public void update(String content) {
+        this.content = content;
+    }
 }
