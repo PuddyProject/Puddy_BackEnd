@@ -123,7 +123,7 @@ public class UserController {
         userService.duplicateAccountCheck(request.account());
     }
 
-    //TODO: 닉네임 중복확인, 프로필 업데이트시 닉네임도 추가
+
     @PostMapping("/duplicate-nickname")
     @Operation(summary = "닉네임 중복 검사 메서드")
     public void duplicateNickname(@RequestBody DuplicateNicknameRequest request) {

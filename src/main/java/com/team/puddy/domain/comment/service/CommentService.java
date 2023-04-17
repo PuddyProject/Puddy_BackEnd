@@ -4,6 +4,7 @@ import com.team.puddy.domain.article.domain.Article;
 import com.team.puddy.domain.article.repository.ArticleRepository;
 import com.team.puddy.domain.comment.domain.Comment;
 import com.team.puddy.domain.comment.dto.request.RequestCommentDto;
+import com.team.puddy.domain.comment.dto.request.UpdateCommentDto;
 import com.team.puddy.domain.comment.repository.CommentRepository;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserQueryRepository;
@@ -33,4 +34,20 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    public void deleteComment(Long articleId, Long commentId, Long userId) {
+        if(commentRepository.existsByIdAndArticleIdAndUserId(commentId, articleId, userId)) {
+            commentRepository.deleteById(commentId);
+        } else {
+            throw new NotFoundException(ErrorCode.COMMENT_DELETE_ERROR);
+        }
+
+    }
+
+    public void modifyComment(Long articleId, Long commentId, UpdateCommentDto request, Long userId) {
+        Comment findComment = commentRepository.findByIdAndArticleIdAndUserId(commentId, articleId, userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.MODIFIY_COMMENT_ERROR));
+
+        findComment.update(request.content());
+
+    }
 }
