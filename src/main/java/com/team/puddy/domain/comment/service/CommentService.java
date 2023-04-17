@@ -34,6 +34,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    @Transactional
     public void deleteComment(Long articleId, Long commentId, Long userId) {
         if(commentRepository.existsByIdAndArticleIdAndUserId(commentId, articleId, userId)) {
             commentRepository.deleteById(commentId);
@@ -43,6 +44,7 @@ public class CommentService {
 
     }
 
+    @Transactional
     public void modifyComment(Long articleId, Long commentId, UpdateCommentDto request, Long userId) {
         Comment findComment = commentRepository.findByIdAndArticleIdAndUserId(commentId, articleId, userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.MODIFIY_COMMENT_ERROR));
