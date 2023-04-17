@@ -159,7 +159,12 @@ public class ArticleService {
     @Transactional
     public void unlike(Long userId, Long articleId) {
         Article findArticle = articleRepository.findById(articleId).orElseThrow(() -> new NotFoundException(ErrorCode.ARTICLE_NOT_FOUND));
-        findArticle.removeLikes(userId);
+
+        Likes like = findArticle.removeLikes(userId);
+
+        if (like != null) {
+            likeRepository.delete(like);
+        }
     }
 
     public boolean checkIfLikeExists(long userId, long articleId) {

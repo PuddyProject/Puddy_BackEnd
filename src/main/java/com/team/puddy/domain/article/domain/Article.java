@@ -85,9 +85,14 @@ public class Article extends BaseTimeEntity {
         likes.setArticle(this);
     }
 
-    public void removeLikes(long userId) {
-        boolean removed = likeList.removeIf(like -> like.getUserId() == userId);
-        if (!removed) throw new BusinessException(ErrorCode.ARTICLE_LIKE_ERROR);
+    public Likes removeLikes(long userId) {
+        Likes likeToRemove = likeList.stream().filter(like -> like.getUserId() == userId).findFirst().orElse(null);
+
+        if (likeToRemove != null) {
+            likeList.remove(likeToRemove);
+        }
+
+        return likeToRemove;
     }
 
 
