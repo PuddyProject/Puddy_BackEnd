@@ -95,6 +95,10 @@ public class User extends BaseTimeEntity {
                 .build();
     }
 
+    public void updateOauthUser(boolean isNotificated, String provider) {
+        this.isNotificated = isNotificated;
+    }
+
     public void updateAuth() {
         this.role = UserRole.EXPERT.getRole();
     }

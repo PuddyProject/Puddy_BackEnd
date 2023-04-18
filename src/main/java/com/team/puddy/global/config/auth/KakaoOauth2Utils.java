@@ -1,9 +1,12 @@
 package com.team.puddy.global.config.auth;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.puddy.global.error.exception.user.TokenInvalidException;
 import org.springframework.http.*;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,34 +15,36 @@ import java.util.Collections;
 
 public class KakaoOauth2Utils {
 
-    private static final String USER_INFO_ENDPOINT = "https://kapi.kakao.com/v1/oidc/userinfo";
 
-    public static KakaoUserDetails getUserInfo(String accessToken) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        // Set the access token in the Authorization header
+    public static KakaoUserDetails getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+        // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        // Build the userinfo request
-        HttpEntity<String> request = new HttpEntity<>(headers);
-        try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                    USER_INFO_ENDPOINT,
-                    HttpMethod.GET,
-                    request,
-                    String.class);
+        // HTTP 요청 보내기
+        HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<String> response = rt.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                kakaoUserInfoRequest,
+                String.class
+        );
 
-            if (response.getStatusCode().is2xxSuccessful()) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                return objectMapper.readValue(response.getBody(), KakaoUserDetails.class);
-            }
-        } catch (IOException | HttpClientErrorException e) {
+        // responseBody에 있는 정보를 꺼냄
+        String responseBody = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        }
+        long id = jsonNode.get("id").asLong();
+        String email = jsonNode.get("kakao_account").get("email").asText();
+        String name = jsonNode.get("properties")
+                .get("nickname").asText();
 
-        throw new TokenInvalidException("토큰이 유효하지 않습니다");
+        return KakaoUserDetails.builder()
+                .sub(Long.toString(id))
+                .email(email)
+                .name(name).build();
     }
 }
