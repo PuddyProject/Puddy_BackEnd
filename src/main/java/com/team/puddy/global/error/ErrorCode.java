@@ -31,6 +31,7 @@ public enum ErrorCode {
 
     //USER
     DUPLICATE_ACCOUNT(HttpStatus.BAD_REQUEST, "중복된 아이디입니다"),
+    DUPLICATE_USER(HttpStatus.BAD_REQUEST, "중복된 유저입니다"),
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "중복된 이메일입니다"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "가입된 유저가 아닙니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "유효하지 않은 패스워드입니다."),
@@ -39,6 +40,11 @@ public enum ErrorCode {
     UNAUTHORIZED_OPERATION(HttpStatus.UNAUTHORIZED, "수정,삭제 권한이 없습니다."),
     SEND_EMAIL_FAIL(HttpStatus.BAD_REQUEST,"메일 전송에 실패했습니다."),
     CHANGE_PASSWORD_FAIL(HttpStatus.BAD_REQUEST,"패스워드 변경에 실패했습니다."),
+    NEED_MORE_INFO(HttpStatus.BAD_REQUEST, "추가 정보가 필요합니다."),
+    PUDDY_USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST,"잘못된 접근입니다."),
+    PROVIDER_NOT_SUPPORTED(HttpStatus.BAD_REQUEST,"지원하지 않는 로그인 방식입니다."),
+
+
 
     //QUESTION
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 문제입니다."),
@@ -59,6 +65,7 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
     COMMENT_DELETE_ERROR(HttpStatus.BAD_REQUEST, "댓글 삭제 에러입니다."),
     MODIFIY_COMMENT_ERROR(HttpStatus.BAD_REQUEST, "댓글 수정 에러입니다.");
+
 
     private final HttpStatus status;
     private final String message;
