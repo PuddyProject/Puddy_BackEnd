@@ -13,6 +13,9 @@ import com.team.puddy.domain.question.domain.Question;
 import com.team.puddy.domain.question.dto.request.RequestQuestionDto;
 import com.team.puddy.domain.question.dto.response.QuestionResponseDto;
 import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
+import com.team.puddy.domain.review.domain.Review;
+import com.team.puddy.domain.review.dto.RequestReviewDto;
+import com.team.puddy.domain.review.dto.ResponseReviewDto;
 import com.team.puddy.domain.type.Category;
 import com.team.puddy.domain.type.UserRole;
 import com.team.puddy.domain.user.domain.User;
@@ -206,6 +209,26 @@ public class TestEntityUtils {
                 .content("content")
                 .question(question(user()))
                 .user(user())
+                .build();
+    }
+
+    public static Review review() {
+        return Review.builder()
+                .id(1L)
+                .content("content")
+                .expert(expert())
+                .build();
+    }
+
+    public static RequestReviewDto requestReviewDto() {
+        return RequestReviewDto.builder()
+                .content("content")
+                .build();
+    }
+
+    public static ResponseReviewDto responseReviewDto() {
+        return ResponseReviewDto.builder()
+                .content("content")
                 .build();
     }
 }
