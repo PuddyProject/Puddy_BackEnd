@@ -63,7 +63,6 @@ public class UserService {
     @Transactional
     public LoginToken login(LoginUserRequest request) {
         User user = userQueryRepository.findByAccount(request.account()).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
-
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new BusinessException(INVALID_PASSWORD);
         }
@@ -84,7 +83,6 @@ public class UserService {
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.password()));
         userRepository.save(user);
-        //리턴
 
     }
 

@@ -53,6 +53,7 @@ public class JwtTokenUtils {
                 .withClaim("nickname", user.getNickname())
                 .withClaim("email", user.getEmail())
                 .withClaim("auth", user.getRole())
+                .withClaim("provider",user.getProvider().name())
                 .sign(Algorithm.HMAC256(SECRET));
 
     }
