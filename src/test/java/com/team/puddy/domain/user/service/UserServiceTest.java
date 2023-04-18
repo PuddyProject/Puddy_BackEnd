@@ -36,6 +36,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@DisplayName("유저 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 

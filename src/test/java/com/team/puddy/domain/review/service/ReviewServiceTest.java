@@ -21,6 +21,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@DisplayName("리뷰 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
 
