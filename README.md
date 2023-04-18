@@ -2,7 +2,7 @@
 
 > 전문가 기반 반려동물 질의응답 중심의 커뮤니티 서비스
 
-![puddt](https://user-images.githubusercontent.com/93868431/230781341-cd83cda9-e3b9-45ce-b86d-60fc3eea08e2.png)
+![image](https://user-images.githubusercontent.com/93868431/232716519-3f43848d-1f78-4c6d-a429-a759300fa31b.png)
 
 ## 기술 스택
 
