@@ -1,6 +1,8 @@
 package com.team.puddy.domain;
 
 import com.team.puddy.domain.answer.domain.Answer;
+import com.team.puddy.domain.answer.dto.RequestAnswerDto;
+import com.team.puddy.domain.answer.dto.request.UpdateAnswerDto;
 import com.team.puddy.domain.article.domain.Article;
 import com.team.puddy.domain.article.dto.request.RequestArticleDto;
 import com.team.puddy.domain.article.dto.request.UpdateArticleDto;
@@ -242,5 +244,19 @@ public class TestEntityUtils {
                 .imagePath("")
                 .careerList(List.of("career1", "career2"))
                 .build();
+    }
+
+    public static RequestAnswerDto requestAnswerDto() {
+        return RequestAnswerDto.builder()
+                .content("content")
+                .postCategory(1)
+                .build();
+    }
+
+    public static UpdateAnswerDto updateAnswerDto() {
+        return UpdateAnswerDto.builder()
+                .content("수정 내용")
+                .build();
+
     }
 }
