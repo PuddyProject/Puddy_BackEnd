@@ -17,6 +17,7 @@ import com.team.puddy.domain.user.repository.UserRepository;
 import com.team.puddy.global.error.exception.NotFoundException;
 import com.team.puddy.global.mapper.ArticleMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@DisplayName("게시글 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
 
@@ -83,9 +85,9 @@ class ArticleServiceTest {
                 new MockMultipartFile("image2", new byte[0])
         );
     }
-
+    @DisplayName("게시글 등록 테스트")
     @Test
-    void 질문글_등록시_성공() {
+    void givenRequest_whenAddArticle_thenOK() {
         // Given
         Article article = TestEntityUtils.article();
         when(userQueryRepository.findByUserId(userId)).thenReturn(Optional.of(user));
@@ -103,9 +105,9 @@ class ArticleServiceTest {
         verify(tagRepository, times(requestDto.tagList().size())).findByTagName(anyString());
         verify(articleRepository, times(1)).save(any(Article.class));
     }
-
+    @DisplayName("게시글 조회 테스트")
     @Test
-    void 질문글_조회시_성공() {
+    void givenArticleId_whenGetArticle_thenOK() {
         // Given
         Long articleId = 1L;
         boolean isLike = true;
@@ -124,9 +126,9 @@ class ArticleServiceTest {
         verify(likeRepository, times(1)).countByArticleId(articleId);
         verify(articleMapper, times(1)).toDto(anyLong(), anyBoolean(), any(Article.class), anyList());
     }
-
+    @DisplayName("게시글 조회시 예외 테스트")
     @Test
-    void 질문글_조회시_예외() {
+    void givenArticleId_whenGetArticle_then400() {
         // Given
         Long articleId = 1L;
         boolean isLike = true;
@@ -139,8 +141,9 @@ class ArticleServiceTest {
         verify(articleRepository, times(1)).findArticleWithUserById(articleId);
     }
 
+    @DisplayName("게시글 수정 테스트")
     @Test
-    void 질문글_수정시_성공() {
+    void givenUpdate_whenUpdateArticle_thenOK() {
         // Given
         Long articleId = 1L;
         UpdateArticleDto updateDto = TestEntityUtils.updateArticleDto();
@@ -157,9 +160,9 @@ class ArticleServiceTest {
         verify(articleTagRepository, times(1)).deleteByArticleId(articleId);
         verify(article, times(1)).updateArticle(eq(updateDto.title()), eq(updateDto.content()), anyList());
     }
-
+    @DisplayName("게시글 삭제시 성공 테스트")
     @Test
-    void 질문글_삭제시_성공() {
+    void givenArticleId_whenDeleteArticle_thenOK() {
         // given
         Long articleId = 1L;
         Long userId = 1L;

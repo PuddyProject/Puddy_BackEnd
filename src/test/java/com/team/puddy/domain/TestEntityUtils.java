@@ -7,6 +7,7 @@ import com.team.puddy.domain.article.dto.request.UpdateArticleDto;
 import com.team.puddy.domain.article.dto.response.ResponseArticleDto;
 import com.team.puddy.domain.expert.domain.Expert;
 import com.team.puddy.domain.expert.dto.RequestExpertDto;
+import com.team.puddy.domain.expert.dto.ResponseExpertDto;
 import com.team.puddy.domain.pet.domain.Pet;
 import com.team.puddy.domain.pet.dto.request.RequestPetDto;
 import com.team.puddy.domain.question.domain.Question;
@@ -114,6 +115,7 @@ public class TestEntityUtils {
                 .education("테스트대학교")
                 .introduce("저는 테스트입니다.")
                 .location("테스트시 테스트동")
+                .user(user())
                 .careerList(List.of("테스트 대학원 석사", "테스트 대학교 수의학과 학사")).build();
     }
 
@@ -229,6 +231,16 @@ public class TestEntityUtils {
     public static ResponseReviewDto responseReviewDto() {
         return ResponseReviewDto.builder()
                 .content("content")
+                .build();
+    }
+
+    public static ResponseExpertDto responseExpertDto() {
+        return ResponseExpertDto.builder()
+                .education("education")
+                .introduce("introduce")
+                .location("location")
+                .imagePath("")
+                .careerList(List.of("career1", "career2"))
                 .build();
     }
 }
