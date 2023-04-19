@@ -40,19 +40,16 @@ public class QuestionServiceTest {
     private UserRepository userRepository;
     @Mock
     private QuestionMapper questionMapper;
-    @Mock
-    private AnswerMapper answerMapper;
 
     @Mock
     private ImageService imageService;
-
 
     @DisplayName("문제 등록 테스트")
     @Test
     void givenRequestDto_whenAddQuestion_thenSuccess() throws IOException {
         //given
         User user = TestEntityUtils.user();
-        RequestQuestionDto requestDto = TestEntityUtils.questionRequestDto();
+        RequestQuestionDto requestDto = TestEntityUtils.requestQuestionDto();
         Question question = TestEntityUtils.question(user);
         given(userRepository.findById(any(Long.class))).willReturn(Optional.ofNullable(user));
         given(questionMapper.toEntity(any(RequestQuestionDto.class),any(List.class),any(User.class))).willReturn(question);
@@ -73,15 +70,11 @@ public class QuestionServiceTest {
         Page<Question> questionPage = new PageImpl<>(Collections.singletonList(
                 TestEntityUtils.question(user)
         ));
-        List<ResponseQuestionExcludeAnswerDto> questionList = List.of(
-                ResponseQuestionExcludeAnswerDto.builder().content("s").build()
-        );
-        Slice<ResponseQuestionExcludeAnswerDto> questions = TestEntityUtils.questionPageList();
-        given(questionRepository.findByTitleStartWithOrderByModifiedDateDesc(any(),any(String.class))).willReturn(questionPage);
+        given(questionRepository.findByTitleStartWithOrderByCreatedDateDesc(any(),any(String.class))).willReturn(questionPage);
         //when
-        questionService.getQuestionListByTitleStartWith(page,"");
+        questionService.getQuestionListByTitleStartWith(page,"","desc");
         //then
-        verify(questionRepository).findByTitleStartWithOrderByModifiedDateDesc(page,"");
+        verify(questionRepository).findByTitleStartWithOrderByCreatedDateDesc(page,"");
     }
 
     @DisplayName("문제 전체 개수 조회 테스트")
@@ -123,13 +116,6 @@ public class QuestionServiceTest {
 
     }
 
-    @Transactional
-    public void increaseViewCount(Long questionId) {
-        if (!questionRepository.existsById(questionId)) {
-            throw new EntityNotFoundException();
-        }
-        questionRepository.increaseViewCount(questionId);
-    }
 
 
 
