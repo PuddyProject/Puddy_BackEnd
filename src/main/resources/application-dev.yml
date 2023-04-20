@@ -1,9 +1,48 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: puddyofficial1
+    password: ${EMAIL_SECRET}
+    properties:
+      mail:
+        smtp:
+          auth: true # 5
+          timeout: 5000 # 6
+          starttls:
+            enable: true # 7
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            clientId: ${KAKAO_CLIENT_ID}
+            scope:
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      enabled: true
   datasource:
-    driver-class-name: #TODO
-    url: #TODO
-    username: #TODO
-    password: #TODO
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: wave
+    password: ${DB_PASSWORD}
+
+
+  redis:
+    host: redis
+    port: 6379
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -12,12 +51,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 1000
     show-sql: true
 
 
 logging:
   level:
-    org.hibernate.sql: debug
+    root: INFO
+    com.team.com.team.puddy: INFO
+    org.hibernate.orm.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
 
 springdoc:
   swagger-ui:
@@ -25,3 +68,29 @@ springdoc:
     path: '/swagger-ui.html'
     try-it-out-enabled: false
   version: 'v1'
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS}
+      secret-key: ${S3_SECRET}
+    stack:
+      auto: false
+    region:
+      static: ${S3_REGION}
+    s3:
+      bucket: ${S3_BUCKET}
+
+jwt:
+  secret-key: ${JWT_SECRET}
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+

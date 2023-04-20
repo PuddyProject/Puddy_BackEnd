@@ -17,7 +17,7 @@ plugins {
 
 group = 'com.team'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 configurations {
 	compileOnly {
@@ -33,14 +33,22 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//monitoring
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	//Security
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
 
 	//querydsl
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
+//	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
 	//Lombok & Mapstruct
 	implementation 'org.projectlombok:lombok:1.18.24'
@@ -50,17 +58,40 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+	//validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	//Swagger UI
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
 
+	//token
+	implementation 'com.auth0:java-jwt:3.18.3'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'com.nimbusds:nimbus-jose-jwt:9.31'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
+	//S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// 추가
+jar {
+	enabled = false
 }
 
 clean {
@@ -88,3 +119,4 @@ configurations {
 	}
 	querydsl.extendsFrom compileClasspath
 }
+
