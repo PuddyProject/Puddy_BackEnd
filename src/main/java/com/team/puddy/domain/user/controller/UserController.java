@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -68,9 +70,11 @@ public class UserController {
     }
 
     @GetMapping("/posts")
-    public Response<?> myPost(@AuthenticationPrincipal JwtUserDetails user) {
-
-        ResponsePostDto myPost = userService.getMyPost(user.getUserId());
+    public Response<?> myPost(@RequestParam("page") int page,@RequestParam(value = "type",defaultValue = "question") String type,
+                                @AuthenticationPrincipal JwtUserDetails user) {
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        userService.getMyPost(user.getUserId(),type,pageable);
+        ResponsePostDto myPost = userService.getMyPost(user.getUserId(),type,pageable);
         return Response.success(myPost);
     }
 

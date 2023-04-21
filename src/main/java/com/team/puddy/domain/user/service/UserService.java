@@ -4,6 +4,8 @@ import com.team.puddy.domain.answer.domain.Answer;
 import com.team.puddy.domain.answer.dto.ResponseAnswerDtoExcludeUser;
 import com.team.puddy.domain.answer.repository.AnswerRepository;
 import com.team.puddy.domain.answer.repository.querydsl.AnswerQueryRepository;
+import com.team.puddy.domain.article.repository.ArticleRepository;
+import com.team.puddy.domain.comment.repository.CommentRepository;
 import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.image.service.ImageService;
 import com.team.puddy.domain.question.domain.Question;
@@ -28,6 +30,7 @@ import com.team.puddy.global.config.security.jwt.JwtTokenUtils;
 import com.team.puddy.global.config.security.jwt.LoginToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +51,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final ArticleRepository articleRepository;
 
     private final QuestionMapper questionMapper;
     private final AnswerMapper answerMapper;
@@ -129,7 +133,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public ResponsePostDto getMyPost(Long userId) {
+    public ResponsePostDto getMyPost(Long userId, String type, Pageable page) {
         List<Question> questionList = questionRepository.findQuestionListByUserId(userId);
         List<Answer> answerList = answerRepository.findAnswerListByUserId(userId);
 
