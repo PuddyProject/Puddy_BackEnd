@@ -2,6 +2,8 @@ package com.team.puddy.domain.user.controller;
 
 
 
+import com.team.puddy.domain.article.dto.response.ResponseArticleExcludeCommentDto;
+import com.team.puddy.domain.question.dto.response.ResponseQuestionExcludeAnswerDto;
 import com.team.puddy.domain.user.dto.request.*;
 import com.team.puddy.domain.user.dto.response.ResponsePostDto;
 import com.team.puddy.domain.user.dto.response.ResponseUserInfoDto;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 
 @Slf4j
@@ -73,8 +76,7 @@ public class UserController {
     public Response<?> myPost(@RequestParam("page") int page,@RequestParam(value = "type",defaultValue = "question") String type,
                                 @AuthenticationPrincipal JwtUserDetails user) {
         Pageable pageable = PageRequest.of(page - 1, 10);
-        userService.getMyPost(user.getUserId(),type,pageable);
-        ResponsePostDto myPost = userService.getMyPost(user.getUserId(),type,pageable);
+        ResponsePostDto myPost = userService.getMyPost(user.getUserId(), type, pageable);
         return Response.success(myPost);
     }
 
