@@ -93,7 +93,7 @@ public class QuestionServiceTest {
         verify(questionRepository).count();
     }
 
-    @DisplayName("id로 특정 질문글을 조회할 수 있다.")
+    @DisplayName("특정 질문글을 조회할 수 있다.")
     @Test
     void givenQuestionId_whenGetQuestion_thenQuestionResponseDto() {
         Long questionId = 2L;
