@@ -11,10 +11,12 @@ import com.team.puddy.domain.image.domain.Image;
 import com.team.puddy.domain.user.domain.User;
 import com.team.puddy.domain.user.repository.UserRepository;
 import com.team.puddy.global.config.auth.JwtUserDetails;
+import com.team.puddy.global.email.EmailService;
 import com.team.puddy.global.error.ErrorCode;
 import com.team.puddy.global.error.exception.NotFoundException;
 import com.team.puddy.global.error.exception.user.DuplicateException;
 import com.team.puddy.global.mapper.ExpertMapper;
+import com.team.puddy.global.slack.SlackService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +40,8 @@ public class ExpertService {
     private final ExpertRepository expertRepository;
     private final UserRepository userRepository;
     private final ExpertMapper expertMapper;
+    private final EmailService emailService;
+    private final SlackService slackService;
 
     public void registerExpert(RequestExpertDto requestExpertDto, Long userId) {
         User findUser = userRepository.findByIdWithExpert(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
@@ -88,6 +93,11 @@ public class ExpertService {
         return image.getImagePath();
     }
 
+    public void sendDocs(Long userId, MultipartFile file) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+        emailService.sendDocs(file, user.getId());
+        slackService.sendSlackMessage(user.getUsername());
+    }
 }
 
 

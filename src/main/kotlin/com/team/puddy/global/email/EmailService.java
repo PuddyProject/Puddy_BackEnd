@@ -100,7 +100,7 @@ public class EmailService {
             helper.setFrom(fromAddress);
             helper.setTo("puddyofficial1@gmail.com");
             helper.setSubject("퍼디 문서 전송 메일입니다.");
-            helper.setText("퍼디 문서 전송 메일입니다.");
+            helper.setText(findUser.getUsername() + "의 퍼디 문서 전송 메일입니다.");
             helper.addAttachment(Objects.requireNonNull(file.getOriginalFilename()), file);
             javaMailSender.send(message);
         } catch (MessagingException e) {

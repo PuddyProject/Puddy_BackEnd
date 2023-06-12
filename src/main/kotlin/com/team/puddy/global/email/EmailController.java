@@ -1,5 +1,6 @@
 package com.team.puddy.global.email;
 
+import com.team.puddy.domain.expert.service.ExpertService;
 import com.team.puddy.domain.user.dto.request.FindPasswordDto;
 import com.team.puddy.global.common.dto.Response;
 import com.team.puddy.global.config.auth.JwtUserDetails;
@@ -15,6 +16,7 @@ import java.io.IOException;
 public class EmailController {
 
     private final EmailService emailService;
+    private final ExpertService expertService;
 
     @PostMapping("/users/find-password")
     public Response<String> findPassword(@RequestBody FindPasswordDto passwordDto) {
@@ -23,9 +25,9 @@ public class EmailController {
     }
 
     @PostMapping("/experts/send-docs")
-    public Response<Void> sendDocs(@RequestPart("file") MultipartFile file,
+    public Response<Void> sendDocs(@RequestParam("file") MultipartFile file,
                                    @AuthenticationPrincipal JwtUserDetails user) throws IOException {
-        emailService.sendDocs(file,user.getUserId());
+        expertService.sendDocs(user.getUserId(),file);
         return Response.success();
     }
 }
