@@ -1,15 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.utils.extendsFrom
 
-val queryDslVersion = "5.0.0"
-
 plugins {
     val kotlinVersion = "1.8.21"
 
     id("org.springframework.boot") version "3.1.0"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
-    id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
 
+    id("org.jetbrains.kotlin.plugin.allopen") version kotlinVersion
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
@@ -31,7 +29,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.micrometer:micrometer-registry-prometheus")
-    runtimeOnly("com.mysql:mysql-connector-j")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.boot:spring-boot-starter-security")
 
@@ -43,9 +40,10 @@ dependencies {
     implementation("io.springfox:springfox-boot-starter:3.0.0")
 
 
-    // querydsl
-    implementation("com.querydsl:querydsl-jpa:5.0.0")
-    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
+    //querydsl
+    implementation("com.querydsl:querydsl-core:5.0.0")
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    annotationProcessor ("com.querydsl:querydsl-apt:5.0.0:jakarta")
 
     implementation("com.google.code.findbugs:jsr305:3.0.2")
 
@@ -55,6 +53,9 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.6.12")
     //redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    //mysql
+    runtimeOnly("com.mysql:mysql-connector-j")
 
     // jwt
     implementation("com.auth0:java-jwt:3.18.3")
@@ -88,28 +89,9 @@ tasks {
     }
 }
 
-// QueryDsl 설정
-allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Embeddable")
-}
-noArg {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Embeddable")
-}
-
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
     }
 }
 
-idea {
-    module {
-        val kaptMain = file("build/generated/source/kapt/main")
-        sourceDirs.add(kaptMain)
-        generatedSourceDirs.add(kaptMain)
-    }
-}
