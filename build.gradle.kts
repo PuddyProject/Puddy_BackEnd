@@ -6,7 +6,7 @@ val queryDslVersion = "5.0.0"
 plugins {
     val kotlinVersion = "1.8.21"
 
-    id("org.springframework.boot") version "2.7.9"
+    id("org.springframework.boot") version "3.1.0"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
     id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
 
@@ -36,6 +36,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
 
     //kotlin
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
