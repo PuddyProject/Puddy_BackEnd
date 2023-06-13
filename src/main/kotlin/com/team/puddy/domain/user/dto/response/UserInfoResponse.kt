@@ -1,13 +1,8 @@
 package com.team.puddy.domain.user.dto.response;
 
-import lombok.Builder;
-
-public record ResponseUserInfoDto (String nickname,
-                                   String imagePath,
-                                   boolean hasPet,
-                                   boolean hasExpertInfo) {
-
-    @Builder
-    public ResponseUserInfoDto {
-    }
-}
+data class UserInfoResponse(
+    val nickname: String,
+    val imagePath: String,
+    val hasPet: Boolean,
+    val hasExpertInfo: Boolean
+)
